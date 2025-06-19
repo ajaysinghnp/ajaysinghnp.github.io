@@ -1,0 +1,19 @@
+BEGIN:VCARD
+VERSION:3.0
+FN:Ajay Kumar Singh
+N:Singh;Ajay;Kumar;Er.;
+NICKNAME:Maya
+EMAIL;TYPE=HOME,INTERNET:admin@ajaysingh.com.np
+EMAIL;TYPE=WORK,INTERNET:ajay@nrb.org.np
+TEL;TYPE=CELL:9846449912
+TEL;TYPE=WORK:+977-1-5719641/42/43/44 EXT 1355
+URL:https://www.ajaysingh.com.np
+ORG:Nepal Rastra Bank
+TITLE:IT Assistant
+X-SOCIALPROFILE;TYPE=linkedin:https://www.linkedin.com/in/ajaysinghnp/
+X-SOCIALPROFILE;TYPE=twitter:https://x.com/ajaysinghnp
+X-SOCIALPROFILE;TYPE=facebook:https://www.facebook.com/erajaysinghnp
+X-SOCIALPROFILE;TYPE=instagram:https://www.instagram.com/erajaysinghnp/
+X-SOCIALPROFILE;TYPE=youtube:https://www.youtube.com/@mentormaya
+REV:2025-06-19T02:34:46.788Z
+END:VCARD
