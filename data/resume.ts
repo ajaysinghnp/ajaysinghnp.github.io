@@ -1,3 +1,5 @@
+import { yearsSince } from "@/lib/utils";
+
 export const resume = {
   fname: "Ajay",
   lname: "Singh",
@@ -5,8 +7,9 @@ export const resume = {
   quote: "Bridging imagination and reality, one innovation at a time.",
   quote_author: "Ajay Singh",
   position: "IT Assistant @NRB",
-  profile:
-    "Results-driven Electronics and Communication Engineer with a diploma in the field and 6 years of experience as an IT Assistant at the Central Bank of Nepal. Passionate about programming, development, and automation across various domains. Skilled in scripting and hardware-based solutions, including home automation systems. Combines technical expertise with a strong work ethic to drive efficiency and innovation in IT operations.",
+  profile: `Results-driven Electronics and Communication Engineer with a diploma in the field and ${yearsSince(
+    new Date(2018, 11, 3)
+  )} years of experience as an IT Assistant at the Central Bank of Nepal. Passionate about programming, development, and automation across various domains. Skilled in scripting and hardware-based solutions, including home automation systems. Combines technical expertise with a strong work ethic to drive efficiency and innovation in IT operations.`,
   contacts: [
     {
       label: "Personal",
