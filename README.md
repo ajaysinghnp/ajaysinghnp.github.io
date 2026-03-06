@@ -1,5 +1,7 @@
 # Ajay Singh Portfolio
 
+[![Deploy Next.js site to Pages](https://github.com/ajaysinghnp/ajaysinghnp.github.io/actions/workflows/nextjs.yml/badge.svg?branch=main)](https://github.com/ajaysinghnp/ajaysinghnp.github.io/actions/workflows/nextjs.yml)
+
 Personal portfolio and blog built with Next.js, MDX, and Tailwind CSS, and deployed as a static site with GitHub Pages.
 
 ## Features
