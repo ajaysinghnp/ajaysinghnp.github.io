@@ -36,7 +36,7 @@ const Footer = ({ duration = 1000 }: Props) => {
         )}
       >
         <p className="text-center">
-          &copy; {new Date().getFullYear()}{" "}
+          &copy; <span suppressHydrationWarning>{new Date().getFullYear()}</span>{" "}
           <Link
             target="_blank"
             href="/contact"

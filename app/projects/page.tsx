@@ -1,11 +1,11 @@
 "use client";
 
-import Link from "next/link"; // Assuming you are using Next.js
-import { Eye } from "lucide-react"; // Ensure you have the correct path for Eye
+import Link from "next/link";
+import { Eye } from "lucide-react";
 import useSWR from "swr";
 
-import { Card } from "@/components/card"; // Ensure you have the correct path for Card
-import { Article } from "./article"; // Ensure you have the correct path for Article
+import { Card } from "@/components/card";
+import { Article } from "./article";
 import { Project } from "@/types/github";
 import { fetchProjects } from "@/lib/projects";
 import { socialMedia } from "@/data/social";

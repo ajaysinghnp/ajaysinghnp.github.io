@@ -11,4 +11,16 @@ const nextConfig = {
   transpilePackages: ["next-mdx-remote"],
 };
 
-export default withContentlayer(nextConfig);
+const contentlayerConfig = withContentlayer(nextConfig);
+
+export default async (...args) => {
+  const resolvedConfig =
+    typeof contentlayerConfig === "function"
+      ? await contentlayerConfig(...args)
+      : contentlayerConfig;
+
+  return {
+    ...resolvedConfig,
+    turbopack: resolvedConfig?.turbopack ?? {},
+  };
+};
