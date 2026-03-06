@@ -22,7 +22,6 @@ export default async function ProjectLoadingPage({ params }: Props) {
   const { name: rawName } = await params;
   const name = decodeURIComponent(rawName);
   const readMe: string = await fetchProjectReadme(name);
-  console.log(`Loading project: ${readMe}`);
 
   return (
     <main className="space-y-2">
