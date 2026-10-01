@@ -121,6 +121,11 @@
   color: #a5f3fc;
 }
 
+.site-footer {
+  border-color: var(--site-border);
+  color: var(--site-muted);
+}
+
 .resume-shell {
   color: var(--site-text);
 }

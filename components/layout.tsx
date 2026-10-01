@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { Navigation } from './nav'
-import Footer from './footer'
+import SiteFooter from './site-footer'
 import { usePathname } from 'next/navigation';
 
 interface Props {
@@ -19,10 +19,10 @@ const Layout = ({ children }: Props) => {
     <div className="relative">
       <div className="relative">
         <Navigation />
-        <div className="w-full mx-auto max-w-[90%] mb-12">
+        <div className="w-full mx-auto max-w-[90%] mb-12 pt-8 lg:pt-10">
           {children}
         </div>
-        <Footer />
+        <SiteFooter />
       </div>
     </div>
   )

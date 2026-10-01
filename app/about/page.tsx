@@ -1,18 +1,61 @@
-import About from '@/components/sections/about'
-import Education from '@/components/sections/education'
-import Experience from '@/components/sections/experience'
-import Skills from '@/components/sections/skills'
-import React from 'react'
+import Link from "next/link";
+import { ArrowUpRight, CircuitBoard, Lightbulb, Mail, Workflow } from "lucide-react";
 
-const AboutPage = () => {
+import { about } from "@/data/about";
+import { resume } from "@/data/resume";
+import { socialMedia } from "@/data/social";
+
+const principles = [
+  {
+    icon: Lightbulb,
+    title: "Start with curiosity",
+    description: "The best solutions usually begin with a better question and a willingness to look twice.",
+  },
+  {
+    icon: Workflow,
+    title: "Make it useful",
+    description: "I like technology that removes friction, explains itself, and earns its place in a real workflow.",
+  },
+  {
+    icon: CircuitBoard,
+    title: "Stay close to reality",
+    description: "Software, hardware, people, and constraints all belong in the same conversation.",
+  },
+];
+
+export default function AboutPage() {
   return (
-    <main className='text-white rounded flex flex-col gap-8'>
-      <About />
-      <Experience />
-      <Skills />
-      <Education />
-    </main>
-  )
-}
+    <main className="resume-shell mx-auto max-w-7xl pb-20">
+      <header className="grid gap-10 border-b border-[var(--site-border)] pb-14 lg:grid-cols-[1.15fr_0.85fr] lg:items-end">
+        <div>
+          <p className="section-code">// about / the longer signal</p>
+          <h1 className="mt-5 max-w-4xl text-6xl font-semibold leading-[0.92] tracking-[-0.06em] text-zinc-50 sm:text-8xl">I love creativity<span className="text-cyan-300">.</span></h1>
+        </div>
+        <p className="resume-lead max-w-xl text-xl leading-8">{about.quote}</p>
+      </header>
 
-export default AboutPage
+      <section className="mt-14 grid gap-12 lg:grid-cols-[0.8fr_1.2fr]">
+        <div>
+          <p className="section-code">// the short version</p>
+          <h2 className="mt-5 max-w-md text-4xl font-semibold leading-tight tracking-[-0.05em] text-zinc-50">A practical mind with room for wonder.</h2>
+        </div>
+        <div>
+          <p className="resume-lead max-w-3xl text-lg leading-8">{about.description}</p>
+          <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {about.highlights.map((highlight) => <div key={highlight.label} className="resume-panel p-4"><p className="text-2xl font-semibold text-zinc-100">{highlight.label}</p><p className="resume-muted mt-2 text-xs uppercase leading-5 tracking-[0.1em]">{highlight.description}</p></div>)}
+          </div>
+        </div>
+      </section>
+
+      <section className="mt-20 border-y border-[var(--site-border)] py-14">
+        <div className="mb-8 flex items-end justify-between gap-5"><div><p className="section-code">// working principles</p><h2 className="mt-4 text-4xl font-semibold tracking-[-0.05em] text-zinc-50 sm:text-5xl">How I approach the work.</h2></div><span className="resume-muted hidden text-xs uppercase tracking-[0.15em] sm:block">signal / 02</span></div>
+        <div className="grid gap-3 md:grid-cols-3">{principles.map(({ icon: Icon, title, description }) => <article key={title} className="resume-skill p-5"><Icon className="h-5 w-5 text-cyan-300" /><h3 className="mt-6 text-xl text-zinc-100">{title}</h3><p className="resume-muted mt-3 leading-7">{description}</p></article>)}</div>
+      </section>
+
+      <section className="mt-20 grid gap-12 lg:grid-cols-[1fr_0.8fr]">
+        <div><p className="section-code">// current interests</p><h2 className="mt-4 text-4xl font-semibold tracking-[-0.05em] text-zinc-50 sm:text-5xl">Learning by building.</h2><p className="resume-lead mt-6 max-w-xl text-lg leading-8">These are the areas I keep returning to, whether the output is a small script, a useful interface, or a physical prototype.</p><div className="mt-7 flex flex-wrap gap-2">{resume.skills.map((skill) => <span key={skill.label} className="resume-chip">{skill.label}</span>)}</div></div>
+        <div className="resume-panel p-6"><p className="section-code">// keep in touch</p><h2 className="mt-4 text-2xl text-zinc-50">Good ideas become better conversations.</h2><p className="resume-muted mt-3 leading-7">For collaborations, questions, or a problem worth exploring, email is the best place to start.</p><div className="mt-7 flex flex-wrap gap-4"><Link href={socialMedia.email.href} className="glow-action inline-flex items-center gap-2 rounded px-4 py-3 text-sm font-semibold text-[#090b0d]"><Mail className="h-4 w-4" /> Say hello</Link><Link href={socialMedia.github.href} target="_blank" className="inline-flex items-center gap-2 py-3 text-sm text-cyan-300 hover:text-cyan-200">View the code <ArrowUpRight className="h-4 w-4" /></Link></div></div>
+      </section>
+    </main>
+  );
+}
