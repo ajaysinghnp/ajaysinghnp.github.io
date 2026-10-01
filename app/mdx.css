@@ -12,36 +12,7 @@
   color: gray;
 }
 
-[data-rehype-pretty-code-figure]>pre>code[data-line-numbers-max-digits="2"]>[data-line]::before {
-  width: 2rem;
-}
-
-[data-rehype-pretty-code-figure]>pre>code[data-line-numbers-max-digits="3"]>[data-line]::before {
-  width: 3rem;
-}
-
-/* Inline Code */
 span[data-rehype-pretty-code-figure]>code {
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
-  border-radius: 0.25rem;
-}
-
-.contains-task-list {
-  list-style: none;
-  color: rgb(212 212 216 / 1);
-}
-
-.contains-task-list>li {
-  display: flex;
-  gap: 0.75rem;
-}
-
-.contains-task-list>li>input[type="checkbox"] {
-  width: 1rem;
-  height: 1rem;
-  color: rgb(37 99 235 / 1);
-  background-color: rgb(243 244 246 / 1);
-  border-color: rgb(209 213 219 / 1);
+  padding: 0 0.5rem;
   border-radius: 0.25rem;
 }

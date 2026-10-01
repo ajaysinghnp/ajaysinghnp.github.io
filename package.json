@@ -4,9 +4,8 @@
   "private": true,
   "packageManager": "pnpm@12.8.1",
   "scripts": {
-    "content:build": "contentlayer build || node -e \"console.warn('Contentlayer build skipped; continuing with Next.js build.')\"",
-    "dev": "pnpm run content:build && next dev",
-    "build": "pnpm run content:build && next build",
+    "dev": "next dev",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
@@ -22,10 +21,8 @@
     "clsx": "^2.1.1",
     "date-fns": "^4.4.0",
     "framer-motion": "^13.4.6",
-    "github-slugger": "^2.0.0",
     "lucide-react": "^1.49.0",
     "next": "^16.3.7",
-    "next-contentlayer": "^0.3.4",
     "next-mdx-remote": "^6.0.0",
     "next-themes": "^0.4.6",
     "react": "^19.3.0",
@@ -33,7 +30,6 @@
     "remark": "^15.0.1",
     "remark-toc": "^9.0.0",
     "sharp": "^0.35.5",
-    "shiki": "^4.4.3",
     "swr": "^2.5.1",
     "tailwind-merge": "^3.7.0",
     "tailwindcss-animate": "^1.0.7"
@@ -44,7 +40,6 @@
     "@types/node": "^26.6.3",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
-    "contentlayer": "^0.3.4",
     "eslint": "^10.11.0",
     "eslint-config-next": "16.3.7",
     "postcss": "^8.5.28",
@@ -52,14 +47,8 @@
     "rehype-pretty-code": "^0.14.5",
     "rehype-slug": "^6.0.0",
     "remark-gfm": "^4.0.1",
-    "remark-github": "^12.0.0",
     "tailwindcss": "^4.3.3",
     "tailwindcss-debug-screens": "^3.0.1",
     "typescript": "^7.0.2"
-  },
-  "overrides": {
-    "next-contentlayer": {
-      "next": "$next"
-    }
   }
 }

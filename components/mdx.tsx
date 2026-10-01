@@ -1,4 +1,3 @@
-// components/mdx-remote.js
 import { options } from "@/lib/mdxOptions";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { Suspense } from "react";
