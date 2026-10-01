@@ -62,7 +62,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={calSans.className} suppressHydrationWarning>
+    <html lang="en" className={calSans.variable} suppressHydrationWarning>
       <head>
         <link
           rel="apple-touch-icon"
@@ -90,7 +90,7 @@ export default function RootLayout({
         )}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <Particles className="animate-fade-in" quantity={150} />
+          <Particles className="z-0 animate-fade-in opacity-80" quantity={150} />
           {/* TODO Refractor the Layout to merge them in this layout rather than having a seperate component */}
           <Layout>{children}</Layout>
         </ThemeProvider>

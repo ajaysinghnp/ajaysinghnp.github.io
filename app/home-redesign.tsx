@@ -4,45 +4,47 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import {
-  ArrowDownRight,
   ArrowUpRight,
   BriefcaseBusiness,
   GitBranch,
-  GitBranch as Github,
   Mail,
   MapPin,
   Rss,
 } from "lucide-react";
 
+import { about } from "@/data/about";
+import { navigation } from "@/data/navigation";
 import { resume } from "@/data/resume";
 import { socialMedia } from "@/data/social";
 
 const projects = [
   {
-    number: "01",
-    title: "Personal web / blog",
-    description: "A quiet home for experiments, field notes, and the systems behind the work.",
-    tags: ["Next.js", "MDX", "Open source"],
+    index: "01",
+    title: "Ajay Singh / portfolio",
+    type: "Personal system",
+    description: "A living archive for experiments, writing, and the practical systems behind the work.",
     href: "https://github.com/ajaysinghnp/ajaysinghnp.github.io",
   },
   {
-    number: "02",
+    index: "02",
     title: "Nepali calendar tools",
-    description: "Useful, lightweight utilities that make local dates and everyday workflows easier to handle.",
-    tags: ["JavaScript", "Utilities", "Nepal"],
+    type: "Open source utility",
+    description: "Small, useful tools for working with local dates and everyday calendar workflows.",
     href: "https://github.com/ajaysinghnp/np-calendar",
   },
   {
-    number: "03",
+    index: "03",
     title: "Maya Utility App",
-    description: "A practical collection of small tools shaped by the friction of real technical work.",
-    tags: ["Automation", "Tools", "Open source"],
+    type: "Automation toolkit",
+    description: "A practical collection of tools shaped by the friction of real technical work.",
     href: "https://github.com/ajaysinghnp/Maya-Utility-App",
   },
 ];
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 22 },
+const socialLinks = [socialMedia.github, socialMedia.linkedin, socialMedia.youtube];
+
+const reveal = {
+  hidden: { opacity: 0, y: 18 },
   show: (delay = 0) => ({
     opacity: 1,
     y: 0,
@@ -50,63 +52,61 @@ const fadeUp = {
   }),
 };
 
-const navItems = [
-  { label: "Work", href: "#work" },
-  { label: "About", href: "#about" },
-  { label: "Notes", href: "/blog" },
-];
-
 export default function HomeRedesign() {
   return (
-    <main className="portfolio-shell min-h-screen overflow-hidden text-[#20211d]">
-      <header className="relative z-20 mx-auto flex max-w-7xl items-center justify-between px-5 py-6 sm:px-8 lg:px-12">
-        <Link href="/" className="group flex items-center gap-3 text-sm font-semibold tracking-[-0.02em]">
-          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#20211d] text-sm text-[#d8ff45] transition-transform group-hover:rotate-12">AS</span>
-          <span>Ajay Singh<span className="text-[#a6ad9a]">.</span></span>
-        </Link>
-        <nav className="hidden items-center gap-8 text-sm text-[#65695e] md:flex">
-          {navItems.map((item) => <Link key={item.href} href={item.href} className="transition-colors hover:text-[#20211d]">{item.label}</Link>)}
-        </nav>
-        <Link href={socialMedia.email.href} className="inline-flex items-center gap-2 rounded-full border border-[#20211d]/15 px-4 py-2 text-sm font-medium transition hover:border-[#20211d] hover:bg-[#20211d] hover:text-[#f6f5ef]"><Mail className="h-4 w-4" /> Say hello</Link>
+    <main className="signal-shell relative z-10 min-h-screen overflow-hidden bg-[#090b0d] text-zinc-100">
+      <div className="signal-grid pointer-events-none fixed inset-0 opacity-40" />
+      <header className="relative z-20 border-b border-white/10 bg-[#090b0d]/80 backdrop-blur-xl">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-8 lg:px-12">
+          <Link href="/" className="flex items-center gap-3 text-sm font-semibold tracking-wide">
+            <span className="flex h-8 w-8 items-center justify-center rounded border border-cyan-300/60 text-xs text-cyan-200">AS</span>
+            <span>AJAY SINGH<span className="text-cyan-300">_</span></span>
+          </Link>
+          <nav className="hidden items-center gap-6 text-xs uppercase tracking-[0.16em] text-zinc-500 lg:flex">
+            {navigation.map((item) => <Link key={item.href} href={item.href} className="transition-colors hover:text-cyan-200">{item.name}</Link>)}
+          </nav>
+          <Link href={socialMedia.email.href} className="inline-flex items-center gap-2 rounded border border-cyan-300/40 bg-cyan-300/10 px-3 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-cyan-100 transition hover:bg-cyan-300/20"><Mail className="h-3.5 w-3.5" /> Contact</Link>
+        </div>
       </header>
 
-      <section className="relative mx-auto grid max-w-7xl gap-14 px-5 pb-20 pt-12 sm:px-8 lg:grid-cols-[1.05fr_0.95fr] lg:px-12 lg:pb-28 lg:pt-20">
-        <div className="pointer-events-none absolute -right-24 top-0 h-72 w-72 rounded-full bg-[#d8ff45]/50 blur-3xl" />
-        <motion.div initial="hidden" animate="show" variants={fadeUp} custom={0.08} className="relative z-10 flex flex-col justify-center">
-          <div className="mb-8 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#7d8474]"><span className="h-px w-10 bg-[#20211d]" /> Engineer / builder / curious mind</div>
-          <h1 className="max-w-3xl text-[clamp(3.5rem,9vw,8rem)] font-semibold leading-[0.9] tracking-[-0.075em]">Making useful things for the real world<span className="text-[#8eae19]">.</span></h1>
-          <p className="mt-8 max-w-xl text-lg leading-8 text-[#65695e] sm:text-xl">I&apos;m Ajay, an electronics and communication engineer based in Kathmandu. I work across IT operations, automation, software, and the occasional piece of hardware.</p>
-          <div className="mt-9 flex flex-wrap items-center gap-4">
-            <Link href="#work" className="inline-flex items-center gap-3 rounded-full bg-[#20211d] px-5 py-3 text-sm font-medium text-[#f6f5ef] transition hover:bg-[#41443d]">See selected work <ArrowDownRight className="h-4 w-4 text-[#d8ff45]" /></Link>
-            <GitBranch className="h-5 w-5" /> GitHub
+      <section className="relative z-10 mx-auto grid max-w-7xl gap-12 px-5 pb-20 pt-16 sm:px-8 lg:grid-cols-[1.15fr_0.85fr] lg:px-12 lg:pb-28 lg:pt-24">
+        <motion.div initial="hidden" animate="show" variants={reveal} custom={0.1} className="lg:order-last">
+          <div className="mb-8 flex items-center gap-3 text-xs uppercase tracking-[0.2em] text-cyan-300"><span className="h-2 w-2 animate-pulse rounded-full bg-cyan-300 shadow-[0_0_18px_#67e8f9]" /> Signal online / Kathmandu, Nepal</div>
+          <h1 className="max-w-5xl text-[clamp(4rem,11vw,10rem)] font-semibold leading-[0.83] tracking-[-0.09em] text-zinc-50">Ajay<br /><span className="text-cyan-300">Singh.</span></h1>
+          <p className="mt-10 max-w-2xl text-xl leading-8 text-zinc-400 sm:text-2xl">{resume.position}. I build useful software, automate the repetitive, and stay curious about what happens when hardware meets the web.</p>
+          <div className="mt-10 flex flex-wrap items-center gap-5">
+            <Link href="/projects" className="group inline-flex items-center gap-3 rounded bg-cyan-300 px-5 py-3 text-sm font-semibold text-[#090b0d] transition hover:bg-cyan-200">Explore the work <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" /></Link>
+            <Link href={socialMedia.github.href} target="_blank" className="inline-flex items-center gap-2 text-sm text-zinc-300 transition hover:text-cyan-200"><GitBranch className="h-4 w-4" /> GitHub</Link>
           </div>
-          <div className="mt-14 flex flex-wrap gap-x-8 gap-y-3 text-sm text-[#7d8474]"><span className="inline-flex items-center gap-2"><MapPin className="h-4 w-4" /> Kathmandu, Nepal</span><span className="inline-flex items-center gap-2"><BriefcaseBusiness className="h-4 w-4" /> IT Assistant at Nepal Rastra Bank</span></div>
         </motion.div>
 
-        <motion.div initial="hidden" animate="show" variants={fadeUp} custom={0.2} className="relative z-10 flex items-end justify-center lg:justify-end">
-          <div className="relative aspect-[0.84] w-full max-w-md overflow-hidden rounded-[2rem] bg-[#c7d0b6] shadow-[18px_18px_0_#20211d]">
-            <Image src="/images/author.png" alt="Portrait of Ajay Singh" fill priority sizes="(max-width: 1024px) 90vw, 34vw" className="object-cover object-top grayscale mix-blend-multiply" />
-            <div className="absolute inset-x-0 bottom-0 flex items-end justify-between bg-gradient-to-t from-[#20211d]/80 to-transparent p-6 pt-24 text-[#f6f5ef]"><p className="max-w-[13rem] text-sm leading-6">Bridging imagination and reality, one innovation at a time.</p><span className="text-3xl font-semibold text-[#d8ff45]">↗</span></div>
+        <motion.div initial="hidden" animate="show" variants={reveal} custom={0.25} className="relative flex items-end justify-center lg:order-first lg:justify-start">
+          <div className="relative w-full max-w-sm border border-cyan-300/30 bg-[#101518] p-3 shadow-[0_0_70px_rgba(34,211,238,0.12)]">
+            <div className="mb-3 flex items-center justify-between border-b border-white/10 px-2 pb-3 text-[10px] uppercase tracking-[0.18em] text-zinc-500"><span>Profile / 001</span><span className="text-cyan-300">Live</span></div>
+            <div className="relative aspect-[0.9] overflow-hidden bg-zinc-900"><Image src="/images/author.png" alt="Portrait of Ajay Singh" fill priority sizes="(max-width: 1024px) 90vw, 28vw" className="object-cover object-top grayscale contrast-125" /><div className="absolute inset-0 bg-[linear-gradient(transparent_0%,rgba(34,211,238,0.08)_50%,transparent_100%)] bg-[length:100%_8px]" /></div>
+            <div className="grid grid-cols-2 gap-3 border-t border-white/10 px-2 pt-4 text-xs"><div><p className="text-zinc-600">Focus</p><p className="mt-1 text-zinc-200">Automation + systems</p></div><div><p className="text-zinc-600">Since</p><p className="mt-1 text-zinc-200">2012 / coding</p></div></div>
           </div>
         </motion.div>
       </section>
 
-      <section className="border-y border-[#20211d]/10 bg-[#ecebe3]" aria-label="Highlights">
-        <div className="mx-auto grid max-w-7xl gap-6 px-5 py-7 text-sm sm:grid-cols-3 sm:px-8 lg:px-12"><div><p className="text-3xl font-semibold tracking-[-0.05em]">6<span className="text-[#8eae19]">+</span></p><p className="mt-1 text-[#7d8474]">years in IT and operations</p></div><div><p className="text-3xl font-semibold tracking-[-0.05em]">30<span className="text-[#8eae19]">+</span></p><p className="mt-1 text-[#7d8474]">open-source experiments</p></div><div><p className="text-3xl font-semibold tracking-[-0.05em]">∞</p><p className="mt-1 text-[#7d8474]">things still left to learn</p></div></div>
-      </section>
-
-      <section id="work" className="mx-auto max-w-7xl px-5 py-24 sm:px-8 lg:px-12 lg:py-32">
-        <div className="mb-12 flex flex-col justify-between gap-5 sm:flex-row sm:items-end"><div><p className="eyebrow">Selected work</p><h2 className="mt-4 text-4xl font-semibold tracking-[-0.06em] sm:text-6xl">Small tools, useful systems.</h2></div><Link href="/projects" className="inline-flex items-center gap-2 text-sm font-medium underline decoration-[#b4bf94] underline-offset-8 hover:decoration-[#20211d]">Browse all projects <ArrowUpRight className="h-4 w-4" /></Link></div>
-        <div className="divide-y divide-[#20211d]/15 border-y border-[#20211d]/15">
-          {projects.map((project, index) => <motion.div key={project.title} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.4 }} variants={fadeUp} custom={index * 0.08} className="group grid gap-5 py-7 transition-colors hover:bg-[#ecebe3] sm:grid-cols-[5rem_1fr_auto] sm:items-center sm:px-5"><span className="text-sm text-[#a1a79a]">{project.number}</span><div><div className="flex flex-wrap items-center gap-3"><h3 className="text-2xl font-semibold tracking-[-0.04em]">{project.title}</h3><span className="h-2 w-2 rounded-full bg-[#a8c622]" /></div><p className="mt-2 max-w-xl text-sm leading-7 text-[#65695e]">{project.description}</p><div className="mt-3 flex flex-wrap gap-2 text-xs text-[#7d8474]">{project.tags.map((tag) => <span key={tag}>#{tag}</span>)}</div></div><Link href={project.href} target="_blank" rel="noreferrer" aria-label={`View ${project.title} on GitHub`} className="flex h-11 w-11 items-center justify-center rounded-full border border-[#20211d]/15 transition group-hover:border-[#20211d] group-hover:bg-[#20211d] group-hover:text-[#d8ff45]"><ArrowUpRight className="h-5 w-5" /></Link></motion.div>)}
+      <section className="relative z-10 border-y border-white/10 bg-[#0d1215]" aria-label="Profile highlights">
+        <div className="mx-auto grid max-w-7xl gap-6 px-5 py-7 sm:grid-cols-4 sm:px-8 lg:px-12">
+          {about.highlights.map((highlight) => <div key={highlight.label} className="border-l border-cyan-300/40 pl-4"><p className="text-2xl font-semibold text-zinc-100">{highlight.label}</p><p className="mt-1 text-xs uppercase tracking-[0.12em] text-zinc-500">{highlight.description}</p></div>)}
         </div>
       </section>
 
-      <section id="about" className="bg-[#20211d] text-[#f6f5ef]"><div className="mx-auto grid max-w-7xl gap-16 px-5 py-24 sm:px-8 lg:grid-cols-[0.75fr_1.25fr] lg:px-12 lg:py-32"><div><p className="eyebrow text-[#d8ff45]">A little context</p><h2 className="mt-5 max-w-sm text-4xl font-semibold leading-tight tracking-[-0.06em] sm:text-5xl">Technical enough to ship. Curious enough to keep asking why.</h2></div><div><p className="max-w-2xl text-xl leading-9 text-[#c2c5b9]">{resume.profile}</p><div className="mt-12 border-t border-white/15 pt-7"><p className="eyebrow text-[#8f9587]">Experience</p>{resume.workExperiences.map((job) => <div key={job.company} className="mt-5 grid gap-3 sm:grid-cols-[12rem_1fr]"><div><p className="font-medium text-[#d8ff45]">{job.company}</p><p className="mt-1 text-sm text-[#8f9587]">{job.date}</p></div><div><h3 className="text-xl font-medium">{job.title}</h3><p className="mt-2 max-w-xl leading-7 text-[#aeb2a6]">Supporting reliable IT operations while building better ways to automate the repetitive parts.</p></div></div>)}</div></div></div></section>
+      <section className="relative z-10 mx-auto max-w-7xl px-5 py-24 sm:px-8 lg:px-12 lg:py-32" id="work">
+        <div className="mb-10 flex items-end justify-between gap-6"><div><p className="section-code">// selected_work</p><h2 className="mt-4 text-4xl font-semibold tracking-[-0.06em] text-zinc-50 sm:text-6xl">Useful by design.</h2></div><Link href="/projects" className="hidden items-center gap-2 text-sm text-zinc-400 transition hover:text-cyan-200 sm:inline-flex">All projects <ArrowUpRight className="h-4 w-4" /></Link></div>
+        <div className="divide-y divide-white/10 border-y border-white/10">
+          {projects.map((project, index) => <motion.div key={project.index} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.3 }} variants={reveal} custom={index * 0.1} className="group grid gap-4 py-7 transition-colors hover:bg-cyan-300/[0.04] sm:grid-cols-[4rem_1fr_auto] sm:items-center sm:px-4"><span className="font-mono text-sm text-cyan-300/70">{project.index}</span><div><p className="text-[10px] uppercase tracking-[0.2em] text-zinc-600">{project.type}</p><h3 className="mt-2 text-2xl font-medium tracking-[-0.04em] text-zinc-100">{project.title}</h3><p className="mt-2 max-w-2xl text-sm leading-7 text-zinc-500">{project.description}</p></div><Link href={project.href} target="_blank" rel="noreferrer" aria-label={`View ${project.title} on GitHub`} className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-zinc-400 transition group-hover:border-cyan-300 group-hover:text-cyan-200"><ArrowUpRight className="h-4 w-4" /></Link></motion.div>)}
+        </div>
+      </section>
 
-      <section className="mx-auto grid max-w-7xl gap-12 px-5 py-24 sm:px-8 lg:grid-cols-[1fr_0.8fr] lg:px-12 lg:py-32"><div><p className="eyebrow">Keep exploring</p><h2 className="mt-4 max-w-xl text-4xl font-semibold tracking-[-0.06em] sm:text-6xl">The work is only half the story.</h2><p className="mt-6 max-w-lg text-lg leading-8 text-[#65695e]">I write about the other half: what I learn, what breaks, and the small ideas that make technology feel more human.</p><Link href="/blog" className="mt-8 inline-flex items-center gap-3 rounded-full border border-[#20211d]/20 px-5 py-3 text-sm font-medium transition hover:bg-[#20211d] hover:text-[#f6f5ef]"><Rss className="h-4 w-4" /> Read the notes <ArrowUpRight className="h-4 w-4" /></Link></div><div className="flex flex-col justify-end border-t border-[#20211d]/15 pt-6 lg:border-t-0 lg:border-l lg:pl-10"><p className="eyebrow">Elsewhere</p><div className="mt-5 space-y-3 text-lg"><Link href={socialMedia.github.href} target="_blank" className="flex items-center justify-between border-b border-[#20211d]/15 pb-3 transition hover:text-[#718b0d]"><span className="inline-flex items-center gap-3"><Github className="h-5 w-5" /> GitHub</span><ArrowUpRight className="h-4 w-4" /></Link><Link href={socialMedia.linkedin.href} target="_blank" className="flex items-center justify-between border-b border-[#20211d]/15 pb-3 transition hover:text-[#718b0d]"><span>LinkedIn</span><ArrowUpRight className="h-4 w-4" /></Link><Link href={socialMedia.youtube.href} target="_blank" className="flex items-center justify-between border-b border-[#20211d]/15 pb-3 transition hover:text-[#718b0d]"><span>YouTube / Mentor Maya</span><ArrowUpRight className="h-4 w-4" /></Link></div></div></section>
+      <section id="about" className="relative z-10 border-y border-white/10 bg-[#101518]"><div className="mx-auto grid max-w-7xl gap-14 px-5 py-24 sm:px-8 lg:grid-cols-[0.8fr_1.2fr] lg:px-12 lg:py-32"><div><p className="section-code">// context</p><h2 className="mt-5 max-w-md text-4xl font-semibold leading-tight tracking-[-0.06em] text-zinc-50 sm:text-5xl">A creative engineer with a practical streak.</h2><p className="mt-7 max-w-md text-base leading-8 text-zinc-400">{about.description}</p></div><div><div className="flex items-center gap-3 text-xs uppercase tracking-[0.18em] text-cyan-300"><BriefcaseBusiness className="h-4 w-4" /> Current chapter</div>{resume.workExperiences.map((job) => <div key={job.company} className="mt-6 border-l border-cyan-300/50 pl-6"><div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"><h3 className="text-2xl text-zinc-100">{job.title}</h3><span className="text-xs uppercase tracking-[0.14em] text-zinc-600">{job.date}</span></div><p className="mt-2 text-cyan-200">{job.company}</p><p className="mt-4 max-w-xl leading-8 text-zinc-400">{job.description}</p></div>)}<Link href="/resume" className="mt-8 inline-flex items-center gap-2 text-sm text-zinc-300 underline decoration-cyan-300/60 underline-offset-8 transition hover:text-cyan-200">Read the full résumé <ArrowUpRight className="h-4 w-4" /></Link></div></div></section>
 
-      <footer id="contact" className="border-t border-[#20211d]/10 bg-[#d8ff45]"><div className="mx-auto flex max-w-7xl flex-col gap-8 px-5 py-12 sm:px-8 lg:flex-row lg:items-end lg:justify-between lg:px-12"><div><p className="eyebrow">Have a good problem?</p><h2 className="mt-3 text-4xl font-semibold tracking-[-0.06em] sm:text-6xl">Let&apos;s make it useful.</h2></div><Link href={socialMedia.email.href} className="inline-flex w-fit items-center gap-2 rounded-full bg-[#20211d] px-5 py-3 text-sm font-medium text-[#f6f5ef] transition hover:bg-[#41443d]"><Mail className="h-4 w-4 text-[#d8ff45]" /> {socialMedia.email.handle}</Link></div></footer>
-</main>
+      <section className="relative z-10 mx-auto grid max-w-7xl gap-14 px-5 py-24 sm:px-8 lg:grid-cols-[1fr_0.8fr] lg:px-12 lg:py-32"><div><p className="section-code">// field_notes</p><h2 className="mt-5 max-w-xl text-4xl font-semibold tracking-[-0.06em] text-zinc-50 sm:text-6xl">The signal continues in the notes.</h2><p className="mt-6 max-w-lg text-lg leading-8 text-zinc-500">Ideas, lessons, and the occasional rabbit hole from building across software, automation, and hardware.</p><Link href="/blog" className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-cyan-200 transition hover:text-cyan-100"><Rss className="h-4 w-4" /> Read the blog <ArrowUpRight className="h-4 w-4" /></Link></div><div className="border-t border-white/10 pt-5 lg:border-l lg:border-t-0 lg:pl-10"><p className="section-code">// elsewhere</p><div className="mt-5 space-y-3">{socialLinks.map((social) => <Link key={social.label} href={social.href} target="_blank" rel="noreferrer" className="flex items-center justify-between border-b border-white/10 pb-3 text-sm text-zinc-300 transition hover:border-cyan-300/50 hover:text-cyan-200"><span>{social.label}</span><span className="text-xs text-zinc-600">{social.handle}</span></Link>)}</div></div></section>
+
+      <footer id="contact" className="relative z-10 border-t border-cyan-300/30 bg-cyan-300 text-[#090b0d]"><div className="mx-auto flex max-w-7xl flex-col gap-8 px-5 py-12 sm:px-8 lg:flex-row lg:items-end lg:justify-between lg:px-12"><div><p className="text-xs font-bold uppercase tracking-[0.2em] text-[#245761]">// open_channel</p><h2 className="mt-3 text-4xl font-semibold tracking-[-0.06em] sm:text-6xl">Have a good problem?</h2></div><Link href={socialMedia.email.href} className="inline-flex w-fit items-center gap-2 rounded bg-[#090b0d] px-5 py-3 text-sm font-semibold text-cyan-200 transition hover:bg-[#172126]"><Mail className="h-4 w-4" /> {socialMedia.email.handle}</Link></div></footer>
+    </main>
   );
 }

@@ -1,7 +1,8 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Cal Sans", ui-sans-serif, sans-serif;
+  --font-sans: "Segoe UI", ui-sans-serif, sans-serif;
+  --font-display: var(--font-calsans), "Segoe UI", sans-serif;
 }
 
 ::selection {
@@ -9,22 +10,29 @@
   color: #20211d;
 }
 
-.portfolio-shell {
-  background-color: #f6f5ef;
-  background-image: radial-gradient(rgba(32, 33, 29, 0.07) 0.7px, transparent 0.7px);
-  background-size: 7px 7px;
+.signal-grid {
+  background-image: linear-gradient(rgba(103, 232, 249, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(103, 232, 249, 0.045) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(to bottom, black, transparent 75%);
 }
 
-.eyebrow {
-  color: #7d8474;
+.section-code {
+  color: #67e8f9;
   font-size: 0.7rem;
   font-weight: 700;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.18em;
   line-height: 1.25;
   text-transform: uppercase;
 }
 
 @layer base {
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-calsans), "Segoe UI", sans-serif;
+  }
+
   :root {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
