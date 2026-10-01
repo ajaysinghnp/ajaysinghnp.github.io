@@ -1,159 +1,47 @@
 "use client";
 
 import Link from "next/link";
-import { Eye } from "lucide-react";
+import { ArrowUpRight, GitBranch, RefreshCw } from "lucide-react";
 import useSWR from "swr";
+import { motion } from "framer-motion";
 
-import { Card } from "@/components/card";
-import { Article } from "./article";
-import { Project } from "@/types/github";
 import { fetchProjects } from "@/lib/projects";
 import { socialMedia } from "@/data/social";
+import type { Project } from "@/types/github";
+
+const reveal = {
+  hidden: { opacity: 0, y: 16 },
+  show: (delay = 0) => ({ opacity: 1, y: 0, transition: { duration: 0.55, delay } }),
+};
 
 export default function ProjectsPage() {
-  const {
-    data: projects,
-    error,
-    isLoading,
-  } = useSWR<Project[]>("projects", fetchProjects);
-
-  if (error) {
-    return (
-      <div className="relative bg-black h-dvh flex justify-center items-center">
-        Something happened while fetching Projects!
-      </div>
-    );
-  }
+  const { data: projects, error, isLoading, mutate } = useSWR<Project[]>("projects", fetchProjects);
+  const orderedProjects = [...(projects ?? [])].sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime());
+  const featured = orderedProjects.find((project) => project.name === socialMedia.github.domain) ?? orderedProjects[0];
+  const remaining = orderedProjects.filter((project) => project.name !== featured?.name);
 
   if (isLoading) {
-    return (
-      <div className="relative bg-black h-dvh flex justify-center items-center">
-        Loading Projects...
-      </div>
-    );
+    return <ProjectsState label="Scanning the project signal..." />;
   }
 
-  const featured = projects?.find(
-    (project) => project.name === socialMedia.github.domain
-  )!;
-  const top2 = projects?.find((project) => project.name === "blog")!;
-  const top3 = projects?.find((project) => project.name === "portfolio-blog-theme")!;
-  const sorted = projects
-    ?.filter(
-      (project) =>
-        project.name !== featured.name &&
-        project.name !== top2.name &&
-        project.name !== top3.name
-    )
-    .sort(
-      (a, b) =>
-        new Date(b.date ?? Number.POSITIVE_INFINITY).getTime() -
-        new Date(a.date ?? Number.POSITIVE_INFINITY).getTime()
-    );
+  if (error) {
+    return <ProjectsState label="The project signal is unavailable." action={<button onClick={() => mutate()} className="glow-action inline-flex items-center gap-2 rounded px-4 py-3 text-sm font-semibold text-[#090b0d]"><RefreshCw className="h-4 w-4" /> Try again</button>} />;
+  }
 
   return (
-    <main className="space-y-2">
-      <div className="mx-auto lg:mx-0">
-        <h2 className="text-3xl font-bold tracking-tight text-zinc-100 sm:text-4xl">
-          Open Source Projects
-        </h2>
-        <p className="mt-4 text-zinc-400">
-          Some of my open source projects that I have worked on in the past and
-          currently woking on. You can explore the projects and contribute to
-          them on GitHub by following the links below.
-        </p>
-      </div>
-      <div className="w-full h-px bg-zinc-800" />
+    <main className="resume-shell w-full pb-20">
+      <header className="grid gap-10 border-b border-[var(--site-border)] pb-14 lg:grid-cols-[1fr_0.8fr] lg:items-end">
+        <div><p className="section-code">// projects / open signal</p><h1 className="mt-5 max-w-4xl text-6xl font-semibold leading-[0.92] tracking-[-0.06em] text-zinc-50 sm:text-8xl">Things I&apos;ve made<span className="text-cyan-300">.</span></h1></div>
+        <p className="resume-lead max-w-xl text-xl leading-8">A changing index of open-source experiments, practical utilities, and tools built to make a real workflow a little better.</p>
+      </header>
 
-      {projects && projects?.length > 0 ? (
-        <>
-          <div className="grid grid-cols-1 gap-8 mx-auto lg:grid-cols-2">
-            <Card>
-              <Link href={`/projects/${featured.name}`}>
-                <article className="relative w-full h-full p-4 md:p-8">
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="text-xs text-zinc-100">
-                      {featured.date ? (
-                        <time dateTime={new Date(featured.date).toISOString()}>
-                          {Intl.DateTimeFormat(undefined, {
-                            dateStyle: "medium",
-                          }).format(new Date(featured.date))}
-                        </time>
-                      ) : (
-                        <span>SOON</span>
-                      )}
-                    </div>
-                    <span className="flex items-center gap-1 text-xs text-zinc-500">
-                      <Eye className="w-4 h-4" />{" "}
-                      {Intl.NumberFormat("en-US", {
-                        notation: "compact",
-                      }).format(0)}
-                    </span>
-                  </div>
+      {featured ? <motion.section initial="hidden" animate="show" variants={reveal} className="resume-panel mt-14 grid gap-8 overflow-hidden p-6 sm:p-8 lg:grid-cols-[1fr_0.42fr] lg:items-end"><div><p className="section-code">// featured / 01</p><h2 className="mt-5 max-w-2xl text-4xl font-semibold tracking-[-0.05em] text-zinc-50 sm:text-6xl">{featured.title}<span className="text-cyan-300">.</span></h2><p className="resume-muted mt-5 max-w-2xl text-lg leading-8">{featured.description || "A practical open-source project from the workshop."}</p></div><div className="flex flex-col gap-4 border-t border-[var(--site-border)] pt-5 lg:border-l lg:border-t-0 lg:pl-6"><p className="section-code">// repository</p><p className="resume-muted text-sm">Updated {new Date(featured.updated_at).toLocaleDateString()}</p><Link href={`/projects/${featured.name}`} className="inline-flex items-center gap-2 text-sm text-cyan-300 transition hover:text-cyan-200">Open project <ArrowUpRight className="h-4 w-4" /></Link></div></motion.section> : <ProjectsState label="No public projects are available right now." />}
 
-                  <h2
-                    id="featured-post"
-                    className="mt-4 text-3xl font-bold text-zinc-100 group-hover:text-white sm:text-4xl font-display"
-                  >
-                    {featured.title}
-                  </h2>
-                  <p className="mt-4 leading-8 duration-150 text-zinc-400 group-hover:text-zinc-300">
-                    {featured.description}
-                  </p>
-                  <div className="absolute bottom-4 md:bottom-8">
-                    <p className="hidden text-zinc-200 hover:text-zinc-50 lg:block">
-                      Read more <span aria-hidden="true">&rarr;</span>
-                    </p>
-                  </div>
-                </article>
-              </Link>
-            </Card>
-
-            <div className="flex flex-col w-full gap-8 mx-auto border-t border-gray-900/10 lg:mx-0 lg:border-t-0">
-              {[top2, top3].map((project) => (
-                <Card key={project.name}>
-                  <Article project={project} views={0} />
-                </Card>
-              ))}
-            </div>
-          </div>
-          <div className="hidden w-full h-px md:block bg-zinc-800" />
-
-          <div className="grid grid-cols-1 gap-4 mx-auto lg:mx-0 md:grid-cols-3">
-            <div className="grid grid-cols-1 gap-4">
-              {sorted
-                ?.filter((_, i) => i % 3 === 0)
-                .map((project) => (
-                  <Card key={project.name}>
-                    <Article project={project} views={0} />
-                  </Card>
-                ))}
-            </div>
-            <div className="grid grid-cols-1 gap-4">
-              {sorted
-                ?.filter((_, i) => i % 3 === 1)
-                .map((project) => (
-                  <Card key={project.name}>
-                    <Article project={project} views={0} />
-                  </Card>
-                ))}
-            </div>
-            <div className="grid grid-cols-1 gap-4">
-              {sorted
-                ?.filter((_, i) => i % 3 === 2)
-                .map((project) => (
-                  <Card key={project.name}>
-                    <Article project={project} views={0} />
-                  </Card>
-                ))}
-            </div>
-          </div>
-        </>
-      ) : (
-        <div className="relative flex justify-start items-center text-white">
-          Could not Load the Projects
-        </div>
-      )}
+      {remaining.length > 0 && <section className="mt-20"><div className="mb-8 flex items-end justify-between"><div><p className="section-code">// project index</p><h2 className="mt-4 text-4xl font-semibold tracking-[-0.05em] text-zinc-50 sm:text-5xl">More experiments.</h2></div><Link href={socialMedia.github.href} target="_blank" className="hidden items-center gap-2 text-sm text-cyan-300 hover:text-cyan-200 sm:inline-flex">Open GitHub <GitBranch className="h-4 w-4" /></Link></div><div className="divide-y divide-[var(--site-border)] border-y border-[var(--site-border)]">{remaining.map((project, index) => <motion.article key={project.name} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.25 }} variants={reveal} custom={index * 0.05} className="group grid gap-4 py-6 sm:grid-cols-[4rem_1fr_auto] sm:items-center"><span className="font-mono text-sm text-cyan-300/70">{String(index + 2).padStart(2, "0")}</span><div><p className="text-[10px] uppercase tracking-[0.18em] text-cyan-300/70">{project.visibility} / repository</p><h3 className="mt-2 text-2xl text-zinc-100 transition group-hover:text-cyan-200">{project.title}</h3><p className="resume-muted mt-2 max-w-2xl text-sm leading-7">{project.description || "No description yet. Open the repository to inspect the work."}</p></div><Link href={`/projects/${project.name}`} aria-label={`Open ${project.title}`} className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--site-border)] text-zinc-400 transition group-hover:border-cyan-300 group-hover:text-cyan-300"><ArrowUpRight className="h-4 w-4" /></Link></motion.article>)}</div></section>}
     </main>
   );
+}
+
+function ProjectsState({ label, action }: { label: string; action?: React.ReactNode }) {
+  return <main className="resume-shell flex min-h-[55vh] w-full flex-col items-center justify-center gap-5 text-center"><p className="section-code">// projects / signal</p><h1 className="text-3xl text-zinc-50">{label}</h1>{action}</main>;
 }
