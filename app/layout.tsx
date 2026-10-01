@@ -5,8 +5,8 @@ import "@/app/mdx.css";
 import { calSans } from "@/components/local-fonts";
 import { ThemeProvider } from "@/providers/theme";
 import { cn } from "@/lib/utils";
-import Particles from "@/components/particles";
 import Layout from "@/components/layout";
+import SiteBackground from "@/components/site-background";
 
 const title = "Ajay Singh";
 const description = "A Personal Portfolio for Ajay Singh.";
@@ -85,12 +85,12 @@ export default function RootLayout({
       </head>
       <body
         className={cn(
-          "bg-black text-white",
+          "site-body",
           process.env.NODE_ENV === "development" && "debug-screens"
         )}
       >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <Particles className="z-0 animate-fade-in opacity-80" quantity={150} />
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
+          <SiteBackground />
           {/* TODO Refractor the Layout to merge them in this layout rather than having a seperate component */}
           <Layout>{children}</Layout>
         </ThemeProvider>

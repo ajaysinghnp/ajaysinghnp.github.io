@@ -1,13 +1,11 @@
 "use client";
 import Link from "next/link";
-import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import React, { useEffect, useState } from "react";
 import { GitBranch } from "lucide-react";
 import { usePathname } from 'next/navigation'
 
 import { navigation } from "@/data/navigation";
-import { angelina } from "@/components/local-fonts";
-import LogoImage from "@/public/favicon/favicon-32x32.png";
 import { socialMedia } from "@/data/social";
 import { ModeToggle } from "./theme-toggle";
 import { cn } from "@/lib/utils";
@@ -17,70 +15,31 @@ interface Props {
 }
 
 export const Navigation: React.FC<Props> = ({ gitTheme = false }: Props) => {
-  const ref = useRef<HTMLElement>(null);
   const pathname = usePathname();
-  const [isIntersecting, setIntersecting] = useState(true);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
-    if (!ref.current) return;
-    const observer = new IntersectionObserver(([entry]) =>
-      setIntersecting(entry.isIntersecting)
-    );
-
-    observer.observe(ref.current);
-    return () => observer.disconnect();
+    const onScroll = () => setIsScrolled(window.scrollY > 18);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
-    <header ref={ref} className="mb-[calc(2rem_+_0.55rem)] lg:mb-[calc(3rem_+_0.55rem)]">
-      <div
-        className={cn(
-          "fixed inset-x-0 top-0 z-50 backdrop-blur duration-200 border-b",
-          isIntersecting ?
-            "bg-zinc-900/0 border-transparent" :
-            "bg-zinc-900/500  border-zinc-800"
-        )}
-      >
-        <div className="container max-w-[90%] flex flex-row items-center justify-between p-2 mx-auto">
-          <Link
-            href="/"
-            className="flex gap-2 duration-200 text-zinc-300 hover:text-zinc-100"
-          >
-            <Image src={LogoImage} alt="Logo" width={24} height={24} />
-            <span className={angelina.className}>Ajay</span>
-          </Link>
-          <div className="flex gap-16 items-center">
-            <nav className="animate-fade-in duration-75">
-              <ul className="flex items-center justify-center gap-4">
-                {navigation.map((item) => (
-                  <li key={item.href}>
-                    <Link
-                      href={item.href}
-                      className={cn(
-                        "duration-500 text-zinc-500 hover:text-zinc-300",
-                        pathname.includes(item.href) ? "text-purple-600/80 hover:text-purple-600" : ""
-                      )}
-                    >
-                      {item.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-            <div className="flex gap-2 items-center">
-              <Link
-                href={gitTheme ? `${socialMedia.github.theme}` : `${socialMedia.github.href}/${socialMedia.github.domain}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="duration-200 text-zinc-300 hover:text-zinc-100"
-              >
-                <GitBranch className="h-5 w-5" />
-              </Link>
-              <ModeToggle />
-            </div>
-          </div>
+    <header className={cn("site-navigation sticky top-0 z-50 border-b transition-all duration-300", isScrolled && "site-navigation-scrolled")}>
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-5 py-4 sm:px-8 lg:px-12">
+        <Link href="/" className="flex shrink-0 items-center gap-3 text-sm font-semibold tracking-wide">
+          <span className="site-logo flex h-8 w-8 items-center justify-center rounded border p-1"><Image src="/images/logo-black.svg" alt="Ajay Singh logo" width={24} height={24} className="logo-light" /><Image src="/images/logo-white.svg" alt="" width={24} height={24} className="logo-dark" /></span>
+          <span>AJAY SINGH<span className="site-accent">_</span></span>
+        </Link>
+        <nav className="hidden items-center gap-6 text-xs uppercase tracking-[0.16em] md:flex">
+          {navigation.map((item) => <Link key={item.href} href={item.href} className={cn("site-nav-link transition-colors", pathname === item.href ? "site-nav-active" : "")}>{item.name}</Link>)}
+        </nav>
+        <div className="flex items-center gap-2">
+          <Link href={gitTheme ? socialMedia.github.theme : socialMedia.github.href} target="_blank" rel="noopener noreferrer" className="site-icon-button" aria-label="Open GitHub"><GitBranch className="h-4 w-4" /></Link>
+          <ModeToggle variant="ghost" className="site-icon-button" />
         </div>
       </div>
-    </header >
+    </header>
   );
 };

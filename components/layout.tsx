@@ -17,9 +17,9 @@ const Layout = ({ children }: Props) => {
   }
   return (
     <div className="relative">
-      <div className="relative my-6 ">
+      <div className="relative">
         <Navigation />
-        <div className="w-full pt-8 mx-auto lg:pt-16 max-w-[90%] mb-12">
+        <div className="w-full mx-auto max-w-[90%] mb-12">
           {children}
         </div>
         <Footer />
