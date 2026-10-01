@@ -235,7 +235,7 @@ export default function Particles({
   };
 
   return (
-    <div className={cn("fixed inset-0 -z-10", className)} ref={canvasContainerRef} aria-hidden="true">
+    <div className={cn("fixed inset-0 z-0", className)} ref={canvasContainerRef} aria-hidden="true">
       <canvas ref={canvasRef} />
     </div>
   );

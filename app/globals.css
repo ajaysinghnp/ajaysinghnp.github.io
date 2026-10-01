@@ -26,7 +26,36 @@
   text-transform: uppercase;
 }
 
+.profile-meta {
+  background: linear-gradient(90deg, rgba(34, 211, 238, 0.1), transparent 72%);
+  border-left: 2px solid rgba(103, 232, 249, 0.65);
+}
+
+.live-dot {
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 9999px;
+  background: #67e8f9;
+  box-shadow: 0 0 0 0 rgba(103, 232, 249, 0.75);
+  animation: live-pulse 1.8s ease-out infinite;
+}
+
+@keyframes live-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(103, 232, 249, 0.75);
+  }
+
+  70% {
+    box-shadow: 0 0 0 0.45rem rgba(103, 232, 249, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(103, 232, 249, 0);
+  }
+}
+
 @layer base {
+
   h1,
   h2,
   h3 {
@@ -97,6 +126,7 @@
   body {
     background-color: hsl(var(--background));
     color: rgb(212 212 216 / 1);
+    font-family: "Segoe UI", ui-sans-serif, sans-serif;
   }
 
   .text-edge-outline {

@@ -54,7 +54,7 @@ const reveal = {
 
 export default function HomeRedesign() {
   return (
-    <main className="signal-shell relative z-10 min-h-screen overflow-hidden bg-[#090b0d] text-zinc-100">
+    <main className="signal-shell relative z-10 min-h-screen overflow-hidden bg-transparent text-zinc-100">
       <div className="signal-grid pointer-events-none fixed inset-0 opacity-40" />
       <header className="relative z-20 border-b border-white/10 bg-[#090b0d]/80 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-8 lg:px-12">
@@ -82,7 +82,7 @@ export default function HomeRedesign() {
 
         <motion.div initial="hidden" animate="show" variants={reveal} custom={0.25} className="relative flex items-end justify-center lg:order-first lg:justify-start">
           <div className="relative w-full max-w-sm border border-cyan-300/30 bg-[#101518] p-3 shadow-[0_0_70px_rgba(34,211,238,0.12)]">
-            <div className="mb-3 flex items-center justify-between border-b border-white/10 px-2 pb-3 text-[10px] uppercase tracking-[0.18em] text-zinc-500"><span>Profile / 001</span><span className="text-cyan-300">Live</span></div>
+            <div className="profile-meta mb-3 flex items-center justify-between border-b border-white/10 px-2 py-2 pb-3 text-[10px] uppercase tracking-[0.18em] text-zinc-500"><span>Profile / 001</span><span className="inline-flex items-center gap-2 text-cyan-300"><span className="live-dot" /> Live</span></div>
             <div className="relative aspect-[0.9] overflow-hidden bg-zinc-900"><Image src="/images/author.png" alt="Portrait of Ajay Singh" fill priority sizes="(max-width: 1024px) 90vw, 28vw" className="object-cover object-top grayscale contrast-125" /><div className="absolute inset-0 bg-[linear-gradient(transparent_0%,rgba(34,211,238,0.08)_50%,transparent_100%)] bg-[length:100%_8px]" /></div>
             <div className="grid grid-cols-2 gap-3 border-t border-white/10 px-2 pt-4 text-xs"><div><p className="text-zinc-600">Focus</p><p className="mt-1 text-zinc-200">Automation + systems</p></div><div><p className="text-zinc-600">Since</p><p className="mt-1 text-zinc-200">2012 / coding</p></div></div>
           </div>
@@ -106,7 +106,22 @@ export default function HomeRedesign() {
 
       <section className="relative z-10 mx-auto grid max-w-7xl gap-14 px-5 py-24 sm:px-8 lg:grid-cols-[1fr_0.8fr] lg:px-12 lg:py-32"><div><p className="section-code">// field_notes</p><h2 className="mt-5 max-w-xl text-4xl font-semibold tracking-[-0.06em] text-zinc-50 sm:text-6xl">The signal continues in the notes.</h2><p className="mt-6 max-w-lg text-lg leading-8 text-zinc-500">Ideas, lessons, and the occasional rabbit hole from building across software, automation, and hardware.</p><Link href="/blog" className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-cyan-200 transition hover:text-cyan-100"><Rss className="h-4 w-4" /> Read the blog <ArrowUpRight className="h-4 w-4" /></Link></div><div className="border-t border-white/10 pt-5 lg:border-l lg:border-t-0 lg:pl-10"><p className="section-code">// elsewhere</p><div className="mt-5 space-y-3">{socialLinks.map((social) => <Link key={social.label} href={social.href} target="_blank" rel="noreferrer" className="flex items-center justify-between border-b border-white/10 pb-3 text-sm text-zinc-300 transition hover:border-cyan-300/50 hover:text-cyan-200"><span>{social.label}</span><span className="text-xs text-zinc-600">{social.handle}</span></Link>)}</div></div></section>
 
-      <footer id="contact" className="relative z-10 border-t border-cyan-300/30 bg-cyan-300 text-[#090b0d]"><div className="mx-auto flex max-w-7xl flex-col gap-8 px-5 py-12 sm:px-8 lg:flex-row lg:items-end lg:justify-between lg:px-12"><div><p className="text-xs font-bold uppercase tracking-[0.2em] text-[#245761]">// open_channel</p><h2 className="mt-3 text-4xl font-semibold tracking-[-0.06em] sm:text-6xl">Have a good problem?</h2></div><Link href={socialMedia.email.href} className="inline-flex w-fit items-center gap-2 rounded bg-[#090b0d] px-5 py-3 text-sm font-semibold text-cyan-200 transition hover:bg-[#172126]"><Mail className="h-4 w-4" /> {socialMedia.email.handle}</Link></div></footer>
+      <footer id="contact" className="relative z-10 border-t border-cyan-300/30 bg-cyan-300 text-[#090b0d]">
+        <div className="mx-auto max-w-7xl px-5 py-12 sm:px-8 lg:px-12 lg:py-16">
+          <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#245761]">// open_channel</p>
+              <h2 className="mt-3 max-w-2xl text-4xl font-semibold tracking-[-0.06em] sm:text-6xl">Have a good problem?</h2>
+              <p className="mt-4 max-w-md text-sm leading-6 text-[#245761]">Bring the messy bit. We can make it clearer, calmer, and useful.</p>
+            </div>
+            <Link href={socialMedia.email.href} className="inline-flex w-fit items-center gap-2 rounded bg-[#090b0d] px-5 py-3 text-sm font-semibold text-cyan-200 transition hover:bg-[#172126]"><Mail className="h-4 w-4" /> {socialMedia.email.handle}</Link>
+          </div>
+          <div className="mt-12 flex flex-col gap-5 border-t border-[#245761]/30 pt-5 text-xs text-[#245761] sm:flex-row sm:items-center sm:justify-between">
+            <span>© {new Date().getFullYear()} Ajay Singh. Built in Nepal.</span>
+            <nav className="flex flex-wrap gap-x-5 gap-y-2">{navigation.map((item) => <Link key={item.href} href={item.href} className="transition-colors hover:text-[#090b0d]">{item.name}</Link>)}</nav>
+          </div>
+        </div>
+      </footer>
     </main>
   );
 }
