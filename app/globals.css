@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 @layer base {
   :root {
@@ -61,11 +59,12 @@
 
 @layer base {
   * {
-    @apply border-border;
+    border-color: hsl(var(--border));
   }
 
   body {
-    @apply bg-background text-zinc-300;
+    background-color: hsl(var(--background));
+    color: rgb(212 212 216 / 1);
   }
 
   .text-edge-outline {

@@ -2,7 +2,7 @@
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { Github } from "lucide-react";
+import { GitBranch } from "lucide-react";
 import { usePathname } from 'next/navigation'
 
 import { navigation } from "@/data/navigation";
@@ -74,7 +74,7 @@ export const Navigation: React.FC<Props> = ({ gitTheme = false }: Props) => {
                 rel="noopener noreferrer"
                 className="duration-200 text-zinc-300 hover:text-zinc-100"
               >
-                <Github className="h-5 w-5" />
+                <GitBranch className="h-5 w-5" />
               </Link>
               <ModeToggle />
             </div>

@@ -22,17 +22,26 @@
 
 /* Inline Code */
 span[data-rehype-pretty-code-figure]>code {
-  @apply px-2 rounded;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  border-radius: 0.25rem;
 }
 
 .contains-task-list {
-  @apply list-none text-zinc-300;
+  list-style: none;
+  color: rgb(212 212 216 / 1);
 }
 
 .contains-task-list>li {
-  @apply flex gap-3;
+  display: flex;
+  gap: 0.75rem;
 }
 
 .contains-task-list>li>input[type="checkbox"] {
-  @apply w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded;
+  width: 1rem;
+  height: 1rem;
+  color: rgb(37 99 235 / 1);
+  background-color: rgb(243 244 246 / 1);
+  border-color: rgb(209 213 219 / 1);
+  border-radius: 0.25rem;
 }

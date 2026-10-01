@@ -3,7 +3,7 @@
 import { socialMedia } from "@/data/social";
 import { fetchProject } from "@/lib/projects";
 import { Project } from "@/types/github";
-import { ArrowLeft, Eye, Github, Star, Twitter } from "lucide-react";
+import { ArrowLeft, Eye, GitBranch, MessageSquare, Star } from "lucide-react";
 import Link from "next/link";
 import { Suspense, useEffect, useRef, useState } from "react";
 import useSWR from "swr";
@@ -104,7 +104,7 @@ const ProjectHeader = ({ project_name }: Props) => {
                 )}
               </Link>
               <Link target="_blank" href={project.url}>
-                <Github
+                <GitBranch
                   className={`w-6 h-6 duration-200 hover:font-medium ${isIntersecting
                     ? " text-zinc-400 hover:text-zinc-100"
                     : "text-zinc-600 hover:text-zinc-900"

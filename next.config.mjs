@@ -3,7 +3,7 @@ import { withContentlayer } from "next-contentlayer";
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   distDir: "build",
-  output: "export",
+  output: "standalone",
   reactStrictMode: true,
   images: {
     unoptimized: true,

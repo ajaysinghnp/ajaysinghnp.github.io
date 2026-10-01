@@ -1,5 +1,13 @@
 import { cn } from "@/lib/utils";
-import { Facebook, Github, Instagram, Linkedin, Mail, Twitter, Youtube } from "lucide-react";
+import {
+  BriefcaseBusiness,
+  Camera,
+  GitBranch,
+  Globe,
+  Mail,
+  MessageSquare,
+  Play,
+} from "lucide-react";
 
 interface Props {
   name: string;
@@ -9,31 +17,22 @@ interface Props {
 const Icon = ({ name, className }: Props) => {
   switch (name) {
     case "facebook":
-      return <Facebook className={cn("h-4 w-4", className)} />;
-      break;
+      return <Globe className={cn("h-4 w-4", className)} />;
     case "instagram":
-      return <Instagram className={cn("h-4 w-4", className)} />;
-      break;
+      return <Camera className={cn("h-4 w-4", className)} />;
     case "twitter":
-      return <Twitter className={cn("h-4 w-4", className)} />;
-      break;
+      return <MessageSquare className={cn("h-4 w-4", className)} />;
     case "email":
       return <Mail className={cn("h-4 w-4", className)} />;
-      break;
     case "youtube":
-      return <Youtube className={cn("h-4 w-4", className)} />;
-      break;
+      return <Play className={cn("h-4 w-4", className)} />;
     case "github":
-      return <Github className={cn("h-4 w-4", className)} />;
-      break;
+      return <GitBranch className={cn("h-4 w-4", className)} />;
     case "linkedin":
-      return <Linkedin className={cn("h-4 w-4", className)} />;
-      break;
-
+      return <BriefcaseBusiness className={cn("h-4 w-4", className)} />;
     default:
-      return <Github className={cn("h-4 w-4", className)} />;
-      break;
+      return <GitBranch className={cn("h-4 w-4", className)} />;
   }
-}
+};
 
 export default Icon

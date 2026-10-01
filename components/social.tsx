@@ -1,12 +1,13 @@
 import Link from "next/link";
 
 import {
-  Facebook,
-  Github,
-  Instagram,
+  BriefcaseBusiness,
+  Camera,
+  GitBranch,
+  Globe,
   Mail,
-  Twitter,
-  Youtube,
+  MessageSquare,
+  Play,
 } from "lucide-react";
 import { socialMedia } from "@/data/social";
 import type { Social } from "@/types/social";
@@ -14,21 +15,21 @@ import type { Social } from "@/types/social";
 export const socials: Social[] = [];
 
 if (socialMedia.facebook) socials.push({
-  icon: <Facebook size={20} />,
+  icon: <Globe size={20} />,
   href: socialMedia.facebook.href,
   label: socialMedia.facebook.label,
   handle: socialMedia.facebook.handle,
 });
 
 if (socialMedia.instagram) socials.push({
-  icon: <Instagram size={20} />,
+  icon: <Camera size={20} />,
   href: socialMedia.instagram.href,
   label: socialMedia.instagram.label,
   handle: socialMedia.instagram.handle,
 });
 
 if (socialMedia.twitter) socials.push({
-  icon: <Twitter size={20} />,
+  icon: <MessageSquare size={20} />,
   href: socialMedia.twitter.href,
   label: socialMedia.twitter.label,
   handle: socialMedia.twitter.handle,
@@ -42,17 +43,24 @@ if (socialMedia.email) socials.push({
 });
 
 if (socialMedia.youtube) socials.push({
-  icon: <Youtube size={20} />,
+  icon: <Play size={20} />,
   href: socialMedia.youtube.href,
   label: socialMedia.youtube.label,
   handle: socialMedia.youtube.handle,
 });
 
 if (socialMedia.github) socials.push({
-  icon: <Github size={20} />,
+  icon: <GitBranch size={20} />,
   href: socialMedia.github.href,
   label: socialMedia.github.label,
   handle: socialMedia.github.handle,
+});
+
+if (socialMedia.linkedin) socials.push({
+  icon: <BriefcaseBusiness size={20} />,
+  href: socialMedia.linkedin.href,
+  label: socialMedia.linkedin.label,
+  handle: socialMedia.linkedin.handle,
 });
 
 export interface Props {

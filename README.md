@@ -1,8 +1,6 @@
 # Ajay Singh Portfolio
 
-[![Deployment Status](https://github.com/ajaysinghnp/ajaysinghnp.github.io/actions/workflows/nextjs.yml/badge.svg?branch=main)](https://github.com/ajaysinghnp/ajaysinghnp.github.io/actions/workflows/nextjs.yml)
-
-Personal portfolio and blog built with Next.js, MDX, and Tailwind CSS, and deployed as a static site with GitHub Pages.
+Personal portfolio and blog built with Next.js, MDX, and Tailwind CSS, designed to run behind Docker on an Oracle VPS or similar hosting environment such as Dockploy.
 
 ## Features
 
@@ -11,7 +9,7 @@ Personal portfolio and blog built with Next.js, MDX, and Tailwind CSS, and deplo
 - Project showcase powered by GitHub API
 - Syntax-highlighted markdown content
 - Theme support (light/dark/system)
-- Static export for GitHub Pages hosting
+- Production-ready Docker deployment for a VPS
 
 ## Tech Stack
 
@@ -21,6 +19,7 @@ Personal portfolio and blog built with Next.js, MDX, and Tailwind CSS, and deplo
 - Contentlayer + MDX
 - SWR + Axios
 - Lucide icons
+- pnpm package manager
 
 ## Project Structure
 
@@ -32,6 +31,7 @@ lib/            API/data helpers and utilities
 providers/      Context providers (theme, etc.)
 public/         Static assets
 types/          TypeScript types
+Dockerfile      Container build for VPS/Dockploy deployment
 ```
 
 ## Local Development
@@ -39,13 +39,13 @@ types/          TypeScript types
 ### 1. Install dependencies
 
 ```bash
-npm install
+pnpm install
 ```
 
 ### 2. Start development server
 
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 Open `http://localhost:3000`.
@@ -53,7 +53,13 @@ Open `http://localhost:3000`.
 ### 3. Build for production
 
 ```bash
-npm run build
+pnpm run build
+```
+
+### 4. Run production server
+
+```bash
+pnpm run start
 ```
 
 ## Environment Variables
@@ -62,6 +68,7 @@ Create a `.env.local` file for optional authenticated GitHub requests:
 
 ```bash
 GITHUB_TOKEN=your_github_personal_access_token
+PORT=3000
 ```
 
 Why this helps:
@@ -77,19 +84,18 @@ Why this helps:
 
 ## Deployment
 
-This repository is configured for static export:
+This repository is configured for container-based deployment on a VPS such as Oracle Cloud, and is intended for use with Dockploy.
 
-- `next.config.mjs` uses `output: "export"`
-- Output directory is `build/`
-
-Deploy the generated static files to GitHub Pages from your chosen branch/workflow.
+- `next.config.mjs` uses `output: "standalone"`
+- The app is served via a Node.js runtime in Docker
+- The Docker image can be deployed directly through Dockploy
 
 ## Scripts
 
-- `npm run dev` - Start local development server
-- `npm run build` - Create production build/export
-- `npm run start` - Start Next.js server mode (not typically used for static pages)
-- `npm run lint` - Run lint checks
+- `pnpm run dev` - Start local development server
+- `pnpm run build` - Create production build
+- `pnpm run start` - Start the production Next.js server
+- `pnpm run lint` - Run lint checks
 
 ## License
 
