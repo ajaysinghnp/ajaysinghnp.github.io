@@ -10,7 +10,7 @@ const education = resume.education.slice(0, 2);
 
 export default function ResumePage() {
   return (
-    <main className="resume-shell mx-auto max-w-7xl pb-20 text-zinc-100">
+    <main className="resume-shell w-full pb-20 text-zinc-100">
       <header className="resume-intro grid gap-10 border-b pb-12 lg:grid-cols-[1fr_0.7fr] lg:items-end">
         <div>
           <p className="section-code">// resume / selected signal</p>
@@ -19,7 +19,7 @@ export default function ResumePage() {
         </div>
         <div className="flex flex-col gap-3 text-sm">
           <div className="resume-meta flex items-center gap-3"><MapPin className="h-4 w-4 text-cyan-300" /> Kathmandu, Nepal</div>
-          <Link href={socialMedia.email.href} className="resume-meta flex items-center gap-3 transition hover:text-cyan-300"><Mail className="h-4 w-4 text-cyan-300" /> {socialMedia.email.handle}</Link>
+          <Link href={socialMedia.email.href} aria-label="Start a conversation by email" className="resume-meta flex items-center gap-3 transition hover:text-cyan-300"><Mail className="h-4 w-4 text-cyan-300" /> Start a conversation</Link>
           <Link href={socialMedia.github.href} target="_blank" className="resume-meta flex items-center gap-3 transition hover:text-cyan-300"><ArrowUpRight className="h-4 w-4 text-cyan-300" /> github.com/{socialMedia.github.handle}</Link>
         </div>
       </header>

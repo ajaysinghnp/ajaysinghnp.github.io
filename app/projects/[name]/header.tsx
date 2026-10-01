@@ -83,7 +83,7 @@ const ProjectHeader = ({ project_name }: Props) => {
             : "bg-white/10  border-zinc-200 lg:border-transparent"
             }`}
         >
-          <div className="max-w-[90%] flex flex-row-reverse items-center justify-between py-8 mx-auto">
+          <div className="max-w-[80%] flex flex-row-reverse items-center justify-between py-8 mx-auto">
             <div className="flex justify-between gap-8">
               <span
                 title="View counter for this page"
@@ -125,7 +125,7 @@ const ProjectHeader = ({ project_name }: Props) => {
           </div>
         </div>
         <div className="container mx-auto relative isolate overflow-hidden">
-          <div className="mx-auto max-w-7xl px-6 lg:px-8 text-center flex flex-col items-center">
+          <div className="mx-auto w-full max-w-[80%] text-center flex flex-col items-center">
             <div className="mx-auto lg:mx-0">
               <h1 className="text-4xl font-bold tracking-normal text-white font-display">
                 {project.title.replaceAll("-", " ").toLocaleUpperCase()}

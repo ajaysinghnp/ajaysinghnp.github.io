@@ -27,7 +27,7 @@ export const Navigation: React.FC<Props> = ({ gitTheme = false }: Props) => {
 
   return (
     <header className={cn("site-navigation sticky top-0 z-50 border-b transition-all duration-300", isScrolled && "site-navigation-scrolled")}>
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-5 py-4 sm:px-8 lg:px-12">
+      <div className="mx-auto flex w-full max-w-[80%] items-center justify-between gap-6 py-4">
         <Link href="/" className="flex shrink-0 items-center gap-3 text-sm font-semibold tracking-wide">
           <span className="site-logo flex h-8 w-8 items-center justify-center rounded border p-1"><Image src="/images/logo-black.svg" alt="Ajay Singh logo" width={24} height={24} className="logo-light" /><Image src="/images/logo-white.svg" alt="" width={24} height={24} className="logo-dark" /></span>
           <span>AJAY SINGH<span className="site-accent">_</span></span>

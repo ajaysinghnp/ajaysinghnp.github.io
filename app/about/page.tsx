@@ -25,7 +25,7 @@ const principles = [
 
 export default function AboutPage() {
   return (
-    <main className="resume-shell mx-auto max-w-7xl pb-20">
+    <main className="resume-shell w-full pb-20">
       <header className="grid gap-10 border-b border-[var(--site-border)] pb-14 lg:grid-cols-[1.15fr_0.85fr] lg:items-end">
         <div>
           <p className="section-code">// about / the longer signal</p>

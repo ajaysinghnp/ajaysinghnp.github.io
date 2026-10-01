@@ -454,3 +454,28 @@ html:not(.dark) body [class~="text-zinc-500"] {
     --glow-angle: 360deg;
   }
 }
+
+.signal-shell>section:not(.shuttle-band),
+.signal-shell>footer>div,
+.signal-shell>.shuttle-band>div {
+  max-width: 80% !important;
+}
+
+.loading-line {
+  width: 35%;
+  animation: loading-scan 1.5s ease-in-out infinite;
+}
+
+@keyframes loading-scan {
+  0% {
+    transform: translateX(-120%);
+  }
+
+  50% {
+    transform: translateX(190%);
+  }
+
+  100% {
+    transform: translateX(320%);
+  }
+}

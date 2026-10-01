@@ -16,14 +16,14 @@ const Layout = ({ children }: Props) => {
     return children
   }
   return (
-    <div className="relative">
-      <div className="relative">
+    <div className="relative flex min-h-screen flex-col">
+      <div className="relative flex flex-1 flex-col">
         <Navigation />
-        <div className="w-full mx-auto max-w-[90%] mb-12 pt-8 lg:pt-10">
+        <div className="w-full mx-auto max-w-[80%] flex-1 mb-12 pt-8 lg:pt-10">
           {children}
         </div>
-        <SiteFooter />
       </div>
+      <SiteFooter />
     </div>
   )
 }

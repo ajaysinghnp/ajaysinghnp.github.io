@@ -17,6 +17,7 @@ import { navigation } from "@/data/navigation";
 import { resume } from "@/data/resume";
 import { socialMedia } from "@/data/social";
 import { Navigation } from "@/components/nav";
+import SocialLinksPanel from "@/components/social-links-panel";
 
 const projects = [
   {
@@ -41,8 +42,6 @@ const projects = [
     href: "https://github.com/ajaysinghnp/Maya-Utility-App",
   },
 ];
-
-const socialLinks = [socialMedia.github, socialMedia.linkedin, socialMedia.youtube];
 
 const reveal = {
   hidden: { opacity: 0, y: 18 },
@@ -93,17 +92,17 @@ export default function HomeRedesign() {
 
       <section id="about" className="shuttle-band site-panel relative z-10 border-y border-white/10"><div className="mx-auto grid max-w-7xl gap-14 px-5 py-24 sm:px-8 lg:grid-cols-[0.8fr_1.2fr] lg:px-12 lg:py-32"><div><p className="section-code">// context</p><h2 className="mt-5 max-w-md text-4xl font-semibold leading-tight tracking-[-0.06em] text-zinc-50 sm:text-5xl">Curiosity with somewhere useful to go.</h2><p className="mt-7 max-w-md text-base leading-8 text-zinc-400">{about.description}</p></div><div><div className="flex items-center gap-3 text-xs uppercase tracking-[0.18em] text-cyan-300"><BriefcaseBusiness className="h-4 w-4" /> How I work</div><div className="mt-6 space-y-5">{resume.skills.slice(0, 3).map((skill) => <div key={skill.label} className="border-l border-cyan-300/50 pl-6"><h3 className="text-2xl text-zinc-100">{skill.label}</h3><p className="mt-2 max-w-xl leading-8 text-zinc-400">{skill.description}</p></div>)}</div><Link href="/about" className="mt-8 inline-flex items-center gap-2 text-sm text-zinc-300 underline decoration-cyan-300/60 underline-offset-8 transition hover:text-cyan-200">More about the work <ArrowUpRight className="h-4 w-4" /></Link></div></div></section>
 
-      <section className="relative z-10 mx-auto grid max-w-7xl gap-14 px-5 py-24 sm:px-8 lg:grid-cols-[1fr_0.8fr] lg:px-12 lg:py-32"><div><p className="section-code">// field_notes</p><h2 className="mt-5 max-w-xl text-4xl font-semibold tracking-[-0.06em] text-zinc-50 sm:text-6xl">The signal continues in the notes.</h2><p className="mt-6 max-w-lg text-lg leading-8 text-zinc-500">Ideas, lessons, and the occasional rabbit hole from building across software, automation, and hardware.</p><Link href="/blog" className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-cyan-200 transition hover:text-cyan-100"><Rss className="h-4 w-4" /> Read the blog <ArrowUpRight className="h-4 w-4" /></Link></div><div className="border-t border-white/10 pt-5 lg:border-l lg:border-t-0 lg:pl-10"><p className="section-code">// elsewhere</p><div className="mt-5 space-y-3">{socialLinks.map((social) => <Link key={social.label} href={social.href} target="_blank" rel="noreferrer" className="flex items-center justify-between border-b border-white/10 pb-3 text-sm text-zinc-300 transition hover:border-cyan-300/50 hover:text-cyan-200"><span>{social.label}</span><span className="text-xs text-zinc-600">{social.handle}</span></Link>)}</div></div></section>
+      <section className="relative z-10 mx-auto grid max-w-7xl gap-14 px-5 py-24 sm:px-8 lg:grid-cols-[1fr_0.8fr] lg:px-12 lg:py-32"><div><p className="section-code">// field_notes</p><h2 className="mt-5 max-w-xl text-4xl font-semibold tracking-[-0.06em] text-zinc-50 sm:text-6xl">The signal continues in the notes.</h2><p className="mt-6 max-w-lg text-lg leading-8 text-zinc-500">Ideas, lessons, and the occasional rabbit hole from building across software, automation, and hardware.</p><Link href="/blog" className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-cyan-200 transition hover:text-cyan-100"><Rss className="h-4 w-4" /> Read the blog <ArrowUpRight className="h-4 w-4" /></Link></div><div className="border-t border-white/10 pt-5 lg:border-l lg:border-t-0 lg:pl-10"><SocialLinksPanel /></div></section>
 
       <footer id="contact" className="relative z-10 border-t border-cyan-300/30 bg-cyan-300 text-[#090b0d]">
-        <div className="mx-auto max-w-7xl px-5 py-12 sm:px-8 lg:px-12 lg:py-16">
+        <div className="mx-auto w-full max-w-[90%] py-12 lg:py-16">
           <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#245761]">// open_channel</p>
               <h2 className="mt-3 max-w-2xl text-4xl font-semibold tracking-[-0.06em] sm:text-6xl">Have a good problem?</h2>
               <p className="mt-4 max-w-md text-sm leading-6 text-[#245761]">Bring the messy bit. We can make it clearer, calmer, and useful.</p>
             </div>
-            <Link href={socialMedia.email.href} className="inline-flex w-fit items-center gap-2 rounded bg-[#090b0d] px-5 py-3 text-sm font-semibold text-cyan-200 transition hover:bg-[#172126]"><Mail className="h-4 w-4" /> {socialMedia.email.handle}</Link>
+            <Link href={socialMedia.email.href} aria-label="Start a conversation by email" className="inline-flex w-fit items-center gap-2 rounded bg-[#090b0d] px-5 py-3 text-sm font-semibold text-cyan-200 transition hover:bg-[#172126]"><Mail className="h-4 w-4" /> Start a conversation</Link>
           </div>
           <div className="mt-12 flex flex-col gap-5 border-t border-[#245761]/30 pt-5 text-xs text-[#245761] sm:flex-row sm:items-center sm:justify-between">
             <span>© {new Date().getFullYear()} Ajay Singh. Built in Nepal.</span>
