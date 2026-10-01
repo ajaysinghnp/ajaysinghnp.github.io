@@ -1,5 +1,29 @@
 @import "tailwindcss";
 
+@theme {
+  --font-sans: "Cal Sans", ui-sans-serif, sans-serif;
+}
+
+::selection {
+  background: #d8ff45;
+  color: #20211d;
+}
+
+.portfolio-shell {
+  background-color: #f6f5ef;
+  background-image: radial-gradient(rgba(32, 33, 29, 0.07) 0.7px, transparent 0.7px);
+  background-size: 7px 7px;
+}
+
+.eyebrow {
+  color: #7d8474;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

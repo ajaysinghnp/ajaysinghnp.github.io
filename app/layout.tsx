@@ -10,10 +10,10 @@ import Layout from "@/components/layout";
 
 const title = "Ajay Singh";
 const description = "A Personal Portfolio for Ajay Singh.";
-// const url = "https://ajaysingh.com.np";
-const url = "/";
+const url = "https://ajaysingh.com.np";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(url),
   title: {
     default: title,
     template: `%s | ${title}`,
