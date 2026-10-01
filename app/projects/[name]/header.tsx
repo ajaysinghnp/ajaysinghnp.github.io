@@ -1,7 +1,7 @@
 "use client";
 
 import { socialMedia } from "@/data/social";
-import { fetchProject } from "@/lib/projects";
+import { fetchProjectFromApi } from "@/lib/projects-client";
 import { Project } from "@/types/github";
 import { ArrowLeft, Eye, GitBranch, MessageSquare, Star } from "lucide-react";
 import Link from "next/link";
@@ -23,7 +23,10 @@ const ProjectHeader = ({ project_name }: Props) => {
     data: project,
     error,
     isLoading,
-  } = useSWR<Project | null>(project_name, fetchProject);
+  } = useSWR<Project | null>(
+    `/api/projects/${encodeURIComponent(project_name)}`,
+    () => fetchProjectFromApi(project_name),
+  );
 
   if (project) {
     views = project?.watchers_count || views;

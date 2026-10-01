@@ -14,8 +14,15 @@ type StaticParams = {
 };
 
 export async function generateStaticParams(): Promise<StaticParams[]> {
-  const projs: Project[] = await fetchProjects();
-  return projs.map((proj) => ({ name: proj.name }));
+  try {
+    const projs: Project[] = await fetchProjects();
+    return projs.map((proj) => ({ name: proj.name }));
+  } catch {
+    console.warn(
+      "GitHub project list unavailable during build; project pages will be rendered on demand.",
+    );
+    return [];
+  }
 }
 
 export default async function ProjectLoadingPage({ params }: Props) {

@@ -1,3 +1,5 @@
+import "server-only";
+
 import { GIT_USERNAME, Project, Repo } from "@/types/github";
 import axios from "axios";
 
@@ -33,49 +35,44 @@ export const fetchProjects = async (): Promise<Project[]> => {
   let nextPageUrl: string | null =
     `https://api.github.com/users/${GIT_USERNAME}/repos`;
 
-  try {
-    while (nextPageUrl) {
-      const isFirstRequest = nextPageUrl.includes(
-        `/users/${GIT_USERNAME}/repos`,
-      );
+  while (nextPageUrl) {
+    const isFirstRequest = nextPageUrl.includes(
+      `/users/${GIT_USERNAME}/repos`,
+    );
 
-      const { data, headers } = await axios.get<Repo[]>(nextPageUrl, {
-        params: isFirstRequest
-          ? {
-              per_page: perPage,
-              type: "owner",
-              sort: "updated",
-            }
-          : undefined,
-        headers: getGitHubApiHeaders(),
-      });
+    const { data, headers } = await axios.get<Repo[]>(nextPageUrl, {
+      params: isFirstRequest
+        ? {
+            per_page: perPage,
+            type: "owner",
+            sort: "updated",
+          }
+        : undefined,
+      headers: getGitHubApiHeaders(),
+    });
 
-      allRepos.push(...data);
+    allRepos.push(...data);
 
-      if (!headers.link) break;
+    if (!headers.link) break;
 
-      nextPageUrl = getNextPageUrl(headers.link);
-    }
-
-    return allRepos
-      .filter((repo: Repo) => repo.name !== "iptv-channels")
-      .map((repo: Repo) => ({
-        id: repo.id,
-        name: repo.name,
-        title: repo.name,
-        url: repo.html_url,
-        description: repo.description,
-        visibility: repo.private ? "private" : "public",
-        date: repo.created_at,
-        updated_at: repo.updated_at,
-        pushed_at: repo.pushed_at,
-        private: repo.private,
-        published: true,
-      }));
-  } catch (error) {
-    console.error("Error fetching projects:", error);
-    return [];
+    nextPageUrl = getNextPageUrl(headers.link);
   }
+
+  return allRepos
+    .filter((repo: Repo) => !repo.private && repo.name !== "iptv-channels")
+    .map((repo: Repo) => ({
+      id: repo.id,
+      name: repo.name,
+      title: repo.name,
+      url: repo.html_url,
+      description: repo.description,
+      visibility: repo.private ? "private" : "public",
+      date: repo.created_at,
+      updated_at: repo.updated_at,
+      pushed_at: repo.pushed_at,
+      private: repo.private,
+      published: true,
+    }));
 };
 
 export const fetchProject = async (slug: string): Promise<Project | null> => {
@@ -86,6 +83,10 @@ export const fetchProject = async (slug: string): Promise<Project | null> => {
         headers: getGitHubApiHeaders(),
       },
     );
+
+    if (repo.private) {
+      return null;
+    }
 
     return {
       id: repo.id,
@@ -106,8 +107,11 @@ export const fetchProject = async (slug: string): Promise<Project | null> => {
       published: true,
     };
   } catch (error) {
-    console.error(`Error fetching project [${slug}]: ${error}`);
-    return null;
+    if (axios.isAxiosError(error) && error.response?.status === 404) {
+      return null;
+    }
+
+    throw error;
   }
 };
 
@@ -119,6 +123,15 @@ export const fetchProjectReadme = async (project: string): Promise<string> => {
   }
 
   try {
+    const { data: repo } = await axios.get<{ private: boolean }>(
+      `https://api.github.com/repos/${GIT_USERNAME}/${repoName}`,
+      { headers: getGitHubApiHeaders() },
+    );
+
+    if (repo.private) {
+      return "# Project unavailable\n\nThis repository is not public.";
+    }
+
     const { data } = await axios.get<string>(
       `https://api.github.com/repos/${GIT_USERNAME}/${repoName}/readme`,
       {
@@ -133,7 +146,11 @@ export const fetchProjectReadme = async (project: string): Promise<string> => {
     readmeCache.set(repoName, data);
     return data;
   } catch (error) {
-    console.error(`Error fetching project readme [${repoName}]: ${error}`);
-    return "Error fetching README.md";
+    const status =
+      axios.isAxiosError(error) && error.response?.status
+        ? ` (GitHub status ${error.response.status})`
+        : "";
+    console.warn(`Unable to fetch README for ${repoName}${status}.`);
+    return "# README unavailable\n\nGitHub could not provide this project's README right now.";
   }
 };

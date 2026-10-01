@@ -64,17 +64,18 @@ pnpm run start
 
 ## Environment Variables
 
-Create a `.env.local` file for optional authenticated GitHub requests:
+Create a `.env.local` file for authenticated server-side GitHub API requests:
 
 ```bash
-GITHUB_TOKEN=your_github_personal_access_token
+GITHUB_TOKEN=your_read_only_github_token
 PORT=3000
 ```
 
 Why this helps:
 
-- Improves GitHub API rate limits
-- Makes project/readme fetching more reliable
+- Raises the GitHub REST API rate limit for repository and README requests.
+- Keep the token server-only. Do not rename it to `NEXT_PUBLIC_GITHUB_TOKEN` or commit a populated `.env.local` file.
+- Use a token with only the read access needed for public repository metadata and contents.
 
 ## Content and Blog
 
