@@ -77,7 +77,7 @@ const ProjectHeader = ({ project_name }: Props) => {
 
   if (isLoading) {
     return (
-      <section role="status" className="resume-panel my-8 animate-pulse rounded-2xl p-8">
+      <section role="status" className="resume-panel shine-border-hover my-8 animate-pulse rounded-2xl p-8">
         <p className="resume-muted">Loading project details...</p>
       </section>
     );
@@ -85,7 +85,7 @@ const ProjectHeader = ({ project_name }: Props) => {
 
   if (error || !project) {
     return (
-      <section role="status" className="resume-panel my-8 rounded-2xl p-8">
+      <section role="status" className="resume-panel shine-border-hover my-8 rounded-2xl p-8">
         <Link href="/projects" className="inline-flex items-center gap-2 text-sm text-[var(--site-accent)] hover:underline">
           <ArrowLeft className="h-4 w-4" /> Back to projects
         </Link>
@@ -121,7 +121,7 @@ const ProjectHeader = ({ project_name }: Props) => {
               All projects
             </Link>
 
-            <div className="resume-panel overflow-hidden rounded-2xl p-6 sm:p-9 lg:p-12">
+            <div className="resume-panel shine-border-hover overflow-hidden rounded-2xl p-6 sm:p-9 lg:p-12">
               <div className="section-code">Project / {project.visibility}</div>
               <div className="mt-5 grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
                 <div>
@@ -216,7 +216,7 @@ const ProjectHeader = ({ project_name }: Props) => {
               aria-label="Expand project overview"
               title="Show project overview"
               onClick={scrollBackToOverview}
-              className="site-icon-button inline-flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full border border-[var(--site-border)] text-[var(--site-muted)] transition hover:text-[var(--site-accent)]"
+              className="site-icon-button shine-border-hover inline-flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full border border-[var(--site-border)] text-[var(--site-muted)] transition hover:text-[var(--site-accent)]"
             >
               <ArrowDown className="h-4 w-4" />
             </button>

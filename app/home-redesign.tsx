@@ -69,7 +69,7 @@ export default function HomeRedesign() {
         </motion.div>
 
         <motion.div initial="hidden" animate="show" variants={reveal} custom={0.25} className="relative flex items-end justify-center lg:order-first lg:justify-start">
-          <div className="photo-panel glow-frame relative w-full max-w-sm p-3 shadow-[0_0_70px_rgba(34,211,238,0.12)]">
+          <div className="photo-panel glow-frame shine-border relative w-full max-w-sm p-3 shadow-[0_0_70px_rgba(34,211,238,0.12)]">
             <div className="profile-meta mb-3 flex items-center justify-between border-b border-white/10 px-2 py-2 pb-3 text-[10px] uppercase tracking-[0.18em] text-zinc-500"><span>Profile / 001</span><span className="inline-flex items-center gap-2 text-cyan-300"><span className="live-dot" /> Live</span></div>
             <div className="relative aspect-[0.9] overflow-hidden bg-zinc-900"><Image src="/images/author.png" alt="Portrait of Ajay Singh" fill priority sizes="(max-width: 1024px) 90vw, 28vw" className="object-cover object-top grayscale contrast-125" /><div className="absolute inset-0 bg-[linear-gradient(transparent_0%,rgba(34,211,238,0.08)_50%,transparent_100%)] bg-[length:100%_8px]" /></div>
             <div className="grid grid-cols-2 gap-3 border-t border-white/10 px-2 pt-4 text-xs"><div><p className="text-zinc-600">Focus</p><p className="mt-1 text-zinc-200">Automation + systems</p></div><div><p className="text-zinc-600">Since</p><p className="mt-1 text-zinc-200">2012 / coding</p></div></div>

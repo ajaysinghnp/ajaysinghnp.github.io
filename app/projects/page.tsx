@@ -132,7 +132,7 @@ function ProjectCard({
       whileInView="show"
       viewport={{ once: true, amount: 0.2 }}
       variants={reveal}
-      className={`project-card group relative w-full break-inside-avoid overflow-hidden rounded-xl border transition duration-300 hover:-translate-y-1 ${featured ? "h-full" : ""}`}
+      className={`project-card shine-border-hover group relative w-full break-inside-avoid overflow-hidden rounded-xl border transition duration-300 hover:-translate-y-1 ${featured ? "h-full" : ""}`}
     >
       <div aria-hidden="true" className="project-card-glow pointer-events-none absolute -right-12 -top-16 h-40 w-40 rounded-full opacity-40 blur-3xl transition duration-500 group-hover:opacity-100" />
       <Link

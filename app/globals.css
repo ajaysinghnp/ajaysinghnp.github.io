@@ -161,42 +161,29 @@
   background: color-mix(in srgb, var(--site-panel) 86%, transparent);
 }
 
-.project-card,
-.resume-panel,
-.resume-skill,
-.resume-callout,
-.site-logo,
-.site-icon-button,
-.glow-action,
-.glow-frame,
-.shine-edge {
+.shine-border,
+.shine-border-hover {
+  --shine-border-color: var(--site-accent);
+  --shine-border-width: 1px;
+  --shine-border-duration: 8s;
   isolation: isolate;
   position: relative;
 }
 
-.project-card::before,
-.resume-panel::before,
-.resume-skill::before,
-.resume-callout::before,
-.site-logo::before,
-.site-icon-button::before,
-.glow-action::before,
-.glow-frame::before,
-.shine-edge::before {
+.shine-border::before,
+.shine-border-hover::before {
   position: absolute;
   z-index: 2;
   inset: 0;
   border-radius: inherit;
-  padding: 1px;
-  background: conic-gradient(
-    from var(--shine-angle),
-    transparent 0deg 300deg,
-    color-mix(in srgb, var(--site-accent) 35%, transparent) 322deg,
-    var(--site-accent) 338deg,
-    color-mix(in srgb, var(--site-text) 80%, var(--site-accent)) 344deg,
-    var(--site-accent) 350deg,
-    transparent 360deg
-  );
+  padding: var(--shine-border-width);
+  background: conic-gradient(from var(--shine-angle),
+      transparent 0deg 300deg,
+      color-mix(in srgb, var(--shine-border-color) 35%, transparent) 322deg,
+      var(--shine-border-color) 338deg,
+      color-mix(in srgb, var(--site-text) 80%, var(--shine-border-color)) 344deg,
+      var(--shine-border-color) 350deg,
+      transparent 360deg);
   content: "";
   opacity: 0;
   pointer-events: none;
@@ -206,26 +193,16 @@
   transition: opacity 180ms ease;
 }
 
-.project-card:hover::before,
-.resume-panel:hover::before,
-.resume-skill:hover::before,
-.resume-callout:hover::before,
-.site-logo:hover::before,
-.site-icon-button:hover::before,
-.glow-action:hover::before,
-.glow-frame:hover::before,
-.shine-edge:hover::before,
-.project-card:focus-within::before,
-.resume-panel:focus-within::before,
-.resume-skill:focus-within::before,
-.resume-callout:focus-within::before,
-.site-logo:focus-visible::before,
-.site-icon-button:focus-visible::before,
-.glow-action:focus-visible::before,
-.glow-frame:focus-visible::before,
-.shine-edge:focus-visible::before {
+.shine-border::before {
   opacity: 1;
-  animation: shine-rotate 8s linear infinite;
+  animation: shine-rotate var(--shine-border-duration) linear infinite;
+}
+
+.shine-border-hover:hover::before,
+.shine-border-hover:focus-within::before,
+.shine-border-hover:focus-visible::before {
+  opacity: 1;
+  animation: shine-rotate var(--shine-border-duration) linear infinite;
 }
 
 .resume-muted {
@@ -283,7 +260,7 @@
   padding: 1rem 0.75rem 1rem 1rem;
 }
 
-.project-content-layout > .project-readme {
+.project-content-layout>.project-readme {
   border-left: 0;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
@@ -292,7 +269,7 @@
 }
 
 .project-toc-title,
-.project-toc-mobile summary > span {
+.project-toc-mobile summary>span {
   position: relative;
   display: flex;
   align-items: center;
@@ -360,15 +337,15 @@
   padding-left: 0.72rem;
 }
 
-.project-toc-children > li {
+.project-toc-children>li {
   position: relative;
 }
 
-.project-toc-list > li {
+.project-toc-list>li {
   position: relative;
 }
 
-.project-toc-children > li::before {
+.project-toc-children>li::before {
   position: absolute;
   top: 0;
   left: -0.72rem;
@@ -380,7 +357,7 @@
   content: "";
 }
 
-.project-toc-list > li::before {
+.project-toc-list>li::before {
   position: absolute;
   top: 0;
   left: -0.72rem;
@@ -422,15 +399,6 @@
   font-weight: 650;
 }
 
-.project-toc a.shine-edge.is-active {
-  isolation: isolate;
-}
-
-.project-toc a.shine-edge.is-active::before {
-  opacity: 1;
-  animation: shine-rotate 8s linear infinite;
-}
-
 .project-toc-children a {
   font-size: 0.75rem;
 }
@@ -451,7 +419,7 @@
   display: none;
 }
 
-.project-toc-mobile summary > span {
+.project-toc-mobile summary>span {
   margin: 0;
 }
 
@@ -469,22 +437,16 @@
   margin-top: 0.85rem;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .project-toc a.shine-edge.is-active::before {
-    animation: none;
-  }
-}
-
 .project-readme :where(h1, h2) {
   padding-bottom: 0.35em;
   border-bottom: 1px solid var(--site-border);
 }
 
-.project-description > :first-child {
+.project-description> :first-child {
   margin-top: 0;
 }
 
-.project-description > :last-child {
+.project-description> :last-child {
   margin-bottom: 0;
 }
 
@@ -634,7 +596,7 @@
   color: var(--site-muted);
 }
 
-.project-readme .code-block-wrapper > .code-copy-button {
+.project-readme .code-block-wrapper>.code-copy-button {
   position: absolute;
   top: 0.5rem;
   right: 0.5rem;
@@ -646,13 +608,13 @@
   line-height: 1.25rem;
 }
 
-.project-readme .code-block-wrapper > .code-copy-button:hover {
+.project-readme .code-block-wrapper>.code-copy-button:hover {
   border-color: var(--site-accent);
   background: color-mix(in srgb, var(--site-panel) 78%, var(--site-accent));
   color: var(--site-text);
 }
 
-.project-readme .code-block-wrapper > .code-copy-button:disabled {
+.project-readme .code-block-wrapper>.code-copy-button:disabled {
   cursor: default;
 }
 
@@ -757,7 +719,7 @@
     padding: 0.85rem 1rem;
   }
 
-  .project-content-layout > .project-readme {
+  .project-content-layout>.project-readme {
     border-left: 1px solid var(--site-border);
     border-top-left-radius: 1rem;
     border-bottom-left-radius: 1rem;
@@ -1134,24 +1096,11 @@ html:not(.dark) body [class~="text-zinc-500"] {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .project-card:hover::before,
-  .resume-panel:hover::before,
-  .resume-skill:hover::before,
-  .resume-callout:hover::before,
-  .site-logo:hover::before,
-  .site-icon-button:hover::before,
-  .glow-action:hover::before,
-  .glow-frame:hover::before,
-  .shine-edge:hover::before,
-  .project-card:focus-within::before,
-  .resume-panel:focus-within::before,
-  .resume-skill:focus-within::before,
-  .resume-callout:focus-within::before,
-  .site-logo:focus-visible::before,
-  .site-icon-button:focus-visible::before,
-  .glow-action:focus-visible::before,
-  .glow-frame:focus-visible::before,
-  .shine-edge:focus-visible::before {
+
+  .shine-border::before,
+  .shine-border-hover:hover::before,
+  .shine-border-hover:focus-within::before,
+  .shine-border-hover:focus-visible::before {
     animation: none;
   }
 }

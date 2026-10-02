@@ -48,7 +48,7 @@ const Header = () => {
             </li>
           </ul>
         </nav>
-        <button type="button" className={cn("shine-edge bg-primary-100/80 hover:bg-primary-100 px-16 py-2 rounded text-white")}>Blogs</button>
+        <button type="button" className={cn("shine-border-hover bg-primary-100/80 hover:bg-primary-100 px-16 py-2 rounded text-white")}>Blogs</button>
       </div>
     </header>
   )

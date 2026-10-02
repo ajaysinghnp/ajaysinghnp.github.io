@@ -60,7 +60,7 @@ export function ProjectToc({ items }: ProjectTocProps) {
             href={`#${item.id}`}
             aria-current={activeId === item.id ? "location" : undefined}
             className={[
-              activeId === item.id ? "is-active shine-edge" : "",
+              activeId === item.id ? "is-active shine-border" : "",
             ].filter(Boolean).join(" ")}
             onClick={() => activateItem(item.id)}
           >

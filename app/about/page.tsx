@@ -42,19 +42,19 @@ export default function AboutPage() {
         <div>
           <p className="resume-lead max-w-3xl text-lg leading-8">{about.description}</p>
           <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-4">
-            {about.highlights.map((highlight) => <div key={highlight.label} className="resume-panel p-4"><p className="text-2xl font-semibold text-zinc-100">{highlight.label}</p><p className="resume-muted mt-2 text-xs uppercase leading-5 tracking-[0.1em]">{highlight.description}</p></div>)}
+            {about.highlights.map((highlight) => <div key={highlight.label} className="resume-panel shine-border-hover p-4"><p className="text-2xl font-semibold text-zinc-100">{highlight.label}</p><p className="resume-muted mt-2 text-xs uppercase leading-5 tracking-[0.1em]">{highlight.description}</p></div>)}
           </div>
         </div>
       </section>
 
       <section className="mt-20 border-y border-[var(--site-border)] py-14">
         <div className="mb-8 flex items-end justify-between gap-5"><div><p className="section-code">// working principles</p><h2 className="mt-4 text-4xl font-semibold tracking-[-0.05em] text-zinc-50 sm:text-5xl">How I approach the work.</h2></div><span className="resume-muted hidden text-xs uppercase tracking-[0.15em] sm:block">signal / 02</span></div>
-        <div className="grid gap-3 md:grid-cols-3">{principles.map(({ icon: Icon, title, description }) => <article key={title} className="resume-skill p-5"><Icon className="h-5 w-5 text-cyan-300" /><h3 className="mt-6 text-xl text-zinc-100">{title}</h3><p className="resume-muted mt-3 leading-7">{description}</p></article>)}</div>
+        <div className="grid gap-3 md:grid-cols-3">{principles.map(({ icon: Icon, title, description }) => <article key={title} className="resume-skill shine-border-hover p-5"><Icon className="h-5 w-5 text-cyan-300" /><h3 className="mt-6 text-xl text-zinc-100">{title}</h3><p className="resume-muted mt-3 leading-7">{description}</p></article>)}</div>
       </section>
 
       <section className="mt-20 grid gap-12 lg:grid-cols-[1fr_0.8fr]">
         <div><p className="section-code">// current interests</p><h2 className="mt-4 text-4xl font-semibold tracking-[-0.05em] text-zinc-50 sm:text-5xl">Learning by building.</h2><p className="resume-lead mt-6 max-w-xl text-lg leading-8">These are the areas I keep returning to, whether the output is a small script, a useful interface, or a physical prototype.</p><div className="mt-7 flex flex-wrap gap-2">{resume.skills.map((skill) => <span key={skill.label} className="resume-chip">{skill.label}</span>)}</div></div>
-        <div className="resume-panel p-6"><p className="section-code">// keep in touch</p><h2 className="mt-4 text-2xl text-zinc-50">Good ideas become better conversations.</h2><p className="resume-muted mt-3 leading-7">For collaborations, questions, or a problem worth exploring, email is the best place to start.</p><div className="mt-7 flex flex-wrap gap-4"><Link href={socialMedia.email.href} className="glow-action inline-flex items-center gap-2 rounded px-4 py-3 text-sm font-semibold text-[#090b0d]"><Mail className="h-4 w-4" /> Say hello</Link><Link href={socialMedia.github.href} target="_blank" className="inline-flex items-center gap-2 py-3 text-sm text-cyan-300 hover:text-cyan-200">View the code <ArrowUpRight className="h-4 w-4" /></Link></div></div>
+        <div className="resume-panel shine-border-hover p-6"><p className="section-code">// keep in touch</p><h2 className="mt-4 text-2xl text-zinc-50">Good ideas become better conversations.</h2><p className="resume-muted mt-3 leading-7">For collaborations, questions, or a problem worth exploring, email is the best place to start.</p><div className="mt-7 flex flex-wrap gap-4"><Link href={socialMedia.email.href} className="glow-action inline-flex items-center gap-2 rounded px-4 py-3 text-sm font-semibold text-[#090b0d]"><Mail className="h-4 w-4" /> Say hello</Link><Link href={socialMedia.github.href} target="_blank" className="inline-flex items-center gap-2 py-3 text-sm text-cyan-300 hover:text-cyan-200">View the code <ArrowUpRight className="h-4 w-4" /></Link></div></div>
       </section>
     </main>
   );

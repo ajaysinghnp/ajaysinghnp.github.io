@@ -5,7 +5,7 @@ import { CopyCheck, CopyIcon } from "lucide-react";
 import { useState } from "react";
 
 const buttonClasses =
-  "shine-edge flex cursor-pointer items-center rounded text-xs font-medium";
+  "shine-border-hover flex cursor-pointer items-center rounded text-xs font-medium";
 
 export interface CopyButtonProps {
   text: string;
