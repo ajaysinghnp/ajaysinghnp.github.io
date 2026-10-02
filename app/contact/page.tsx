@@ -16,9 +16,9 @@ export default function ContactPage() {
       </header>
 
       <section className="mt-14 grid gap-12 lg:grid-cols-[1.1fr_0.9fr]">
-        <div className="resume-panel shine-border-hover flex min-h-[22rem] flex-col justify-between p-6 sm:p-8">
+        <div className="resume-surface shine-border-hover flex min-h-[22rem] flex-col justify-between p-6 sm:p-8">
           <div><p className="section-code">// best way to reach me</p><h2 className="mt-5 max-w-xl text-4xl font-semibold tracking-[-0.05em] text-zinc-50 sm:text-5xl">Email works best.</h2><p className="resume-muted mt-5 max-w-lg text-lg leading-8">Tell me what you are trying to make, where it is getting stuck, and what a useful outcome would look like.</p></div>
-          <div className="mt-10"><Link href={socialMedia.email.href} aria-label="Start a conversation by email" className="glow-action inline-flex items-center gap-3 rounded px-5 py-3 text-sm font-semibold text-[#090b0d]"><Mail className="h-4 w-4" /> Start a conversation <ArrowUpRight className="h-4 w-4" /></Link></div>
+          <div className="mt-10"><Link href={socialMedia.email.href} aria-label="Start a conversation by email" className="glow-action hover:bg-[#a5f3fc] inline-flex items-center gap-3 rounded px-5 py-3 text-sm font-semibold text-[#090b0d]"><Mail className="h-4 w-4" /> Start a conversation <ArrowUpRight className="h-4 w-4" /></Link></div>
         </div>
 
         <div className="space-y-8">

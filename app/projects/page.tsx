@@ -77,13 +77,13 @@ function FeaturedProjectPreview({ project }: { project: Project }) {
   if (!previewVersion || failedVersion === previewVersion) return null;
 
   return (
-    <div className="project-card-preview relative mt-7 aspect-video w-full overflow-hidden rounded-lg border border-[var(--site-border)]">
+    <div className="project-card-preview relative mt-7 aspect-video w-full overflow-hidden rounded-lg border border-[var(--site-surface-border)]">
       <Image
         src={`${getProjectPreviewSrc(project.name, "light")}?v=${encodeURIComponent(previewVersion)}`}
         alt=""
         fill
         sizes="(max-width: 1024px) 100vw, 45vw"
-        className="project-card-preview-light object-cover object-top transition duration-700 group-hover:scale-[1.03]"
+        className="project-card-preview-theme project-card-preview-light object-cover object-top transition duration-700 group-hover:scale-[1.03]"
         priority
         onError={() => setFailedVersion(previewVersion)}
       />
@@ -92,15 +92,15 @@ function FeaturedProjectPreview({ project }: { project: Project }) {
         alt=""
         fill
         sizes="(max-width: 1024px) 100vw, 45vw"
-        className="project-card-preview-dark object-cover object-top transition duration-700 group-hover:scale-[1.03]"
+        className="project-card-preview-theme project-card-preview-dark object-cover object-top transition duration-700 group-hover:scale-[1.03]"
         priority
         onError={() => setFailedVersion(previewVersion)}
       />
       <div className="project-card-preview-bar absolute inset-x-0 top-0 z-10 flex h-5 items-center gap-1.5 border-b border-[var(--site-border)] px-2 sm:h-8 sm:gap-2 sm:px-3">
         <span className="flex gap-1" aria-hidden="true">
-          <i />
-          <i />
-          <i />
+          <i className="project-card-preview-dot sm:size-[0.38rem]" />
+          <i className="project-card-preview-dot sm:size-[0.38rem]" />
+          <i className="project-card-preview-dot sm:size-[0.38rem]" />
         </span>
         <span className="truncate text-[9px] sm:text-[10px]">{previewHost}</span>
       </div>
@@ -132,7 +132,7 @@ function ProjectCard({
       whileInView="show"
       viewport={{ once: true, amount: 0.2 }}
       variants={reveal}
-      className={`project-card shine-border-hover group relative w-full break-inside-avoid overflow-hidden rounded-xl border transition duration-300 hover:-translate-y-1 ${featured ? "h-full" : ""}`}
+      className={`project-card shine-border-hover group relative w-full break-inside-avoid overflow-hidden rounded-xl border transition duration-300 hover:-translate-y-1 hover:border-[color-mix(in_srgb,var(--project-card-accent)_50%,transparent)] hover:shadow-[var(--project-card-hover-shadow)] ${featured ? "h-full" : ""}`}
     >
       <div aria-hidden="true" className="project-card-glow pointer-events-none absolute -right-12 -top-16 h-40 w-40 rounded-full opacity-40 blur-3xl transition duration-500 group-hover:opacity-100" />
       <Link
@@ -179,7 +179,7 @@ function ProjectCard({
           </a>
         </div>
         <div className="mt-6">
-          <h3 className={`project-card-title ${featured ? "text-3xl sm:text-4xl" : "text-2xl"} font-semibold tracking-[-0.04em] transition`}>
+          <h3 className={`project-card-title group-hover:text-[var(--project-card-accent)] ${featured ? "text-3xl sm:text-4xl" : "text-2xl"} font-semibold tracking-[-0.04em] transition`}>
             {project.title}
           </h3>
           <ProjectDescription className={`resume-muted mt-4 ${featured ? "text-base leading-8" : "text-sm leading-7"}`}>
@@ -191,7 +191,7 @@ function ProjectCard({
           <span className="resume-muted text-xs font-medium">
             Updated {new Date(project.updated_at).toLocaleDateString(undefined, { month: "short", year: "numeric" })}
           </span>
-          <span className="project-card-link inline-flex items-center gap-1.5 text-sm transition">
+          <span className="project-card-link group-hover:text-[var(--project-card-accent)] inline-flex items-center gap-1.5 text-sm transition">
             Read more
             <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </span>
@@ -249,7 +249,7 @@ export default function ProjectsPage() {
         action={
           <button
             onClick={() => mutate()}
-            className="glow-action inline-flex items-center gap-2 rounded px-4 py-3 text-sm font-semibold text-[#090b0d]"
+            className="glow-action hover:bg-[#a5f3fc] inline-flex items-center gap-2 rounded px-4 py-3 text-sm font-semibold text-[#090b0d]"
           >
             <RefreshCw className="h-4 w-4" /> Try again
           </button>

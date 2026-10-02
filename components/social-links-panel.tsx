@@ -17,7 +17,7 @@ export default function SocialLinksPanel({ heading = "// elsewhere" }: SocialLin
   return (
     <div>
       <p className="section-code">{heading}</p>
-      <div className="social-links-panel mt-5 divide-y divide-[var(--site-border)] border-y border-[var(--site-border)]">
+      <div className="social-links-panel mt-5 divide-y divide-[var(--site-border)] border-y border-[var(--site-surface-border)]">
         {links.map(({ label, handle, href, icon: Icon }) => (
           <Link key={label} href={href} target="_blank" rel="noreferrer" className="flex items-center justify-between py-4 text-sm transition hover:text-cyan-300">
             <span className="flex items-center gap-3"><Icon className="h-4 w-4 text-cyan-300" /> {label}</span>

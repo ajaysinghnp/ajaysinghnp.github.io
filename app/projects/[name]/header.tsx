@@ -77,7 +77,7 @@ const ProjectHeader = ({ project_name }: Props) => {
 
   if (isLoading) {
     return (
-      <section role="status" className="resume-panel shine-border-hover my-8 animate-pulse rounded-2xl p-8">
+      <section role="status" className="resume-surface shine-border-hover my-8 animate-pulse rounded-2xl p-8">
         <p className="resume-muted">Loading project details...</p>
       </section>
     );
@@ -85,7 +85,7 @@ const ProjectHeader = ({ project_name }: Props) => {
 
   if (error || !project) {
     return (
-      <section role="status" className="resume-panel shine-border-hover my-8 rounded-2xl p-8">
+      <section role="status" className="resume-surface shine-border-hover my-8 rounded-2xl p-8">
         <Link href="/projects" className="inline-flex items-center gap-2 text-sm text-[var(--site-accent)] hover:underline">
           <ArrowLeft className="h-4 w-4" /> Back to projects
         </Link>
@@ -115,13 +115,13 @@ const ProjectHeader = ({ project_name }: Props) => {
           <>
             <Link
               href="/projects"
-              className="mb-6 inline-flex items-center gap-2 rounded-full border border-[var(--site-border)] px-4 py-2 text-sm text-[var(--site-muted)] transition hover:border-[var(--site-accent)] hover:text-[var(--site-accent)]"
+              className="mb-6 inline-flex items-center gap-2 rounded-full border border-[var(--site-surface-border)] px-4 py-2 text-sm text-[var(--site-muted)] transition hover:border-[var(--site-accent)] hover:text-[var(--site-accent)]"
             >
               <ArrowLeft className="h-4 w-4" />
               All projects
             </Link>
 
-            <div className="resume-panel shine-border-hover overflow-hidden rounded-2xl p-6 sm:p-9 lg:p-12">
+            <div className="resume-surface shine-border-hover overflow-hidden rounded-2xl p-6 sm:p-9 lg:p-12">
               <div className="section-code">Project / {project.visibility}</div>
               <div className="mt-5 grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
                 <div>
@@ -138,7 +138,7 @@ const ProjectHeader = ({ project_name }: Props) => {
                   href={project.url}
                   target="_blank"
                   rel="noreferrer"
-                  className="glow-action inline-flex w-fit items-center gap-2 rounded px-5 py-3 text-sm font-semibold text-[#090b0d]"
+                  className="glow-action hover:bg-[#a5f3fc] inline-flex w-fit items-center gap-2 rounded px-5 py-3 text-sm font-semibold text-[#090b0d]"
                 >
                   <GitBranch className="h-4 w-4" />
                   View on GitHub
@@ -216,7 +216,7 @@ const ProjectHeader = ({ project_name }: Props) => {
               aria-label="Expand project overview"
               title="Show project overview"
               onClick={scrollBackToOverview}
-              className="site-icon-button shine-border-hover inline-flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full border border-[var(--site-border)] text-[var(--site-muted)] transition hover:text-[var(--site-accent)]"
+              className="site-icon-button site-control shine-border-hover inline-flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full border border-[var(--site-surface-border)] text-[var(--site-muted)] transition hover:bg-cyan-400/[0.14] hover:text-cyan-600"
             >
               <ArrowDown className="h-4 w-4" />
             </button>

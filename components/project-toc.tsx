@@ -60,7 +60,9 @@ export function ProjectToc({ items }: ProjectTocProps) {
             href={`#${item.id}`}
             aria-current={activeId === item.id ? "location" : undefined}
             className={[
-              activeId === item.id ? "is-active shine-border" : "",
+              "project-toc-link hover:bg-[color-mix(in_srgb,var(--site-accent)_9%,transparent)] hover:text-[var(--site-text)]",
+              nested ? "project-toc-child-link" : "",
+              activeId === item.id ? "font-semibold bg-[color-mix(in_srgb,var(--site-accent)_9%,transparent)] text-[var(--site-text)] shine-border" : "",
             ].filter(Boolean).join(" ")}
             onClick={() => activateItem(item.id)}
           >

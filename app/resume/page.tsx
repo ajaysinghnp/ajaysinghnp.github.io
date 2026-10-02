@@ -26,15 +26,15 @@ export default function ResumePage() {
 
       <div className="mt-12 grid gap-12 lg:grid-cols-[0.7fr_1.3fr]">
         <aside className="space-y-8">
-          <div className="resume-panel shine-border-hover p-5">
+          <div className="resume-surface shine-border-hover p-5">
             <div className="relative mx-auto aspect-square max-w-[13rem] overflow-hidden rounded-full border border-cyan-300/40 bg-zinc-900"><Image src="/images/author.png" alt="Portrait of Ajay Singh" fill sizes="208px" className="object-cover object-top grayscale contrast-125" /></div>
             <div className="mt-6 border-t border-current/10 pt-5"><p className="section-code">// working mode</p><p className="resume-lead mt-3 text-lg leading-7">Hardware-minded. Software-curious. Always looking for the simpler system.</p></div>
           </div>
           <div>
             <p className="section-code">// capabilities</p>
-            <div className="mt-4 flex flex-wrap gap-2">{capabilities.map((skill) => <span key={skill.label} className="resume-chip">{skill.label}</span>)}</div>
+            <div className="mt-4 flex flex-wrap gap-2">{capabilities.map((skill) => <span key={skill.label} className="resume-chip shine-border-hover inline-flex items-center">{skill.label}</span>)}</div>
           </div>
-          <div className="resume-panel shine-border-hover p-5"><p className="section-code">// education</p><div className="mt-5 space-y-5">{education.map((item) => <div key={item.degree}><p className="text-xs text-cyan-300">{item.date}</p><h3 className="mt-1 text-lg text-zinc-100">{item.degree}</h3><p className="resume-muted mt-1 text-sm">{item.school}</p></div>)}</div></div>
+          <div className="resume-surface shine-border-hover p-5"><p className="section-code">// education</p><div className="mt-5 space-y-5">{education.map((item) => <div key={item.degree}><p className="text-xs text-cyan-300">{item.date}</p><h3 className="mt-1 text-lg text-zinc-100">{item.degree}</h3><p className="resume-muted mt-1 text-sm">{item.school}</p></div>)}</div></div>
         </aside>
 
         <div className="space-y-14">
@@ -45,10 +45,10 @@ export default function ResumePage() {
 
           <section>
             <div className="mb-6 flex items-center justify-between"><p className="section-code">// selected strengths</p><Sparkles className="h-4 w-4 text-cyan-300" /></div>
-            <div className="grid gap-3 sm:grid-cols-2">{capabilities.map((skill) => <div key={skill.label} className="resume-skill shine-border-hover flex items-start gap-3 p-4"><Check className="mt-0.5 h-4 w-4 shrink-0 text-cyan-300" /><div><h3 className="text-base text-zinc-100">{skill.label}</h3><p className="resume-muted mt-1 text-sm leading-6">{skill.description}</p></div></div>)}</div>
+            <div className="grid gap-3 sm:grid-cols-2">{capabilities.map((skill) => <div key={skill.label} className="resume-surface resume-skill shine-border-hover hover:border-cyan-400/55 hover:bg-cyan-400/10 flex items-start gap-3 p-4"><Check className="mt-0.5 h-4 w-4 shrink-0 text-cyan-300" /><div><h3 className="text-base text-zinc-100">{skill.label}</h3><p className="resume-muted mt-1 text-sm leading-6">{skill.description}</p></div></div>)}</div>
           </section>
 
-          <section className="resume-callout shine-border-hover flex flex-col gap-5 p-6 sm:flex-row sm:items-center sm:justify-between"><div><p className="section-code">// next conversation</p><h2 className="mt-2 text-2xl text-zinc-50">Have a useful problem to work through?</h2></div><Link href={socialMedia.email.href} className="glow-action inline-flex w-fit items-center gap-2 rounded px-4 py-3 text-sm font-semibold text-[#090b0d]">Let&apos;s talk <ArrowUpRight className="h-4 w-4" /></Link></section>
+          <section className="resume-surface shine-border-hover flex flex-col gap-5 p-6 sm:flex-row sm:items-center sm:justify-between"><div><p className="section-code">// next conversation</p><h2 className="mt-2 text-2xl text-zinc-50">Have a useful problem to work through?</h2></div><Link href={socialMedia.email.href} className="glow-action hover:bg-[#a5f3fc] inline-flex w-fit items-center gap-2 rounded px-4 py-3 text-sm font-semibold text-[#090b0d]">Let&apos;s talk <ArrowUpRight className="h-4 w-4" /></Link></section>
         </div>
       </div>
     </main>

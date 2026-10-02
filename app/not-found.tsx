@@ -10,7 +10,7 @@ export default function NotFound() {
         <h1 className="mt-4 text-7xl font-semibold tracking-[-0.08em] text-zinc-50 sm:text-9xl">404<span className="text-cyan-300">.</span></h1>
         <p className="resume-lead mx-auto mt-5 max-w-md text-lg leading-8">This route does not exist, or it moved somewhere else while the system was changing.</p>
         <div className="mt-8 flex flex-wrap justify-center gap-5">
-          <Link href="/" className="glow-action inline-flex items-center gap-2 rounded px-5 py-3 text-sm font-semibold text-[#090b0d]"><ArrowLeft className="h-4 w-4" /> Return home</Link>
+          <Link href="/" className="glow-action hover:bg-[#a5f3fc] inline-flex items-center gap-2 rounded px-5 py-3 text-sm font-semibold text-[#090b0d]"><ArrowLeft className="h-4 w-4" /> Return home</Link>
           <Link href="/projects" className="inline-flex items-center gap-2 py-3 text-sm text-cyan-300 transition hover:text-cyan-200">Browse projects <ArrowUpRight className="h-4 w-4" /></Link>
         </div>
       </section>

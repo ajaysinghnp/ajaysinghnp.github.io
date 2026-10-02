@@ -30,10 +30,10 @@ export function ModeToggle({ className, variant }: ModeToggleProps) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="theme-menu">
-        <DropdownMenuItem onClick={() => setTheme("light")} className="theme-menu-item hover:cursor-pointer">
+        <DropdownMenuItem onClick={() => setTheme("light")} className="theme-menu-item hover:cursor-pointer hover:!bg-cyan-400/[0.14] focus:!bg-cyan-400/[0.14] hover:!text-[var(--site-text)] focus:!text-[var(--site-text)]">
           Light
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("dark")} className="theme-menu-item hover:cursor-pointer">
+        <DropdownMenuItem onClick={() => setTheme("dark")} className="theme-menu-item hover:cursor-pointer hover:!bg-cyan-400/[0.14] focus:!bg-cyan-400/[0.14] hover:!text-[var(--site-text)] focus:!text-[var(--site-text)]">
           Dark
         </DropdownMenuItem>
       </DropdownMenuContent>

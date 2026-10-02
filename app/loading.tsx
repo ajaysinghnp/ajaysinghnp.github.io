@@ -1,7 +1,7 @@
 export default function Loading() {
   return (
     <main className="resume-shell flex min-h-[55vh] w-full items-center justify-center py-20">
-      <section className="resume-panel shine-border-hover w-full max-w-xl p-6 sm:p-8" aria-label="Loading page">
+      <section className="resume-surface shine-border-hover w-full max-w-xl p-6 sm:p-8" aria-label="Loading page">
         <div className="flex items-center justify-between border-b border-[var(--site-border)] pb-4 text-xs uppercase tracking-[0.18em]">
           <span className="section-code">// loading / signal</span>
           <span className="live-dot" />
