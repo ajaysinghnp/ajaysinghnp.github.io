@@ -151,6 +151,10 @@ export const fetchProjectReadme = async (project: string): Promise<string> => {
       },
     );
 
+    if (typeof data !== "string") {
+      throw new TypeError(`GitHub returned a non-text README for ${repoName}.`);
+    }
+
     readmeCache.set(repoName, data);
     return data;
   } catch (error) {
