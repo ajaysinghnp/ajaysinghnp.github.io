@@ -7,6 +7,7 @@ Personal portfolio and blog built with Next.js, MDX, and Tailwind CSS, designed 
 - Personal portfolio pages (`about`, `projects`, `resume`, `contact`)
 - Blog support with MDX and Contentlayer
 - Project showcase powered by GitHub API
+- Automatically generated featured-project previews
 - Syntax-highlighted markdown content
 - Theme support (light/dark/system)
 - Production-ready Docker deployment for a VPS
@@ -14,6 +15,7 @@ Personal portfolio and blog built with Next.js, MDX, and Tailwind CSS, designed 
 ## Tech Stack
 
 - Next.js 16 (App Router)
+- Playwright Chromium for build-time project previews
 - React + TypeScript
 - Tailwind CSS
 - Contentlayer + MDX
@@ -47,6 +49,8 @@ pnpm install
 ```bash
 pnpm run dev
 ```
+
+The first run installs Playwright Chromium if needed, starts the local site, and captures separate light- and dark-theme previews of the local development homepage when the selected featured repository is this portfolio. The preview browser bar continues to show the repository's public homepage URL. Production builds capture the public homepage when configured, otherwise the GitHub repository page. Generated images and their version manifest are stored in the ignored `public/generated-project-previews/` directory.
 
 Open `http://localhost:3000`.
 

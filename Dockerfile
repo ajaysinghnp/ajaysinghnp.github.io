@@ -9,6 +9,9 @@ COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile --ignore-scripts
 
 FROM deps AS build
+RUN apk add --no-cache chromium
+ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
+ENV PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium-browser
 COPY . .
 RUN pnpm run content:build
 RUN pnpm run build

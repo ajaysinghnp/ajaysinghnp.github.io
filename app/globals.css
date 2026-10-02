@@ -786,6 +786,45 @@
   background-color: var(--project-card-accent-soft);
 }
 
+.project-card-preview {
+  background: var(--project-card-end);
+}
+
+.project-card-preview-light,
+.project-card-preview-dark {
+  display: none;
+}
+
+html.dark .project-card-preview-dark,
+html:not(.dark) .project-card-preview-light {
+  display: block;
+}
+
+.project-card-preview-bar {
+  background: color-mix(in srgb, var(--project-card-start) 88%, transparent);
+  color: var(--site-muted);
+  backdrop-filter: blur(12px);
+}
+
+.project-card-preview-bar i {
+  display: block;
+  width: 0.25rem;
+  height: 0.25rem;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--site-muted) 35%, transparent);
+}
+
+@media (min-width: 640px) {
+  .project-card-preview-bar i {
+    width: 0.38rem;
+    height: 0.38rem;
+  }
+}
+
+.project-card-preview-fade {
+  background: linear-gradient(to top, var(--project-card-end), transparent);
+}
+
 .project-card-index,
 .project-card-title,
 .project-card-link {

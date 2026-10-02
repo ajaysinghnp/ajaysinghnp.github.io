@@ -1,13 +1,18 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowUpRight, Eye, GitBranch, GitFork, RefreshCw, Star } from "lucide-react";
 import useSWR from "swr";
 import { motion } from "framer-motion";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { PROJECT_REPOSITORY_SETTINGS } from "@/data/repos";
 import { fetchProjectsFromApi } from "@/lib/projects-client";
+import {
+  getProjectPreviewSrc,
+  PROJECT_PREVIEW_MANIFEST_PATH,
+} from "@/lib/project-preview";
 import { socialMedia } from "@/data/social";
 import type { Project } from "@/types/github";
 import { ProjectDescription } from "@/components/project-description";
@@ -19,6 +24,90 @@ const reveal = {
 
 const compactCount = (count: number) =>
   Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 1 }).format(count);
+
+function FeaturedProjectPreview({ project }: { project: Project }) {
+  const [previewVersion, setPreviewVersion] = useState<string | null>(null);
+  const [failedVersion, setFailedVersion] = useState<string | null>(null);
+  const previewUrl = project.homepage || project.url;
+  let previewHost = project.name;
+
+  useEffect(() => {
+    let isMounted = true;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+
+    const checkPreview = async () => {
+      try {
+        const response = await fetch(
+          `${PROJECT_PREVIEW_MANIFEST_PATH}?check=${Date.now()}`,
+          { cache: "no-store" },
+        );
+        if (response.ok) {
+          const manifest = (await response.json()) as {
+            repository: string;
+            generatedAt: string;
+          };
+          if (isMounted && manifest.repository === project.name) {
+            setPreviewVersion(manifest.generatedAt);
+          }
+        } else if (response.status !== 404) {
+          console.warn(`Could not check featured preview: ${response.status}`);
+        }
+      } catch (error) {
+        console.warn("Could not check featured preview availability.", error);
+      }
+
+      if (isMounted && process.env.NODE_ENV === "development") {
+        timer = setTimeout(checkPreview, 2_000);
+      }
+    };
+
+    void checkPreview();
+    return () => {
+      isMounted = false;
+      if (timer) clearTimeout(timer);
+    };
+  }, [project.name]);
+
+  try {
+    previewHost = new URL(previewUrl).host;
+  } catch {
+    previewHost = project.name;
+  }
+
+  if (!previewVersion || failedVersion === previewVersion) return null;
+
+  return (
+    <div className="project-card-preview relative mt-7 aspect-video w-full overflow-hidden rounded-lg border border-[var(--site-border)]">
+      <Image
+        src={`${getProjectPreviewSrc(project.name, "light")}?v=${encodeURIComponent(previewVersion)}`}
+        alt=""
+        fill
+        sizes="(max-width: 1024px) 100vw, 45vw"
+        className="project-card-preview-light object-cover object-top transition duration-700 group-hover:scale-[1.03]"
+        priority
+        onError={() => setFailedVersion(previewVersion)}
+      />
+      <Image
+        src={`${getProjectPreviewSrc(project.name, "dark")}?v=${encodeURIComponent(previewVersion)}`}
+        alt=""
+        fill
+        sizes="(max-width: 1024px) 100vw, 45vw"
+        className="project-card-preview-dark object-cover object-top transition duration-700 group-hover:scale-[1.03]"
+        priority
+        onError={() => setFailedVersion(previewVersion)}
+      />
+      <div className="project-card-preview-bar absolute inset-x-0 top-0 z-10 flex h-5 items-center gap-1.5 border-b border-[var(--site-border)] px-2 sm:h-8 sm:gap-2 sm:px-3">
+        <span className="flex gap-1" aria-hidden="true">
+          <i />
+          <i />
+          <i />
+        </span>
+        <span className="truncate text-[9px] sm:text-[10px]">{previewHost}</span>
+      </div>
+      <div className="project-card-preview-fade pointer-events-none absolute inset-x-0 bottom-0 h-20" />
+    </div>
+  );
+}
 
 function distributeProjects(projects: Project[], columnCount: number): Project[][] {
   const columns = Array.from({ length: columnCount }, () => [] as Project[]);
@@ -97,6 +186,7 @@ function ProjectCard({
             {project.description || "No description yet. Open the repository to inspect the work."}
           </ProjectDescription>
         </div>
+        {featured && <FeaturedProjectPreview project={project} />}
         <div className="mt-auto flex items-center justify-between border-t border-[var(--site-border)] pt-4">
           <span className="resume-muted text-xs font-medium">
             Updated {new Date(project.updated_at).toLocaleDateString(undefined, { month: "short", year: "numeric" })}
@@ -182,6 +272,7 @@ export default function ProjectsPage() {
         </div>
         <div className="grid gap-4 lg:grid-cols-2">
           <ProjectCard
+            key={featured.name}
             project={featured}
             featured
           />
