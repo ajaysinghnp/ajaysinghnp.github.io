@@ -241,6 +241,9 @@ importers:
       remark-math:
         specifier: ^6.0.0
         version: 6.0.0
+      remark-parse:
+        specifier: 11.0.0
+        version: 11.0.0
       remark-toc:
         specifier: ^9.0.0
         version: 9.0.0
@@ -256,6 +259,9 @@ importers:
       tailwindcss-animate:
         specifier: ^1.0.7
         version: 1.0.7(tailwindcss@4.3.3)
+      unified:
+        specifier: 11.0.5
+        version: 11.0.5
     devDependencies:
       '@tailwindcss/postcss':
         specifier: ^4.3.3
@@ -263,6 +269,9 @@ importers:
       '@tailwindcss/typography':
         specifier: ^0.5.20
         version: 0.5.20(tailwindcss@4.3.3)
+      '@types/mdast':
+        specifier: 4.0.4
+        version: 4.0.4
       '@types/node':
         specifier: ^26.6.3
         version: 26.6.3
