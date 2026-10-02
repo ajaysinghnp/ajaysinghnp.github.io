@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils'
 import { CopyCheck, CopyIcon } from 'lucide-react'
 import { useState } from 'react'
 
-const buttonClasses = 'flex items-center text-xs font-medium text-white rounded'
+const buttonClasses = 'shine-edge flex items-center text-xs font-medium text-white rounded'
 
 export interface CopyButtonProps {
   text: string
@@ -33,4 +33,3 @@ export function CopyButton({ text, className }: CopyButtonProps) {
     </button>
   )
 }
-

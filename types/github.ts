@@ -22,6 +22,11 @@ export interface Repo {
   private: boolean;
   size: number;
   owner: RepoOwner;
+  stargazers_count?: number;
+  watchers_count?: number;
+  forks?: number;
+  forks_count?: number;
+  subscribers_count?: number;
 }
 
 export interface Project {

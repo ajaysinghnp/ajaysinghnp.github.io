@@ -1,5 +1,6 @@
 import "server-only";
 
+import { PROJECT_REPOSITORY_SETTINGS } from "@/data/repos";
 import { GIT_USERNAME, Project, Repo } from "@/types/github";
 import axios from "axios";
 
@@ -59,13 +60,20 @@ export const fetchProjects = async (): Promise<Project[]> => {
   }
 
   return allRepos
-    .filter((repo: Repo) => !repo.private && repo.name !== "iptv-channels")
+    .filter((repo: Repo) =>
+      !repo.private
+      && !PROJECT_REPOSITORY_SETTINGS.excludedFromProjectList.includes(repo.name),
+    )
     .map((repo: Repo) => ({
       id: repo.id,
       name: repo.name,
       title: repo.name,
       url: repo.html_url,
       description: repo.description,
+      stargazers_count: repo.stargazers_count,
+      watchers_count: repo.watchers_count,
+      forks: repo.forks ?? repo.forks_count,
+      subscribers_count: repo.subscribers_count,
       visibility: repo.private ? "private" : "public",
       date: repo.created_at,
       updated_at: repo.updated_at,
