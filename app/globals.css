@@ -1043,6 +1043,10 @@ html:not(.dark) body [class~="text-zinc-500"] {
   background: var(--site-panel);
 }
 
+.photo-panel.glow-frame {
+  border-color: color-mix(in srgb, var(--site-accent) 24%, transparent);
+}
+
 @property --frame-angle {
   syntax: "<angle>";
   inherits: false;
