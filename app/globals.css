@@ -172,11 +172,11 @@
     border-radius: var(--shine-border-radius, inherit);
     padding: var(--shine-border-width, 1px);
     background: conic-gradient(from var(--shine-angle),
-      transparent 0deg var(--shine-border-clear, 300deg),
-      color-mix(in srgb, var(--shine-border-color, var(--site-accent)) 35%, transparent) var(--shine-border-fade, 322deg),
-      var(--shine-border-color, var(--site-accent)) var(--shine-border-peak, 338deg),
-      color-mix(in srgb, var(--site-text) 80%, var(--shine-border-color, var(--site-accent))) var(--shine-border-mid, 344deg),
-      var(--shine-border-color, var(--site-accent)) var(--shine-border-end, 350deg),
+        transparent 0deg var(--shine-border-clear, 300deg),
+        color-mix(in srgb, var(--shine-border-color, var(--site-accent)) 35%, transparent) var(--shine-border-fade, 322deg),
+        var(--shine-border-color, var(--site-accent)) var(--shine-border-peak, 338deg),
+        color-mix(in srgb, var(--site-text) 80%, var(--shine-border-color, var(--site-accent))) var(--shine-border-mid, 344deg),
+        var(--shine-border-color, var(--site-accent)) var(--shine-border-end, 350deg),
         transparent 360deg);
     content: "";
     opacity: 1;
@@ -206,11 +206,11 @@
     border-radius: var(--shine-border-radius, inherit);
     padding: var(--shine-border-width, 1px);
     background: conic-gradient(from var(--shine-angle),
-      transparent 0deg var(--shine-border-clear, 300deg),
-      color-mix(in srgb, var(--shine-border-color, var(--site-accent)) 35%, transparent) var(--shine-border-fade, 322deg),
-      var(--shine-border-color, var(--site-accent)) var(--shine-border-peak, 338deg),
-      color-mix(in srgb, var(--site-text) 80%, var(--shine-border-color, var(--site-accent))) var(--shine-border-mid, 344deg),
-      var(--shine-border-color, var(--site-accent)) var(--shine-border-end, 350deg),
+        transparent 0deg var(--shine-border-clear, 300deg),
+        color-mix(in srgb, var(--shine-border-color, var(--site-accent)) 35%, transparent) var(--shine-border-fade, 322deg),
+        var(--shine-border-color, var(--site-accent)) var(--shine-border-peak, 338deg),
+        color-mix(in srgb, var(--site-text) 80%, var(--shine-border-color, var(--site-accent))) var(--shine-border-mid, 344deg),
+        var(--shine-border-color, var(--site-accent)) var(--shine-border-end, 350deg),
         transparent 360deg);
     content: "";
     opacity: 0;
@@ -238,13 +238,15 @@
 @utility shine-border-contrast {
   --shine-border-color: #0e7490;
   --shine-border-gap: 3px;
-  --shine-border-width: 2px;
+  --shine-border-width: 1px;
   --shine-border-radius: calc(var(--site-radius) + var(--shine-border-gap));
   --shine-border-clear: 180deg;
   --shine-border-fade: 220deg;
   --shine-border-peak: 260deg;
   --shine-border-mid: 320deg;
   --shine-border-end: 350deg;
+  outline: 1px solid color-mix(in srgb, var(--shine-border-color) 55%, transparent);
+  outline-offset: var(--shine-border-gap);
 }
 
 @utility resume-muted {
