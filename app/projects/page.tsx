@@ -48,13 +48,22 @@ function ProjectCard({
       <Link
         href={`/projects/${project.name}`}
         aria-label={`Open ${project.title}`}
-        className={`relative flex h-full flex-col ${featured ? "p-6 sm:p-8" : "p-5 sm:p-6"}`}
+        className="absolute inset-0 z-10 rounded-xl"
       >
+        <span className="sr-only">Open project details</span>
+      </Link>
+      <div className={`pointer-events-none relative z-20 flex h-full flex-col ${featured ? "p-6 sm:p-8" : "p-5 sm:p-6"}`}>
         <div className="flex items-center justify-between">
           <span className="project-card-index font-mono text-xs tracking-[0.14em]">
             ID {project.id}
           </span>
-          <span className="project-card-visibility flex items-center gap-3 text-[10px] uppercase tracking-[0.12em]">
+          <a
+            href={project.url}
+            target="_blank"
+            rel="noreferrer"
+            aria-label={`View ${project.title} on GitHub`}
+            className="project-card-visibility pointer-events-auto relative z-30 flex items-center gap-3 text-[10px] uppercase tracking-[0.12em]"
+          >
             <span className="inline-flex items-center gap-1.5" aria-label={`Visibility: ${project.visibility}`}>
               <Eye className="h-3.5 w-3.5" aria-hidden="true" />
               {project.visibility}
@@ -77,7 +86,7 @@ function ProjectCard({
                 {compactCount(project.forks)}
               </span>
             )}
-          </span>
+          </a>
         </div>
         <div className="mt-6">
           <h3 className={`project-card-title ${featured ? "text-3xl sm:text-4xl" : "text-2xl"} font-semibold tracking-[-0.04em] transition`}>
@@ -96,7 +105,7 @@ function ProjectCard({
             <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </span>
         </div>
-      </Link>
+      </div>
     </motion.article>
   );
 }

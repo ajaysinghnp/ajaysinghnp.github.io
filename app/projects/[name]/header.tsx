@@ -2,23 +2,19 @@
 
 import { socialMedia } from "@/data/social";
 import { fetchProjectFromApi } from "@/lib/projects-client";
-import { Project } from "@/types/github";
-import { ArrowLeft, Eye, GitBranch, MessageSquare, Star } from "lucide-react";
+import type { Project } from "@/types/github";
+import { ArrowLeft, ArrowUpRight, Eye, GitBranch, GitFork, Star } from "lucide-react";
 import Link from "next/link";
-import { Suspense, useEffect, useRef, useState } from "react";
 import useSWR from "swr";
 
 interface Props {
   project_name: string;
 }
 
-const ProjectHeader = ({ project_name }: Props) => {
-  const ref = useRef<HTMLElement>(null);
-  const [isIntersecting, setIntersecting] = useState(true);
-  const links: { label: string; href: string }[] = [];
-  let views = 0;
-  let stars = 0;
+const formatCount = (count: number) =>
+  Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 1 }).format(count);
 
+const ProjectHeader = ({ project_name }: Props) => {
   const {
     data: project,
     error,
@@ -28,129 +24,92 @@ const ProjectHeader = ({ project_name }: Props) => {
     () => fetchProjectFromApi(project_name),
   );
 
-  if (project) {
-    views = project?.watchers_count || views;
-    stars = project?.stargazers_count || stars;
+  if (isLoading) {
+    return (
+      <section role="status" className="resume-panel my-8 animate-pulse rounded-2xl p-8">
+        <p className="resume-muted">Loading project details...</p>
+      </section>
+    );
   }
 
-  if (project?.repository) {
-    links.push({
-      label: "Repository",
-      href: `https://github.com/${project.repository}`,
-    });
+  if (error || !project) {
+    return (
+      <section role="status" className="resume-panel my-8 rounded-2xl p-8">
+        <Link href="/projects" className="inline-flex items-center gap-2 text-sm text-[var(--site-accent)] hover:underline">
+          <ArrowLeft className="h-4 w-4" /> Back to projects
+        </Link>
+        <h1 className="mt-6 text-3xl font-semibold text-[var(--site-text)]">
+          {error ? "Project details are unavailable." : "Project not found."}
+        </h1>
+        {error && <p className="resume-muted mt-3">Please try again in a moment.</p>}
+      </section>
+    );
   }
-  if (project?.url) {
-    links.push({
-      label: "Source Code",
-      href: project.url,
-    });
-  }
-  useEffect(() => {
-    if (!ref.current) return;
-    const observer = new IntersectionObserver(([entry]) =>
-      setIntersecting(entry.isIntersecting),
-    );
 
-    observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, []);
-
-  if (error)
-    return (
-      <div className="relative h-dvh flex justify-center items-center">
-        Something happened while fetching project details...
-      </div>
-    );
-  if (isLoading)
-    return (
-      <div className="relative h-dvh flex justify-center items-center">
-        Loading...
-      </div>
-    );
-  if (!project)
-    return (
-      <div className="relative h-dvh flex justify-center items-center">
-        Project not found...
-      </div>
-    );
+  const stats = [
+    { label: "Stars", value: project.stargazers_count, icon: Star },
+    { label: "Forks", value: project.forks, icon: GitFork },
+    { label: "Watchers", value: project.subscribers_count, icon: Eye },
+    { label: "Open issues", value: project.open_issues, icon: GitBranch },
+  ].filter((stat): stat is typeof stat & { value: number } => stat.value !== undefined);
 
   return (
-    <Suspense fallback={<p>Loading {project_name}...</p>}>
-      <header
-        ref={ref}
-        className="relative isolate overflow-hidden bg-transparent"
+    <section className="pt-5">
+      <Link
+        href="/projects"
+        className="inline-flex items-center gap-2 rounded-full border border-[var(--site-border)] px-4 py-2 text-sm text-[var(--site-muted)] transition hover:border-[var(--site-accent)] hover:text-[var(--site-accent)]"
       >
-        <div
-          className={`fixed inset-x-0 top-12 z-50 backdrop-blur lg:backdrop-blur-none duration-200 border-b lg:bg-transparent ${isIntersecting
-            ? "bg-zinc-900/0 border-transparent"
-            : "bg-white/10  border-zinc-200 lg:border-transparent"
-            }`}
-        >
-          <div className="max-w-[80%] flex flex-row-reverse items-center justify-between py-8 mx-auto">
-            <div className="flex justify-between gap-8">
-              <span
-                title="View counter for this page"
-                className={`duration-200 hover:font-medium flex items-center gap-1 ${isIntersecting
-                  ? " text-zinc-400 hover:text-zinc-100"
-                  : "text-zinc-600 hover:text-zinc-900"
-                  } `}
-              >
-                <Eye className="w-5 h-5" />{" "}
-                {Intl.NumberFormat("en-US", { notation: "compact" }).format(
-                  views,
-                )}
-              </span>
-              <Link target="_blank" href={socialMedia.twitter.href} className="flex gap-1 text-zinc-400 hover:text-zinc-100">
-                <Star className="w-5 h-5" />{" "}
-                {Intl.NumberFormat("en-US", { notation: "compact" }).format(
-                  stars,
-                )}
-              </Link>
-              <Link target="_blank" href={project.url}>
-                <GitBranch
-                  className={`w-6 h-6 duration-200 hover:font-medium ${isIntersecting
-                    ? " text-zinc-400 hover:text-zinc-100"
-                    : "text-zinc-600 hover:text-zinc-900"
-                    } `}
-                />
-              </Link>
-            </div>
+        <ArrowLeft className="h-4 w-4" />
+        All projects
+      </Link>
 
-            <Link
-              href="/projects"
-              className={`duration-200 hover:font-medium ${isIntersecting
-                ? " text-zinc-400 hover:text-zinc-100"
-                : "text-zinc-600 hover:text-zinc-900"
-                } `}
-            >
-              <ArrowLeft className="w-6 h-6 " />
-            </Link>
-          </div>
-        </div>
-        <div className="container mx-auto relative isolate overflow-hidden">
-          <div className="mx-auto w-full max-w-[80%] text-center flex flex-col items-center">
-            <div className="mx-auto lg:mx-0">
-              <h1 className="text-4xl font-bold tracking-normal text-white font-display">
-                {project.title.replaceAll("-", " ").toLocaleUpperCase()}
-              </h1>
-              <p className="mt-6 text-md text-muted-foreground line-clamp-2">
+      <div className="resume-panel mt-6 overflow-hidden rounded-2xl p-6 sm:p-9 lg:p-12">
+        <div className="section-code">Project / {project.visibility}</div>
+        <div className="mt-5 grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+          <div>
+            <h1 className="max-w-4xl break-words text-4xl font-semibold leading-tight tracking-[-0.055em] text-[var(--site-text)] sm:text-6xl">
+              {project.title.replaceAll("-", " ")}
+            </h1>
+            {project.description && (
+              <p className="resume-lead mt-5 max-w-3xl text-base leading-8 sm:text-lg">
                 {project.description}
               </p>
-            </div>
-
-            <div className="mx-auto mt-4 max-w-2xl lg:mx-0 lg:max-w-none">
-              <div className="grid grid-cols-1 gap-y-6 gap-x-8 text-base font-semibold leading-7 text-white sm:grid-cols-2 md:flex lg:gap-x-10">
-                {links.map((link) => (
-                  <Link target="_blank" key={link.label} href={link.href}>
-                    {link.label} <span aria-hidden="true">&rarr;</span>
-                  </Link>
-                ))}
-              </div>
-            </div>
+            )}
           </div>
+          <Link
+            href={project.url}
+            target="_blank"
+            rel="noreferrer"
+            className="glow-action inline-flex w-fit items-center gap-2 rounded px-5 py-3 text-sm font-semibold text-[#090b0d]"
+          >
+            <GitBranch className="h-4 w-4" />
+            View on GitHub
+            <ArrowUpRight className="h-4 w-4" />
+          </Link>
         </div>
-      </header>
-    </Suspense>
+
+        <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-[var(--site-border)] pt-5">
+          <span className="resume-muted text-sm">
+            Updated {new Date(project.updated_at).toLocaleDateString(undefined, { month: "long", year: "numeric" })}
+          </span>
+          {stats.map(({ label, value, icon: Icon }) => (
+            <span key={label} className="resume-muted inline-flex items-center gap-2 text-sm" title={`${value} ${label.toLowerCase()}`}>
+              <Icon className="h-4 w-4 text-[var(--site-accent)]" />
+              <span className="font-medium text-[var(--site-text)]">{formatCount(value)}</span>
+              <span>{label}</span>
+            </span>
+          ))}
+          <Link
+            href={socialMedia.github.href}
+            target="_blank"
+            rel="noreferrer"
+            className="ml-auto inline-flex items-center gap-2 text-sm text-[var(--site-accent)] hover:underline"
+          >
+            GitHub profile <ArrowUpRight className="h-4 w-4" />
+          </Link>
+        </div>
+      </div>
+    </section>
   );
 };
 

@@ -6,7 +6,7 @@ import { components } from "./mdx-components";
 export function MDX(props: any) {
   return (
     <Suspense fallback={<>Loading Contents...</>}>
-      <article className="py-6 mx-auto prose prose-zinc prose-quoteless max-w-full p-12 border rounded border-zinc-600/60">
+      <article className="project-readme prose prose-quoteless mx-auto mt-6 max-w-full rounded-2xl border p-6 sm:p-10">
         <MDXRemote
           {...props}
           options={options}

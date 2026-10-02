@@ -31,7 +31,7 @@ export default async function ProjectLoadingPage({ params }: Props) {
   const readMe: string = await fetchProjectReadme(name);
 
   return (
-    <main className="space-y-2">
+    <main className="resume-shell pb-16">
       <ProjectHeader project_name={name} />
       <MDX source={readMe} />
     </main>
