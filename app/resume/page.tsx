@@ -48,7 +48,7 @@ export default function ResumePage() {
             <div className="grid gap-3 sm:grid-cols-2">{capabilities.map((skill) => <div key={skill.label} className="resume-surface resume-skill shine-border-hover hover:border-cyan-400/55 hover:bg-cyan-400/10 flex items-start gap-3 p-4"><Check className="mt-0.5 h-4 w-4 shrink-0 text-cyan-300" /><div><h3 className="text-base text-zinc-100">{skill.label}</h3><p className="resume-muted mt-1 text-sm leading-6">{skill.description}</p></div></div>)}</div>
           </section>
 
-          <section className="resume-surface shine-border-hover flex flex-col gap-5 p-6 sm:flex-row sm:items-center sm:justify-between"><div><p className="section-code">// next conversation</p><h2 className="mt-2 text-2xl text-zinc-50">Have a useful problem to work through?</h2></div><Link href={socialMedia.email.href} className="glow-action hover:bg-[#a5f3fc] inline-flex w-fit items-center gap-2 rounded px-4 py-3 text-sm font-semibold text-[#090b0d]">Let&apos;s talk <ArrowUpRight className="h-4 w-4" /></Link></section>
+          <section className="resume-surface shine-border-hover flex flex-col gap-5 p-6 sm:flex-row sm:items-center sm:justify-between"><div><p className="section-code">// next conversation</p><h2 className="mt-2 text-2xl text-zinc-50">Have a useful problem to work through?</h2></div><Link href={socialMedia.email.href} className="glow-action shine-border inline-flex w-fit items-center gap-2 rounded px-4 py-3 text-sm font-semibold text-[#090b0d]">Let&apos;s talk <ArrowUpRight className="h-4 w-4" /></Link></section>
         </div>
       </div>
     </main>

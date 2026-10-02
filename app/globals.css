@@ -156,51 +156,87 @@
 
 @utility resume-surface {
   border: 1px solid var(--site-surface-border);
+  border-radius: var(--site-radius);
   background: color-mix(in srgb, var(--site-panel) 86%, transparent);
 }
 
-.shine-border,
-.shine-border-hover {
+@utility shine-border {
   --shine-border-color: var(--site-accent);
   --shine-border-width: 1px;
   --shine-border-duration: 8s;
   isolation: isolate;
   position: relative;
+
+  &::before {
+    position: absolute;
+    z-index: 2;
+    inset: 0;
+    border-radius: inherit;
+    padding: var(--shine-border-width);
+    background: conic-gradient(from var(--shine-angle),
+        transparent 0deg 300deg,
+        color-mix(in srgb, var(--shine-border-color) 35%, transparent) 322deg,
+        var(--shine-border-color) 338deg,
+        color-mix(in srgb, var(--site-text) 80%, var(--shine-border-color)) 344deg,
+        var(--shine-border-color) 350deg,
+        transparent 360deg);
+    content: "";
+    opacity: 1;
+    pointer-events: none;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: shine-rotate var(--shine-border-duration) linear infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &::before {
+      animation: none;
+    }
+  }
 }
 
-.shine-border::before,
-.shine-border-hover::before {
-  position: absolute;
-  z-index: 2;
-  inset: 0;
-  border-radius: inherit;
-  padding: var(--shine-border-width);
-  background: conic-gradient(from var(--shine-angle),
-      transparent 0deg 300deg,
-      color-mix(in srgb, var(--shine-border-color) 35%, transparent) 322deg,
-      var(--shine-border-color) 338deg,
-      color-mix(in srgb, var(--site-text) 80%, var(--shine-border-color)) 344deg,
-      var(--shine-border-color) 350deg,
-      transparent 360deg);
-  content: "";
-  opacity: 0;
-  pointer-events: none;
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  transition: opacity 180ms ease;
-}
+@utility shine-border-hover {
+  --shine-border-color: var(--site-accent);
+  --shine-border-width: 1px;
+  --shine-border-duration: 8s;
+  isolation: isolate;
+  position: relative;
 
-.shine-border::before {
-  opacity: 1;
-  animation: shine-rotate var(--shine-border-duration) linear infinite;
-}
+  &::before {
+    position: absolute;
+    z-index: 2;
+    inset: 0;
+    border-radius: inherit;
+    padding: var(--shine-border-width);
+    background: conic-gradient(from var(--shine-angle),
+        transparent 0deg 300deg,
+        color-mix(in srgb, var(--shine-border-color) 35%, transparent) 322deg,
+        var(--shine-border-color) 338deg,
+        color-mix(in srgb, var(--site-text) 80%, var(--shine-border-color)) 344deg,
+        var(--shine-border-color) 350deg,
+        transparent 360deg);
+    content: "";
+    opacity: 0;
+    pointer-events: none;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    transition: opacity 180ms ease;
+  }
 
-.shine-border-hover:hover::before,
-.shine-border-hover:focus-within::before,
-.shine-border-hover:focus-visible::before {
-  opacity: 1;
-  animation: shine-rotate var(--shine-border-duration) linear infinite;
+  &:hover::before,
+  &:focus-within::before,
+  &:focus-visible::before {
+    opacity: 1;
+    animation: shine-rotate var(--shine-border-duration) linear infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &::before {
+      animation: none;
+    }
+  }
 }
 
 @utility resume-muted {
@@ -988,10 +1024,13 @@ html:not(.dark) body [class~="text-zinc-500"] {
 
 @utility glow-action {
   background: #67e8f9;
+  border: 1px solid var(--site-surface-border);
+  border-radius: var(--site-radius);
 }
 
 @utility glow-frame {
   border: 1px solid var(--site-surface-border);
+  border-radius: var(--site-radius);
   background: var(--site-panel);
 }
 
@@ -1044,16 +1083,6 @@ html:not(.dark) body [class~="text-zinc-500"] {
 @keyframes shine-rotate {
   to {
     --shine-angle: 360deg;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-
-  .shine-border::before,
-  .shine-border-hover:hover::before,
-  .shine-border-hover:focus-within::before,
-  .shine-border-hover:focus-visible::before {
-    animation: none;
   }
 }
 

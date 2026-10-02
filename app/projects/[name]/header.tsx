@@ -138,7 +138,7 @@ const ProjectHeader = ({ project_name }: Props) => {
                   href={project.url}
                   target="_blank"
                   rel="noreferrer"
-                  className="glow-action hover:bg-[#a5f3fc] inline-flex w-fit items-center gap-2 rounded px-5 py-3 text-sm font-semibold text-[#090b0d]"
+                  className="glow-action shine-border inline-flex w-fit items-center gap-2 rounded px-5 py-3 text-sm font-semibold text-[#090b0d]"
                 >
                   <GitBranch className="h-4 w-4" />
                   View on GitHub
