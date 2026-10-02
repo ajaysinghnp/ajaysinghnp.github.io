@@ -17,5 +17,5 @@
 
 span[data-rehype-pretty-code-figure]>code {
   padding: 0 0.5rem;
-  border-radius: 0.25rem;
+  border-radius: var(--site-radius);
 }
