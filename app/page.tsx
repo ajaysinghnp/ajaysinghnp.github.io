@@ -63,7 +63,7 @@ export default function HomeRedesign() {
           <h1 className="max-w-5xl text-[clamp(4rem,11vw,10rem)] font-semibold leading-[0.96] tracking-[-0.045em] text-zinc-50">Ajay<br /><span className="text-cyan-300">Singh.</span></h1>
           <p className="mt-10 max-w-2xl text-xl leading-8 text-zinc-400 sm:text-2xl">I make useful software, small tools, and thoughtful experiments for the space between people and technology.</p>
           <div className="mt-10 flex flex-wrap items-center gap-5">
-            <Link href="/projects" className="glow-action shine-border inline-flex items-center gap-3 rounded px-5 py-3 text-sm font-semibold text-[#090b0d]">Explore the work <ArrowUpRight className="h-4 w-4" /></Link>
+            <Link href="/projects" className="glow-action shine-border shine-border-contrast inline-flex items-center gap-3 rounded px-5 py-3 text-sm font-semibold text-[#090b0d]">Explore the work <ArrowUpRight className="h-4 w-4" /></Link>
             <Link href={socialMedia.github.href} target="_blank" className="inline-flex items-center gap-2 text-sm text-zinc-300 transition hover:text-cyan-200"><GitBranch className="h-4 w-4" /> GitHub</Link>
           </div>
         </motion.div>

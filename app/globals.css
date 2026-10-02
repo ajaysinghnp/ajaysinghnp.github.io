@@ -161,8 +161,6 @@
 }
 
 @utility shine-border {
-  --shine-border-color: var(--site-accent);
-  --shine-border-width: 1px;
   --shine-border-duration: 8s;
   isolation: isolate;
   position: relative;
@@ -170,15 +168,15 @@
   &::before {
     position: absolute;
     z-index: 2;
-    inset: 0;
-    border-radius: inherit;
-    padding: var(--shine-border-width);
+    inset: calc(0px - var(--shine-border-gap, 0px));
+    border-radius: var(--shine-border-radius, inherit);
+    padding: var(--shine-border-width, 1px);
     background: conic-gradient(from var(--shine-angle),
-        transparent 0deg 300deg,
-        color-mix(in srgb, var(--shine-border-color) 35%, transparent) 322deg,
-        var(--shine-border-color) 338deg,
-        color-mix(in srgb, var(--site-text) 80%, var(--shine-border-color)) 344deg,
-        var(--shine-border-color) 350deg,
+      transparent 0deg var(--shine-border-clear, 300deg),
+      color-mix(in srgb, var(--shine-border-color, var(--site-accent)) 35%, transparent) var(--shine-border-fade, 322deg),
+      var(--shine-border-color, var(--site-accent)) var(--shine-border-peak, 338deg),
+      color-mix(in srgb, var(--site-text) 80%, var(--shine-border-color, var(--site-accent))) var(--shine-border-mid, 344deg),
+      var(--shine-border-color, var(--site-accent)) var(--shine-border-end, 350deg),
         transparent 360deg);
     content: "";
     opacity: 1;
@@ -197,8 +195,6 @@
 }
 
 @utility shine-border-hover {
-  --shine-border-color: var(--site-accent);
-  --shine-border-width: 1px;
   --shine-border-duration: 8s;
   isolation: isolate;
   position: relative;
@@ -206,15 +202,15 @@
   &::before {
     position: absolute;
     z-index: 2;
-    inset: 0;
-    border-radius: inherit;
-    padding: var(--shine-border-width);
+    inset: calc(0px - var(--shine-border-gap, 0px));
+    border-radius: var(--shine-border-radius, inherit);
+    padding: var(--shine-border-width, 1px);
     background: conic-gradient(from var(--shine-angle),
-        transparent 0deg 300deg,
-        color-mix(in srgb, var(--shine-border-color) 35%, transparent) 322deg,
-        var(--shine-border-color) 338deg,
-        color-mix(in srgb, var(--site-text) 80%, var(--shine-border-color)) 344deg,
-        var(--shine-border-color) 350deg,
+      transparent 0deg var(--shine-border-clear, 300deg),
+      color-mix(in srgb, var(--shine-border-color, var(--site-accent)) 35%, transparent) var(--shine-border-fade, 322deg),
+      var(--shine-border-color, var(--site-accent)) var(--shine-border-peak, 338deg),
+      color-mix(in srgb, var(--site-text) 80%, var(--shine-border-color, var(--site-accent))) var(--shine-border-mid, 344deg),
+      var(--shine-border-color, var(--site-accent)) var(--shine-border-end, 350deg),
         transparent 360deg);
     content: "";
     opacity: 0;
@@ -237,6 +233,18 @@
       animation: none;
     }
   }
+}
+
+@utility shine-border-contrast {
+  --shine-border-color: #0e7490;
+  --shine-border-gap: 3px;
+  --shine-border-width: 2px;
+  --shine-border-radius: calc(var(--site-radius) + var(--shine-border-gap));
+  --shine-border-clear: 180deg;
+  --shine-border-fade: 220deg;
+  --shine-border-peak: 260deg;
+  --shine-border-mid: 320deg;
+  --shine-border-end: 350deg;
 }
 
 @utility resume-muted {
@@ -1024,7 +1032,6 @@ html:not(.dark) body [class~="text-zinc-500"] {
 
 @utility glow-action {
   background: #67e8f9;
-  border: 1px solid var(--site-surface-border);
   border-radius: var(--site-radius);
 }
 

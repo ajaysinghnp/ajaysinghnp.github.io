@@ -249,7 +249,7 @@ export default function ProjectsPage() {
         action={
           <button
             onClick={() => mutate()}
-            className="glow-action shine-border inline-flex items-center gap-2 rounded px-4 py-3 text-sm font-semibold text-[#090b0d]"
+            className="glow-action shine-border shine-border-contrast inline-flex items-center gap-2 rounded px-4 py-3 text-sm font-semibold text-[#090b0d]"
           >
             <RefreshCw className="h-4 w-4" /> Try again
           </button>
