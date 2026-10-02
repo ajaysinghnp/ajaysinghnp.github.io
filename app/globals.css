@@ -256,9 +256,62 @@
   color: var(--site-muted);
 }
 
+.project-compact-header {
+  border-color: var(--site-border);
+  background: color-mix(in srgb, var(--site-bg) 88%, transparent);
+  color: var(--site-text);
+  backdrop-filter: blur(18px);
+}
+
 .project-readme :where(h1, h2) {
   padding-bottom: 0.35em;
   border-bottom: 1px solid var(--site-border);
+}
+
+.project-description > :first-child {
+  margin-top: 0;
+}
+
+.project-description > :last-child {
+  margin-bottom: 0;
+}
+
+.project-description p,
+.project-description ul,
+.project-description ol,
+.project-description blockquote {
+  margin-block: 0.35em;
+}
+
+.project-description ul,
+.project-description ol {
+  padding-left: 1.4em;
+}
+
+.project-description ul {
+  list-style: disc;
+}
+
+.project-description ol {
+  list-style: decimal;
+}
+
+.project-description a {
+  color: var(--site-accent);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.project-description code {
+  border: 1px solid var(--site-border);
+  border-radius: 0.3rem;
+  padding: 0.05em 0.3em;
+  font-size: 0.875em;
+}
+
+.project-description blockquote {
+  border-left: 2px solid var(--site-accent);
+  padding-left: 0.75em;
 }
 
 .project-readme :where(h1, h2, h3, h4, h5, h6) {
@@ -278,6 +331,31 @@
   font-size: 0.875em;
 }
 
+.project-readme .inline-code-copy {
+  display: inline;
+  appearance: none;
+  margin: 0;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  line-height: inherit;
+  vertical-align: baseline;
+  cursor: pointer;
+}
+
+.project-readme .inline-code-copy code::before,
+.project-readme .inline-code-copy code::after {
+  content: none;
+}
+
+.project-readme .inline-code-copy:focus-visible {
+  border-radius: 0.4rem;
+  outline: 2px solid var(--site-accent);
+  outline-offset: 2px;
+}
+
 .project-readme :where(pre, table, th, td, hr) {
   border-color: var(--site-border);
 }
@@ -287,11 +365,61 @@
   margin: 1.7em 0;
 }
 
+.project-readme {
+  --readme-code-bg: color-mix(in srgb, var(--site-panel) 88%, var(--site-text));
+}
+
+.dark .project-readme {
+  --readme-code-bg: color-mix(in srgb, var(--site-panel) 78%, var(--site-bg));
+}
+
 .project-readme :where(pre) {
   border: 1px solid var(--site-border);
   border-radius: 0.75rem;
   margin: 0;
-  background: color-mix(in srgb, var(--site-bg) 78%, var(--site-panel));
+  background: var(--readme-code-bg) !important;
+}
+
+.project-readme pre code,
+.project-readme pre code span {
+  color: var(--shiki-light, var(--site-text)) !important;
+  background-color: transparent !important;
+}
+
+.dark .project-readme pre code,
+.dark .project-readme pre code span {
+  color: var(--shiki-dark, var(--site-text)) !important;
+}
+
+.project-readme code[data-language="diff"] [data-line][data-diff="add"] {
+  background-color: color-mix(in srgb, #1a7f37 14%, transparent) !important;
+}
+
+.project-readme code[data-language="diff"] [data-line][data-diff="remove"] {
+  background-color: color-mix(in srgb, #cf222e 12%, transparent) !important;
+}
+
+.project-readme .mermaid-diagram {
+  margin: 1.7em 0;
+  overflow-x: auto;
+  border: 1px solid var(--site-border);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  background: color-mix(in srgb, var(--site-panel) 82%, var(--site-bg));
+}
+
+.project-readme .mermaid-diagram svg {
+  display: block;
+  max-width: 100%;
+  margin-inline: auto;
+}
+
+.project-readme .mermaid-error {
+  margin: 1.7em 0;
+  border: 1px solid var(--site-border);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  color: var(--site-muted);
 }
 
 .project-readme .code-block-wrapper > .code-copy-button {
@@ -299,17 +427,17 @@
   top: 0.5rem;
   right: 0.5rem;
   z-index: 10;
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  background: rgba(15, 23, 27, 0.94);
-  color: #f4fbfc;
+  border: 1px solid var(--site-border);
+  background: color-mix(in srgb, var(--site-panel) 88%, var(--site-bg));
+  color: var(--site-text);
   cursor: pointer;
   line-height: 1.25rem;
 }
 
 .project-readme .code-block-wrapper > .code-copy-button:hover {
   border-color: var(--site-accent);
-  background: #18272c;
-  color: #ffffff;
+  background: color-mix(in srgb, var(--site-panel) 78%, var(--site-accent));
+  color: var(--site-text);
 }
 
 .project-readme .code-block-wrapper > .code-copy-button:disabled {
@@ -347,12 +475,52 @@
 
 .project-readme :where(li.task-list-item) {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 0.55rem;
 }
 
 .project-readme :where(li.task-list-item input[type="checkbox"]) {
-  accent-color: var(--site-accent);
+  appearance: none;
+  position: relative;
+  display: inline-grid;
+  width: 1.05rem;
+  height: 1.05rem;
+  flex: none;
+  place-content: center;
+  margin: 0;
+  border: 1.5px solid color-mix(in srgb, var(--site-muted) 70%, var(--site-border));
+  border-radius: 0.32rem;
+  background: color-mix(in srgb, var(--site-panel) 76%, var(--site-bg));
+  transition: background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.project-readme :where(li.task-list-item input[type="checkbox"]):checked {
+  border-color: var(--site-accent);
+  background: var(--site-accent);
+}
+
+.project-readme :where(li.task-list-item input[type="checkbox"])::before {
+  width: 0.32rem;
+  height: 0.55rem;
+  border: solid var(--site-bg);
+  border-width: 0 2px 2px 0;
+  content: "";
+  transform: translateY(-0.05rem) rotate(45deg) scale(0);
+  transition: transform 120ms ease-out;
+}
+
+.project-readme :where(li.task-list-item input[type="checkbox"]):checked::before {
+  transform: translateY(-0.05rem) rotate(45deg) scale(1);
+}
+
+.project-readme :where(li.task-list-item input[type="checkbox"]):focus-visible {
+  outline: 2px solid var(--site-accent);
+  outline-offset: 2px;
+}
+
+.project-readme :where(li.task-list-item input[type="checkbox"]):disabled {
+  cursor: default;
+  opacity: 0.85;
 }
 
 .project-readme :where(img) {

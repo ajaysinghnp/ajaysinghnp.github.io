@@ -10,6 +10,7 @@ import { PROJECT_REPOSITORY_SETTINGS } from "@/data/repos";
 import { fetchProjectsFromApi } from "@/lib/projects-client";
 import { socialMedia } from "@/data/social";
 import type { Project } from "@/types/github";
+import { ProjectDescription } from "@/components/project-description";
 
 const reveal = {
   hidden: { opacity: 0, y: 16 },
@@ -92,9 +93,9 @@ function ProjectCard({
           <h3 className={`project-card-title ${featured ? "text-3xl sm:text-4xl" : "text-2xl"} font-semibold tracking-[-0.04em] transition`}>
             {project.title}
           </h3>
-          <p className={`resume-muted mt-4 ${featured ? "text-base leading-8" : "text-sm leading-7"}`}>
+          <ProjectDescription className={`resume-muted mt-4 ${featured ? "text-base leading-8" : "text-sm leading-7"}`}>
             {project.description || "No description yet. Open the repository to inspect the work."}
-          </p>
+          </ProjectDescription>
         </div>
         <div className="mt-auto flex items-center justify-between border-t border-[var(--site-border)] pt-4">
           <span className="resume-muted text-xs font-medium">

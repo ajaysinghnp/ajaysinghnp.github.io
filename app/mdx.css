@@ -1,15 +1,18 @@
-[data-rehype-pretty-code-figure]>pre>code {
+.project-readme [data-rehype-pretty-code-figure] pre>code {
   counter-reset: line;
 }
 
-[data-rehype-pretty-code-figure]>pre>code>[data-line]::before {
+.project-readme [data-rehype-pretty-code-figure] pre>code>[data-line]::before {
   counter-increment: line;
   content: counter(line);
   display: inline-block;
-  width: 1rem;
-  margin-right: 2rem;
+  width: 2rem;
+  margin-right: 1rem;
+  padding-right: 0.5rem;
+  border-right: 1px solid var(--site-border);
   text-align: right;
-  color: gray;
+  color: var(--site-muted);
+  user-select: none;
 }
 
 span[data-rehype-pretty-code-figure]>code {
