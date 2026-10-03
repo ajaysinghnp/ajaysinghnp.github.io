@@ -2,9 +2,20 @@ import "server-only";
 
 import { PROJECT_REPOSITORY_SETTINGS } from "@/data/repos";
 import { GIT_USERNAME, Project, Repo } from "@/types/github";
-import axios from "axios";
 
+const GITHUB_API = "https://api.github.com";
 const GITHUB_API_VERSION = "2022-11-28";
+export const PROJECTS_REVALIDATE_SECONDS = 21600; // 6 hours
+
+export class GitHubHttpError extends Error {
+  status: number;
+
+  constructor(status: number, url: string) {
+    super(`GitHub API responded with ${status} for ${url}`);
+    this.name = "GitHubHttpError";
+    this.status = status;
+  }
+}
 
 const getGitHubApiHeaders = (): Record<string, string> => {
   const token = process.env.GITHUB_TOKEN;
@@ -16,7 +27,16 @@ const getGitHubApiHeaders = (): Record<string, string> => {
   };
 };
 
-const readmeCache = new Map<string, string>();
+// Every GitHub call goes through here so it shares the 6-hour cache.
+async function githubFetch(url: string, tags: string[], accept?: string): Promise<Response> {
+  const res = await fetch(url, {
+    headers: { ...getGitHubApiHeaders(), ...(accept ? { Accept: accept } : {}) },
+    next: { revalidate: PROJECTS_REVALIDATE_SECONDS, tags },
+  });
+
+  if (!res.ok) throw new GitHubHttpError(res.status, url);
+  return res;
+}
 
 const getNextPageUrl = (linkHeader: string): string | null => {
   const nextMatch = linkHeader
@@ -31,32 +51,14 @@ const getNextPageUrl = (linkHeader: string): string | null => {
 };
 
 export const fetchProjects = async (): Promise<Project[]> => {
-  const perPage = 100;
   const allRepos: Repo[] = [];
   let nextPageUrl: string | null =
-    `https://api.github.com/users/${GIT_USERNAME}/repos`;
+    `${GITHUB_API}/users/${GIT_USERNAME}/repos?per_page=100&type=owner&sort=updated`;
 
   while (nextPageUrl) {
-    const isFirstRequest = nextPageUrl.includes(
-      `/users/${GIT_USERNAME}/repos`,
-    );
-
-    const { data, headers } = await axios.get<Repo[]>(nextPageUrl, {
-      params: isFirstRequest
-        ? {
-            per_page: perPage,
-            type: "owner",
-            sort: "updated",
-          }
-        : undefined,
-      headers: getGitHubApiHeaders(),
-    });
-
-    allRepos.push(...data);
-
-    if (!headers.link) break;
-
-    nextPageUrl = getNextPageUrl(headers.link);
+    const res = await githubFetch(nextPageUrl, ["projects"]);
+    allRepos.push(...((await res.json()) as Repo[]));
+    nextPageUrl = getNextPageUrl(res.headers.get("link") ?? "");
   }
 
   return allRepos
@@ -86,16 +88,13 @@ export const fetchProjects = async (): Promise<Project[]> => {
 
 export const fetchProject = async (slug: string): Promise<Project | null> => {
   try {
-    const { data: repo } = await axios.get(
-      `https://api.github.com/repos/${GIT_USERNAME}/${slug}`,
-      {
-        headers: getGitHubApiHeaders(),
-      },
+    const res = await githubFetch(
+      `${GITHUB_API}/repos/${GIT_USERNAME}/${encodeURIComponent(slug)}`,
+      ["projects", `project:${slug}`],
     );
+    const repo = await res.json();
 
-    if (repo.private) {
-      return null;
-    }
+    if (repo.private) return null;
 
     return {
       id: repo.id,
@@ -117,10 +116,7 @@ export const fetchProject = async (slug: string): Promise<Project | null> => {
       published: true,
     };
   } catch (error) {
-    if (axios.isAxiosError(error) && error.response?.status === 404) {
-      return null;
-    }
-
+    if (error instanceof GitHubHttpError && error.status === 404) return null;
     throw error;
   }
 };
@@ -128,43 +124,24 @@ export const fetchProject = async (slug: string): Promise<Project | null> => {
 export const fetchProjectReadme = async (project: string): Promise<string> => {
   const repoName = project.replace(/-readme/g, "");
 
-  if (readmeCache.has(repoName)) {
-    return readmeCache.get(repoName)!;
-  }
-
   try {
-    const { data: repo } = await axios.get<{ private: boolean }>(
-      `https://api.github.com/repos/${GIT_USERNAME}/${repoName}`,
-      { headers: getGitHubApiHeaders() },
+    // Cached, so this adds no extra GitHub request
+    const meta = await fetchProject(repoName);
+    if (!meta) return "# Project unavailable\n\nThis repository is not public.";
+
+    const res = await githubFetch(
+      `${GITHUB_API}/repos/${GIT_USERNAME}/${encodeURIComponent(repoName)}/readme`,
+      ["projects", `project:${repoName}`],
+      "application/vnd.github.raw+json",
     );
-
-    if (repo.private) {
-      return "# Project unavailable\n\nThis repository is not public.";
-    }
-
-    const { data } = await axios.get<string>(
-      `https://api.github.com/repos/${GIT_USERNAME}/${repoName}/readme`,
-      {
-        headers: {
-          ...getGitHubApiHeaders(),
-          // Return raw file body directly as text.
-          Accept: "application/vnd.github.raw+json",
-        },
-      },
-    );
-
-    if (typeof data !== "string") {
-      throw new TypeError(`GitHub returned a non-text README for ${repoName}.`);
-    }
-
-    readmeCache.set(repoName, data);
-    return data;
+    return await res.text();
   } catch (error) {
-    const status =
-      axios.isAxiosError(error) && error.response?.status
-        ? ` (GitHub status ${error.response.status})`
-        : "";
-    console.warn(`Unable to fetch README for ${repoName}${status}.`);
-    return "# README unavailable\n\nGitHub could not provide this project's README right now.";
+    // Repo exists but has no README
+    if (error instanceof GitHubHttpError && error.status === 404) {
+      return "# README unavailable\n\nThis project doesn't have a README yet.";
+    }
+    // Rate limits and outages: rethrow so ISR keeps serving the last good page
+    console.warn(`Unable to fetch README for ${repoName}.`);
+    throw error;
   }
 };

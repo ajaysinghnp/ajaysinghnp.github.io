@@ -34,31 +34,17 @@ const icons: Record<Choice, React.ElementType> = {
   light: Sun,
 }
 
+const subscribe = () => () => { }
+
 export function ModeToggle({ className, variant }: ModeToggleProps) {
   const { theme, systemTheme, setTheme } = useTheme()
-  const [mounted, setMounted] = React.useState(false)
 
-  React.useEffect(() => setMounted(true), [])
+  // false on the server and during hydration, true afterwards
+  const mounted = React.useSyncExternalStore(subscribe, () => true, () => false)
 
-  // Theme is unknown on the server, so render an empty placeholder of the same size
-  if (!mounted) {
-    return (
-      <Button
-        type="button"
-        variant={variant}
-        size={null}
-        className={className}
-        aria-label="Toggle theme"
-        disabled
-      >
-        <span className="h-[1.2rem] w-[1.2rem]" />
-      </Button>
-    )
-  }
-
-  const current = theme ?? "system"
-  const next = getNextTheme(theme, systemTheme)
-  const NextIcon = icons[next]
+  const current = mounted ? (theme ?? "system") : null
+  const next = mounted ? getNextTheme(theme, systemTheme) : null
+  const NextIcon = next ? icons[next] : null
 
   return (
     <Button
@@ -66,11 +52,17 @@ export function ModeToggle({ className, variant }: ModeToggleProps) {
       variant={variant}
       size={null}
       className={`cursor-pointer ${className ?? ""}`}
-      aria-label={`Theme: ${current}. Switch to ${next}.`}
-      title={`Current: ${current}. Next: ${next}.`}
-      onClick={() => setTheme(next)}
+      aria-label={next ? `Theme: ${current}. Switch to ${next}.` : "Toggle theme"}
+      title={next ? `Current: ${current}. Next: ${next}.` : undefined}
+      onClick={() => {
+        if (next) setTheme(next)
+      }}
     >
-      <NextIcon className="h-[1.2rem] w-[1.2rem]" aria-hidden="true" />
+      {NextIcon ? (
+        <NextIcon className="h-[1.2rem] w-[1.2rem]" aria-hidden="true" />
+      ) : (
+        <span className="h-[1.2rem] w-[1.2rem]" aria-hidden="true" />
+      )}
     </Button>
   )
 }
