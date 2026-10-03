@@ -14,12 +14,9 @@ export interface ModeToggleProps {
 export function ModeToggle({ className, variant }: ModeToggleProps) {
   const { resolvedTheme, setTheme, theme } = useTheme()
   const currentTheme = theme ?? "dark"
-  // Use resolvedTheme (actually applied theme) for determining current state
-  const actualTheme = resolvedTheme ?? currentTheme
-  // Calculate next theme based on the actually applied theme
-  const nextTheme = actualTheme === "dark" ? "light" : actualTheme === "light" ? "system" : "dark"
-  // Determine icon to show: icon representing CURRENT state, not next state
-  const ThemeIcon = actualTheme === "dark" ? Moon : actualTheme === "light" ? Sun : Monitor
+  const nextTheme = currentTheme === "light" ? "dark" : currentTheme === "dark" ? "system" : "light"
+  const activeTheme = resolvedTheme ?? currentTheme
+  const ThemeIcon = currentTheme === "system" ? Sun : activeTheme === "dark" ? Monitor : Moon
 
   return (
     <Button
@@ -27,8 +24,11 @@ export function ModeToggle({ className, variant }: ModeToggleProps) {
       variant={variant}
       size={null}
       className={`cursor-pointer ${className ?? ""}`}
-      aria-label={`Currently: ${actualTheme}. Switch to ${nextTheme}.`}
-      title={`Currently: ${actualTheme}. Click to switch to ${nextTheme}.`}
+      aria-label={`Theme: ${currentTheme}. Switch to ${nextTheme}.`}
+      title={`Switch to ${nextTheme} theme`}
+      onClick={() => setTheme(nextTheme)}
+    >
+      <ThemeIcon className="h-[1.2rem] w-[1.2rem]" aria-hidden="true" />
     </Button>
   )
 }
