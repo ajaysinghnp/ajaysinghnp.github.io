@@ -21,6 +21,7 @@
   --site-muted: #536b73;
   --site-border: rgba(16, 37, 43, 0.14);
   --site-accent: #0e7490;
+  --site-shine-color: #0891b2;
   --site-surface-border: color-mix(in srgb, var(--site-accent) 28%, transparent);
   --site-radius: 0.375rem;
   --project-card-start: #ffffff;
@@ -38,6 +39,7 @@
   --site-muted: #a1adb1;
   --site-border: rgba(255, 255, 255, 0.1);
   --site-accent: #67e8f9;
+  --site-shine-color: #67e8f9;
   --site-surface-border: color-mix(in srgb, var(--site-accent) 28%, transparent);
   --project-card-start: #181b1d;
   --project-card-mid: #101719;
@@ -173,10 +175,10 @@
     padding: var(--shine-border-width, 1px);
     background: conic-gradient(from var(--shine-angle),
         transparent 0deg var(--shine-border-clear, 300deg),
-        color-mix(in srgb, var(--shine-border-color, var(--site-accent)) 35%, transparent) var(--shine-border-fade, 322deg),
-        var(--shine-border-color, var(--site-accent)) var(--shine-border-peak, 338deg),
-        color-mix(in srgb, var(--site-text) 80%, var(--shine-border-color, var(--site-accent))) var(--shine-border-mid, 344deg),
-        var(--shine-border-color, var(--site-accent)) var(--shine-border-end, 350deg),
+        color-mix(in srgb, var(--shine-border-color, var(--site-shine-color, var(--site-accent))) 35%, transparent) var(--shine-border-fade, 322deg),
+        var(--shine-border-color, var(--site-shine-color, var(--site-accent))) var(--shine-border-peak, 338deg),
+        color-mix(in srgb, var(--site-text) 80%, var(--shine-border-color, var(--site-shine-color, var(--site-accent)))) var(--shine-border-mid, 344deg),
+        var(--shine-border-color, var(--site-shine-color, var(--site-accent))) var(--shine-border-end, 350deg),
         transparent 360deg);
     content: "";
     opacity: 1;
@@ -207,10 +209,10 @@
     padding: var(--shine-border-width, 1px);
     background: conic-gradient(from var(--shine-angle),
         transparent 0deg var(--shine-border-clear, 300deg),
-        color-mix(in srgb, var(--shine-border-color, var(--site-accent)) 35%, transparent) var(--shine-border-fade, 322deg),
-        var(--shine-border-color, var(--site-accent)) var(--shine-border-peak, 338deg),
-        color-mix(in srgb, var(--site-text) 80%, var(--shine-border-color, var(--site-accent))) var(--shine-border-mid, 344deg),
-        var(--shine-border-color, var(--site-accent)) var(--shine-border-end, 350deg),
+        color-mix(in srgb, var(--shine-border-color, var(--site-shine-color, var(--site-accent))) 35%, transparent) var(--shine-border-fade, 322deg),
+        var(--shine-border-color, var(--site-shine-color, var(--site-accent))) var(--shine-border-peak, 338deg),
+        color-mix(in srgb, var(--site-text) 80%, var(--shine-border-color, var(--site-shine-color, var(--site-accent)))) var(--shine-border-mid, 344deg),
+        var(--shine-border-color, var(--site-shine-color, var(--site-accent))) var(--shine-border-end, 350deg),
         transparent 360deg);
     content: "";
     opacity: 0;

@@ -37,7 +37,7 @@ export const Navigation: React.FC<Props> = ({ gitTheme = false }: Props) => {
         </nav>
         <div className="flex items-center gap-2">
           <Link href={gitTheme ? socialMedia.github.theme : socialMedia.github.href} target="_blank" rel="noopener noreferrer" className="site-icon-button site-control shine-border-hover hover:bg-cyan-400/[0.14] hover:text-cyan-600" aria-label="Open GitHub"><GitBranch className="h-4 w-4" /></Link>
-          <ModeToggle variant="ghost" className="site-icon-button site-control shine-border-hover hover:bg-cyan-400/[0.14] hover:text-cyan-600" />
+          <ModeToggle variant={null} className="site-icon-button site-control shine-border-hover hover:bg-cyan-400/[0.14] hover:text-cyan-600" />
         </div>
       </div>
     </header>

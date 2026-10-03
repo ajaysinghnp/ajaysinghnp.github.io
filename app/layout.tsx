@@ -90,7 +90,7 @@ export default function RootLayout({
           process.env.NODE_ENV === "development" && "debug-screens"
         )}
       >
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
           <SiteBackground />
           {/* TODO Refractor the Layout to merge them in this layout rather than having a seperate component */}
           <Layout>{children}</Layout>
