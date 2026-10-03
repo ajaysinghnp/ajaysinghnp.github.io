@@ -11,51 +11,66 @@ export interface ModeToggleProps {
   variant?: "link" | "default" | "destructive" | "outline" | "secondary" | "ghost" | null | undefined
 }
 
-/**
- * Theme switch cycle: system → dark → light → system (repeat)
- */
-function getNextTheme(current: string) {
-  switch (current) {
-    case "system": return "dark"          // When in system, next is dark
-    case "dark": return "light"           // When in dark, next is light
-    case "light": return "system"         // When in light, back to system
-    default: return "dark"                // Fallback if unknown
-  }
-}
+type Choice = "system" | "dark" | "light"
 
 /**
- * Theme icon component - shows the NEXT theme (destination) not current
- * Sun for dark mode, Moon for light mode, Monitor for system mode
+ * Cycle: system -> opposite of OS theme -> same as OS theme -> system
+ *  OS light: system -> dark -> light -> system
+ *  OS dark:  system -> light -> dark -> system
  */
-function ThemeIcon({ nextTheme }: { nextTheme: string }) {
-  switch (nextTheme) {
-    case "dark": return <Sun className="h-[1.2rem] w-[1.2rem]" aria-hidden="true" />
-    case "light": return <Moon className="h-[1.2rem] w-[1.2rem]" aria-hidden="true" />
-    default: return <Monitor className="h-[1.2rem] w-[1.2rem]" aria-hidden="true" />
-  }
+function getNextTheme(theme: string | undefined, systemTheme: string | undefined): Choice {
+  const system: Choice = systemTheme === "dark" ? "dark" : "light"
+  const opposite: Choice = system === "dark" ? "light" : "dark"
+
+  if (!theme || theme === "system") return opposite
+  if (theme === opposite) return system
+  return "system"
+}
+
+/** Icon represents the NEXT theme (the destination), not the current one. */
+const icons: Record<Choice, React.ElementType> = {
+  system: Monitor,
+  dark: Moon,
+  light: Sun,
 }
 
 export function ModeToggle({ className, variant }: ModeToggleProps) {
-  const { resolvedTheme, setTheme } = useTheme()
+  const { theme, systemTheme, setTheme } = useTheme()
+  const [mounted, setMounted] = React.useState(false)
 
-      // Use resolvedTheme from hook - handles both server and client consistently
-      // When undefined (initial render), theme will be whatever was set on server via defaultTheme
-    const currentTheme = typeof window !== "undefined" ? (resolvedTheme ?? "dark") : "dark"
+  React.useEffect(() => setMounted(true), [])
 
-        // Calculate next theme in the cycle
-  const nextTheme = getNextTheme(currentTheme)
-
-     return (
+  // Theme is unknown on the server, so render an empty placeholder of the same size
+  if (!mounted) {
+    return (
       <Button
+        type="button"
+        variant={variant}
+        size={null}
+        className={className}
+        aria-label="Toggle theme"
+        disabled
+      >
+        <span className="h-[1.2rem] w-[1.2rem]" />
+      </Button>
+    )
+  }
+
+  const current = theme ?? "system"
+  const next = getNextTheme(theme, systemTheme)
+  const NextIcon = icons[next]
+
+  return (
+    <Button
       type="button"
       variant={variant}
       size={null}
       className={`cursor-pointer ${className ?? ""}`}
-      aria-label={`Theme: ${currentTheme}. Switch to ${nextTheme}.`}
-      title={`Current: ${currentTheme}. Next: ${nextTheme}.`}
-      onClick={() => setTheme(nextTheme)}
-     >
-       <ThemeIcon nextTheme={nextTheme} />
-     </Button>
-    )
+      aria-label={`Theme: ${current}. Switch to ${next}.`}
+      title={`Current: ${current}. Next: ${next}.`}
+      onClick={() => setTheme(next)}
+    >
+      <NextIcon className="h-[1.2rem] w-[1.2rem]" aria-hidden="true" />
+    </Button>
+  )
 }

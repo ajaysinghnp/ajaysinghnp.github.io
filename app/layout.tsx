@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   title: {
     default: title,
     template: `%s | ${title}`,
-    },
+  },
   description: description,
   openGraph: {
     title: title,
@@ -26,33 +26,33 @@ export const metadata: Metadata = {
     url: url,
     siteName: title,
     images: [
-        {
+      {
         url: `${url}/images/author.png`,
         width: 1920,
         height: 1080,
-       },
-     ],
+      },
+    ],
     locale: "en-US",
     type: "website",
-    },
+  },
   robots: {
     index: true,
     follow: true,
     googleBot: {
       index: true,
       follow: true,
-        "max-video-preview": -1,
-        "max-image-preview": "large",
-        "max-snippet": -1,
-     },
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
     },
+  },
   twitter: {
     title: title,
     card: "summary_large_image",
-    },
+  },
   icons: {
     shortcut: `${url}/images/logo-color.png`,
-    },
+  },
 };
 
 // const popins = Poppins({ weight: ["300", "400", "500", "600", "700", "800", "900"], subsets: ["latin"] });
@@ -63,21 +63,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-       <html lang="en" className={calSans.variable} suppressHydrationWarning>
-         <head>
-           <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
-           <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png" />
-           <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png" />
-           <link rel="manifest" href="/favicon/site.webmanifest" />
-         </head>
-         <body className={cn("site-body", process.env.NODE_ENV === "development" && "debug-screens")}>
-           {/* Theme cycle: system -> dark -> light */}
-           {/* enableSystem reads OS preference and stores it - when no localStorage exists, first visit shows OS theme */}
-           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
-             <SiteBackground />
-             <Layout>{children}</Layout>
-           </ThemeProvider>
-         </body>
-       </html>
-    );
+    <html lang="en" className={calSans.variable} suppressHydrationWarning>
+      <head>
+        <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png" />
+        <link rel="manifest" href="/favicon/site.webmanifest" />
+      </head>
+      <body className={cn(
+        "site-body",
+        process.env.NODE_ENV === "development" && "debug-screens"
+      )}>
+        {/* Theme cycle: system -> dark -> light */}
+        {/* enableSystem reads OS preference and stores it - when no localStorage exists, first visit shows OS theme */}
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          <SiteBackground />
+          <Layout>{children}</Layout>
+        </ThemeProvider>
+      </body>
+    </html>
+  );
 }
