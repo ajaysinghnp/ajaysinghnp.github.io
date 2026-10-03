@@ -27,7 +27,7 @@ export default function ResumePage() {
       <div className="mt-12 grid gap-12 lg:grid-cols-[0.7fr_1.3fr]">
         <aside className="space-y-8">
           <div className="resume-surface shine-border-hover p-5">
-            <div className="relative mx-auto aspect-square max-w-[13rem] overflow-hidden rounded-full border border-cyan-300/40 bg-zinc-900"><Image src="/images/author.png" alt="Portrait of Ajay Singh" fill sizes="208px" className="object-cover object-top grayscale contrast-125" /></div>
+            <div className="relative mx-auto aspect-square max-w-[13rem] overflow-hidden rounded-full border border-cyan-300/40 bg-background"><Image src="/images/author.png" alt="Portrait of Ajay Singh" fill sizes="208px" className="object-cover object-top grayscale contrast-125" /></div>
             <div className="mt-6 border-t border-current/10 pt-5"><p className="section-code">// working mode</p><p className="resume-lead mt-3 text-lg leading-7">Hardware-minded. Software-curious. Always looking for the simpler system.</p></div>
           </div>
           <div>
