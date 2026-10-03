@@ -10,7 +10,7 @@ const education = resume.education.slice(0, 2);
 
 export default function ResumePage() {
   return (
-    <main className="resume-shell w-full pb-20 text-zinc-100">
+    <main className="resume-shell w-full pb-20">
       <header className="resume-intro grid gap-10 border-b pb-12 lg:grid-cols-[1fr_0.7fr] lg:items-end">
         <div>
           <p className="section-code">// resume / selected signal</p>
@@ -27,7 +27,7 @@ export default function ResumePage() {
       <div className="mt-12 grid gap-12 lg:grid-cols-[0.7fr_1.3fr]">
         <aside className="space-y-8">
           <div className="resume-surface shine-border-hover p-5">
-            <div className="relative mx-auto aspect-square max-w-[13rem] overflow-hidden rounded-full border border-cyan-300/40 bg-background"><Image src="/images/author.png" alt="Portrait of Ajay Singh" fill sizes="208px" className="object-cover object-top grayscale contrast-125" /></div>
+            <div className="relative mx-auto aspect-square max-w-52 overflow-hidden rounded-full border border-cyan-300/40 bg-background"><Image src="/images/author.png" alt="Portrait of Ajay Singh" fill sizes="208px" className="object-cover object-top grayscale contrast-125" /></div>
             <div className="mt-6 border-t border-current/10 pt-5"><p className="section-code">// working mode</p><p className="resume-lead mt-3 text-lg leading-7">Hardware-minded. Software-curious. Always looking for the simpler system.</p></div>
           </div>
           <div>
@@ -40,7 +40,7 @@ export default function ResumePage() {
         <div className="space-y-14">
           <section>
             <div className="mb-6 flex items-center justify-between"><p className="section-code">// experience</p><span className="resume-muted text-xs uppercase tracking-[0.16em]">signal / 01</span></div>
-            {resume.workExperiences.map((job) => <article key={job.company} className="resume-timeline relative border-l border-cyan-300/50 pl-6"><span className="absolute -left-[0.3rem] top-1 h-2 w-2 rounded-full bg-cyan-300 shadow-[0_0_14px_#67e8f9]" /><div className="flex flex-col gap-2 sm:flex-row sm:items-baseline sm:justify-between"><h2 className="text-3xl text-zinc-50">{job.title}</h2><span className="resume-muted text-xs uppercase tracking-[0.15em]">{job.date}</span></div><p className="mt-2 text-cyan-200">{job.company}</p><p className="resume-muted mt-5 max-w-2xl text-base leading-8">Supporting reliable operations through automation, scripting, system support, and practical technical problem-solving.</p></article>)}
+            {resume.workExperiences.map((job) => <article key={job.company} className="resume-timeline relative border-l border-cyan-300/50 pl-6"><span className="absolute left-[-0.3rem] top-1 h-2 w-2 rounded-full bg-cyan-300 shadow-[0_0_14px_#67e8f9]" /><div className="flex flex-col gap-2 sm:flex-row sm:items-baseline sm:justify-between"><h2 className="text-3xl text-zinc-50">{job.title}</h2><span className="resume-muted text-xs uppercase tracking-[0.15em]">{job.date}</span></div><p className="mt-2 text-cyan-200">{job.company}</p><p className="resume-muted mt-5 max-w-2xl text-base leading-8">Supporting reliable operations through automation, scripting, system support, and practical technical problem-solving.</p></article>)}
           </section>
 
           <section>
