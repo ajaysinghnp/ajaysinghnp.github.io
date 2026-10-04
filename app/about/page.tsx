@@ -61,11 +61,11 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="mt-20 border-y border-[var(--site-border)] py-14">
+      <section className="mt-20 border-y resume-intro py-14">
         <div className="mb-8 flex items-end justify-between gap-5">
           <div>
             <p className="section-code">working principles</p>
-            <h2 className="mt-4 text-4xl font-semibold tracking-[-0.05em] text-zinc-50 sm:text-5xl">
+            <h2 className="mt-4 text-4xl font-semibold tracking-tighter text-zinc-50 sm:text-5xl">
               How I approach the work.
             </h2>
           </div>
@@ -90,7 +90,7 @@ export default function AboutPage() {
       <section className="mt-20 grid gap-12 lg:grid-cols-[1fr_0.8fr]">
         <div>
           <p className="section-code">current interests</p>
-          <h2 className="mt-4 text-4xl font-semibold tracking-[-0.05em] text-zinc-50 sm:text-5xl">
+          <h2 className="mt-4 text-4xl font-semibold tracking-tighter text-zinc-50 sm:text-5xl">
             Learning by building.
           </h2>
           <p className="mt-6 max-w-xl text-lg leading-8 resume-lead">
@@ -125,7 +125,7 @@ export default function AboutPage() {
             <Link
               href={socialMedia.github.href}
               target="_blank"
-              className="inline-flex items-center gap-2 py-3 text-sm text-cyan-300 hover:text-cyan-200"
+              className="sparkle inline-flex gap-2 rounded-sm border border-cyan-300/40 bg-cyan-300/10 px-6 py-3 text-cyan-100 hover:border-cyan-300"
             >
               View the code <ArrowUpRight className="h-4 w-4" />
             </Link>
