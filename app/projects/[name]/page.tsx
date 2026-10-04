@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 
-import { MDX } from "@/components/mdx";
-import { ProjectToc } from "@/components/project-toc";
+import { MDX } from "@/components/mdx/mdx";
+import { ProjectToc } from "@/components/mdx/project-toc";
 import { extractProjectToc } from "@/lib/project-toc";
 import { fetchProjectReadme, fetchProjects } from "@/lib/projects";
 

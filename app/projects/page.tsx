@@ -1,5 +1,5 @@
 // app/projects/page.tsx  (no "use client")
-import { ProjectsClient } from "@/components/projects-client";
+import { ProjectsClient } from "@/components/mdx/projects-client";
 import { fetchProjects } from "@/lib/projects";
 
 export const revalidate = 21600;

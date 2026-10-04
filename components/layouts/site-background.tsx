@@ -1,6 +1,6 @@
 "use client";
 
-import Particles from "@/components/particles";
+import Particles from "@/components/layouts/particles";
 
 export default function SiteBackground() {
   return (

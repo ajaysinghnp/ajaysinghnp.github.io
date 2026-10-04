@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { ArrowUpRight, Mail, MapPin } from "lucide-react";
 
-import SocialLinksPanel from "@/components/social-links-panel";
+import SocialLinksPanel from "@/components/sections/social-links-panel";
 import { socialMedia } from "@/data/social";
 
 export default function ContactPage() {

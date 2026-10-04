@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import useSWR from "swr";
 
-import { ProjectDescription } from "@/components/project-description";
+import { ProjectDescription } from "@/components/mdx/project-description";
 import { socialMedia } from "@/data/social";
 import { fetchProjectFromApi } from "@/lib/projects-client";
 import type { Project } from "@/types/github";

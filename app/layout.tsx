@@ -6,9 +6,9 @@ import { Playfair_Display, Space_Grotesk } from "next/font/google";
 
 import type { Metadata } from "next";
 
-import Layout from "@/components/layout";
-import { calSans } from "@/components/local-fonts";
-import SiteBackground from "@/components/site-background";
+import Layout from "@/components/layouts/layout";
+import { calSans } from "@/components/layouts/local-fonts";
+import SiteBackground from "@/components/layouts/site-background";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/providers/theme";
 

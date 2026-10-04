@@ -1,4 +1,4 @@
-import { angelina } from "@/components/local-fonts";
+import { angelina } from "@/components/layouts/local-fonts";
 import { about } from "@/data/about";
 import { cn } from "@/lib/utils";
 

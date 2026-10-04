@@ -2,7 +2,7 @@ import { GraduationCap } from "lucide-react";
 
 import { resume } from "@/data/resume";
 
-import PingingDot from "../pinging-dot";
+import PingingDot from "../ui/pinging-dot";
 
 const Education = () => {
   return (

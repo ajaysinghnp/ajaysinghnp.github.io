@@ -2,11 +2,10 @@ import { isValidElement } from "react";
 
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
+import { CopyButton } from "@/components/mdx/copy-btn";
+import { InlineCodeCopy } from "@/components/mdx/inline-code-copy";
+import { MermaidDiagram } from "@/components/mdx/mermaid-diagram";
 import { cn } from "@/lib/utils";
-
-import { CopyButton } from "./copy-btn";
-import { InlineCodeCopy } from "./inline-code-copy";
-import { MermaidDiagram } from "./mermaid-diagram";
 
 type CodeProps = ComponentPropsWithoutRef<"code"> & { "data-inline-code"?: string };
 type PreProps = ComponentPropsWithoutRef<"pre"> & { raw?: string };

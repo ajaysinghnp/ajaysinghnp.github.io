@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 
 import { RefreshCw } from "lucide-react";
 
-import { ProjectsState } from "@/components/projects-client";
+import { ProjectsState } from "@/components/mdx/projects-client";
 
 export default function ProjectsError({ reset }: { error: Error; reset: () => void }) {
   const router = useRouter();

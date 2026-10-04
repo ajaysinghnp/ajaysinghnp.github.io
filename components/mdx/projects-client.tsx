@@ -7,7 +7,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowUpRight, Eye, GitBranch, GitFork, Star } from "lucide-react";
 
-import { ProjectDescription } from "@/components/project-description";
+import { ProjectDescription } from "@/components/mdx/project-description";
 import { PROJECT_REPOSITORY_SETTINGS } from "@/data/repos";
 import { socialMedia } from "@/data/social";
 import { getProjectPreviewSrc, PROJECT_PREVIEW_MANIFEST_PATH } from "@/lib/project-preview";

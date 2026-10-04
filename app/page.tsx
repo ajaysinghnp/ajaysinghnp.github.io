@@ -6,8 +6,8 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowUpRight, BriefcaseBusiness, GitMerge, Mail, Rss } from "lucide-react";
 
-import { Navigation } from "@/components/nav";
-import SocialLinksPanel from "@/components/social-links-panel";
+import { Navigation } from "@/components/layouts/nav";
+import SocialLinksPanel from "@/components/sections/social-links-panel";
 import { about } from "@/data/about";
 import { navigation } from "@/data/navigation";
 import { resume } from "@/data/resume";
