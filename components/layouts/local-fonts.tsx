@@ -1,16 +1,16 @@
-import LocalFont from "next/font/local";
+import localFont from "next/font/local";
 
-export const calSans = LocalFont({
-  src: "@/public/fonts/CalSans-SemiBold.ttf",
+export const calSans = localFont({
+  src: "../../public/fonts/CalSans-SemiBold.ttf",
   variable: "--font-calsans",
 });
 
-export const angelina = LocalFont({
-  src: "@/public/fonts/Angelina-rnlA.otf",
+export const angelina = localFont({
+  src: "../../public/fonts/Angelina-rnlA.otf",
   variable: "--font-angelina",
 });
 
-export const tomatoes = LocalFont({
-  src: "@/public/fonts/Tomatoes-O8L8.ttf",
+export const tomatoes = localFont({
+  src: "../../public/fonts/Tomatoes-O8L8.ttf",
   variable: "--font-tomatoes",
 });
