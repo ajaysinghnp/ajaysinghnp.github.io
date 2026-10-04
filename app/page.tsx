@@ -63,16 +63,15 @@ export default function HomeRedesign() {
         >
           <div className="mb-8 flex items-center gap-3 text-xs tracking-[0.2em] text-cyan-300 uppercase">
             <span className="h-2 w-2 animate-pulse rounded-full bg-cyan-300 shadow-[0_0_18px_#67e8f9]" />{" "}
-            Signal online / Kathmandu, Nepal
+            Signal online / {resume.contacts.at(0)?.address}
           </div>
           <h1 className="sparkle-text max-w-5xl text-[clamp(4rem,11vw,10rem)] leading-[0.96] font-semibold tracking-[-0.045em]">
-            Ajay
+            {resume.fname}
             <br />
-            <span className="font-accent">Singh.</span>
+            <span className="font-accent">{resume.lname}.</span>
           </h1>
           <p className="mt-10 max-w-2xl text-xl leading-8 text-zinc-400 sm:text-2xl">
-            I make useful software, small tools, and thoughtful experiments for the space between
-            people and technology.
+            {resume.quote}
           </p>
           <div className="mt-10 flex flex-wrap items-center gap-5">
             <Link
@@ -107,8 +106,8 @@ export default function HomeRedesign() {
             </div>
             <div className="relative aspect-[0.9] overflow-hidden site-panel">
               <Image
-                src="/images/author.png"
-                alt="Portrait of Ajay Singh"
+                src={resume.image}
+                alt={`Portrait of ${resume.fname} ${resume.lname}`}
                 fill
                 priority
                 sizes="(max-width: 1024px) 90vw, 28vw"
@@ -121,13 +120,16 @@ export default function HomeRedesign() {
                 <p className="text-[color-mix(in_srgb,var(--site-accent)_55%,var(--site-muted))]">
                   Focus
                 </p>
-                <p className="mt-1 text-(--site-text)">Automation + systems</p>
+                <p className="mt-1 text-(--site-text)">{resume.passion}</p>
               </div>
               <div>
                 <p className="text-[color-mix(in_srgb,var(--site-accent)_55%,var(--site-muted))]">
                   Since
                 </p>
-                <p className="mt-1 text-(--site-text)">2012 / coding</p>
+                <p className="mt-1 text-(--site-text)">
+                  {about.highlights[resume.coding_since].label} /{" "}
+                  {about.highlights[resume.coding_since].description.split(" ")[0]}
+                </p>
               </div>
             </div>
           </div>
@@ -265,8 +267,8 @@ export default function HomeRedesign() {
         <div className="mx-auto w-full max-w-[90%] py-12 lg:py-16">
           <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <p className="text-xs font-bold tracking-[0.2em] text-[#245761] uppercase">
-                // open_channel
+              <p className="section-code text-xs font-bold tracking-[0.2em] text-[#245761] uppercase">
+                open_channel
               </p>
               <h2 className="mt-3 max-w-2xl text-4xl font-semibold tracking-[-0.06em] sm:text-6xl">
                 Have a good problem?

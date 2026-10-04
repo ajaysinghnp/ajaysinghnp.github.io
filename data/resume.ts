@@ -1,21 +1,22 @@
-import { yearsSince } from "@/lib/utils";
-
 export const resume = {
   fname: "Ajay",
   lname: "Singh",
   name: "Ajay Singh",
-  quote: "Bridging imagination and reality, one innovation at a time.",
-  quote_author: "Ajay Singh",
-  position: "IT Assistant @NRB",
-  profile: `Results-driven Electronics and Communication Engineer with a diploma in the field and ${yearsSince(
-    new Date(2018, 11, 3),
-  )} years of experience as an IT Assistant at the Central Bank of Nepal. Passionate about programming, development, and automation across various domains. Skilled in scripting and hardware-based solutions, including home automation systems. Combines technical expertise with a strong work ethic to drive efficiency and innovation in IT operations.`,
+  image: "/images/author.png",
+  quote:
+    "I make useful software, small tools, and thoughtful experiments for the space between people and technology.",
+  position: 0,
+  profile: "Hardware-minded. Software-curious. Always looking for the simpler system.",
+  jobtask:
+    "I build useful systems, automate the repetitive, and turn technical curiosity into practical tools.",
+  passion: "Automation + Systems",
+  coding_since: 3,
   contacts: [
     {
       label: "Personal",
       phone: "+977 9846449912",
       email: "admin@ajaysingh.com.np",
-      address: "Chabahil, Kathmandu, Nepal",
+      address: "Kathmandu, Nepal",
     },
     {
       label: "Office",
@@ -26,11 +27,12 @@ export const resume = {
   ],
   workExperiences: [
     {
-      title: "IT Assistant",
+      title: "Head Assistant [IT]",
       company: "Nepal Rastra Bank",
       date: "[2018 Dec - Present]",
       description:
-        "I have been working as an IT assistant at the Central Bank of Nepal for nearly six years, supporting IT operations and contributing to various projects. My expertise covers system automation, scripting, and general IT support. My technical skills and innovative solutions have made me a valuable asset to the team. I am passionate about development and automation, always looking for ways to improve efficiency and implement new technologies.",
+        "Supporting reliable operations through automation, scripting, system support, and practical technical problem-solving.",
+      link: "https://www.nrb.org.np/",
     },
   ],
   education: [
@@ -40,6 +42,7 @@ export const resume = {
       date: "[2014 - 2017]",
       description:
         "I completed my Bachelor's degree in Comprehensive study of electronic systems, signal processing, and communication technologies, providing a strong foundation for IT and automation careers.",
+      link: "https://www.ioepc.edu.np/",
     },
     {
       degree: "Diploma of Electronics and Communication Engineering",
@@ -47,6 +50,7 @@ export const resume = {
       date: "[2010 - 2012]",
       description:
         "I completed my Diploma (Proficiency Certificate Level PCL) in  Foundational training in electronic circuits, communication systems, and engineering principles, laying the groundwork for advanced studies and practical applications in IT.",
+      link: "https://ioepas.edu.np/",
     },
     {
       degree: "School Leaving Certificate (SLC)",
@@ -54,13 +58,7 @@ export const resume = {
       date: "[2005 - 2009]",
       description:
         "I completed my Completed secondary education with a strong academic foundation, preparing for further studies in engineering and technology.",
-    },
-    {
-      degree: "Primary School",
-      school: "Shree Puja English Boarding School",
-      date: "[1996 - 2004]",
-      description:
-        "I completed my Basic Primary Schooling making a strong foundation for further studies.",
+      link: "https://www.facebook.com/sjmvclp",
     },
   ],
   skills: [

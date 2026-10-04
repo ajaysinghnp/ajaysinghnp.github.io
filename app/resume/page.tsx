@@ -16,16 +16,13 @@ export default function ResumePage() {
         <div>
           <p className="section-code">resume / selected signal</p>
           <h1 className="sparkle-text mt-5 max-w-4xl text-6xl leading-[0.92] font-semibold tracking-[-0.06em] sm:text-8xl">
-            &nbsp;Ajay Singh.
+            &nbsp;{resume.name}.
           </h1>
-          <p className="mt-7 max-w-2xl text-xl leading-8 resume-lead">
-            I build useful systems, automate the repetitive, and turn technical curiosity into
-            practical tools.
-          </p>
+          <p className="mt-7 max-w-2xl text-xl leading-8 resume-lead">{resume.jobtask}</p>
         </div>
         <div className="flex flex-col gap-3 text-sm">
           <div className="flex items-center gap-3 resume-meta">
-            <MapPin className="h-4 w-4 text-cyan-300" /> Kathmandu, Nepal
+            <MapPin className="h-4 w-4 text-cyan-300" /> {resume.contacts.at(0)?.address}
           </div>
           <Link
             href={socialMedia.email.href}
@@ -50,8 +47,8 @@ export default function ResumePage() {
           <div className="shine-border-hover resume-surface p-5">
             <div className="bg-background relative mx-auto aspect-square max-w-52 overflow-hidden rounded-full border border-cyan-300/40">
               <Image
-                src="/images/author.png"
-                alt="Portrait of Ajay Singh"
+                src={resume.image}
+                alt={`Portrait of ${resume.name}`}
                 fill
                 sizes="208px"
                 className="object-cover object-top contrast-125 grayscale"
@@ -59,9 +56,7 @@ export default function ResumePage() {
             </div>
             <div className="mt-6 border-t border-current/10 pt-5">
               <p className="section-code">working mode</p>
-              <p className="mt-3 text-lg leading-7 resume-lead">
-                Hardware-minded. Software-curious. Always looking for the simpler system.
-              </p>
+              <p className="mt-3 text-lg leading-7 resume-lead">{resume.profile}</p>
             </div>
           </div>
           <div>
@@ -84,7 +79,13 @@ export default function ResumePage() {
                 <div key={item.degree}>
                   <p className="text-xs text-cyan-300">{item.date}</p>
                   <h3 className="mt-1 text-lg text-zinc-100">{item.degree}</h3>
-                  <p className="mt-1 text-sm resume-muted">{item.school}</p>
+                  <Link
+                    href={item.link}
+                    target="_blank"
+                    className="mt-1 inline-flex gap-2 text-sm resume-muted hover:underline"
+                  >
+                    {item.school} <ArrowUpRight className="h-4 w-4" />
+                  </Link>
                 </div>
               ))}
             </div>
@@ -109,11 +110,14 @@ export default function ResumePage() {
                     {job.date}
                   </span>
                 </div>
-                <p className="mt-2 text-cyan-200">{job.company}</p>
-                <p className="mt-5 max-w-2xl text-base leading-8 resume-muted">
-                  Supporting reliable operations through automation, scripting, system support, and
-                  practical technical problem-solving.
-                </p>
+                <Link
+                  href={job.link}
+                  target="_blank"
+                  className="mt-2 inline-flex gap-2 text-cyan-200 hover:underline"
+                >
+                  {job.company} <ArrowUpRight className="h-4 w-4" />
+                </Link>
+                <p className="mt-5 max-w-2xl text-base leading-8 resume-muted">{job.description}</p>
               </article>
             ))}
           </section>

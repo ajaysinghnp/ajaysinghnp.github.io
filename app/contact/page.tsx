@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowUpRight, Mail, MapPin } from "lucide-react";
 
 import SocialLinksPanel from "@/components/sections/social-links-panel";
+import { resume } from "@/data/resume";
 import { socialMedia } from "@/data/social";
 
 export default function ContactPage() {
@@ -48,14 +49,14 @@ export default function ContactPage() {
           <div>
             <p className="section-code">currently around</p>
             <div className="mt-4 flex items-center gap-3 text-lg resume-meta">
-              <MapPin className="h-5 w-5 text-cyan-300" /> Kathmandu, Nepal
+              <MapPin className="h-5 w-5 text-cyan-300" /> {resume.contacts.at(0)?.address}
             </div>
           </div>
-          <SocialLinksPanel heading="// find me elsewhere" />
+          <SocialLinksPanel heading="find me elsewhere" />
         </div>
       </section>
 
-      <section className="mt-14 border-t border-[var(--site-border)] pt-6">
+      <section className="mt-14 border-t resume-intro pt-6">
         <p className="text-sm resume-muted">
           No formal brief needed. A rough idea, a half-working prototype, or a problem you cannot
           quite name is enough to begin.

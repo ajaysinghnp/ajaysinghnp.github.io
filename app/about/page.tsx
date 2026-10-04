@@ -1,30 +1,12 @@
 import Link from "next/link";
 
-import { ArrowUpRight, CircuitBoard, Lightbulb, Mail, Workflow } from "lucide-react";
+import { ArrowUpRight, Mail } from "lucide-react";
 
 import { about } from "@/data/about";
 import { resume } from "@/data/resume";
 import { socialMedia } from "@/data/social";
 
-const principles = [
-  {
-    icon: Lightbulb,
-    title: "Start with curiosity",
-    description:
-      "The best solutions usually begin with a better question and a willingness to look twice.",
-  },
-  {
-    icon: Workflow,
-    title: "Make it useful",
-    description:
-      "I like technology that removes friction, explains itself, and earns its place in a real workflow.",
-  },
-  {
-    icon: CircuitBoard,
-    title: "Stay close to reality",
-    description: "Software, hardware, people, and constraints all belong in the same conversation.",
-  },
-];
+const principles = about.principles;
 
 export default function AboutPage() {
   return (
@@ -33,7 +15,7 @@ export default function AboutPage() {
         <div>
           <p className="section-code">about / the longer signal</p>
           <h1 className="sparkle-text mt-5 max-w-4xl text-6xl leading-[0.92] font-semibold tracking-[-0.06em] sm:text-8xl">
-            I love creativity.
+            {about.title}.
           </h1>
         </div>
         <p className="max-w-xl text-xl leading-8 resume-lead">{about.quote}</p>
@@ -47,10 +29,13 @@ export default function AboutPage() {
           </h2>
         </div>
         <div>
-          <p className="max-w-3xl text-lg leading-8 resume-lead">{about.description}</p>
+          <p className="max-w-3xl text-lg leading-8 resume-lead">{resume.quote}</p>
           <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-4">
             {about.highlights.map((highlight) => (
-              <div key={highlight.label} className="shine-border-hover resume-surface p-4">
+              <div
+                key={highlight.label}
+                className="shine-border-hover cursor-pointer resume-surface p-4"
+              >
                 <p className="text-2xl font-semibold text-zinc-100">{highlight.label}</p>
                 <p className="mt-2 text-xs leading-5 tracking-widest resume-muted uppercase">
                   {highlight.description}
@@ -79,8 +64,10 @@ export default function AboutPage() {
               key={title}
               className="shine-border-hover resume-surface p-5 resume-skill hover:border-cyan-400/55 hover:bg-cyan-400/10"
             >
-              <Icon className="h-5 w-5 text-cyan-300" />
-              <h3 className="mt-6 text-xl text-zinc-100">{title}</h3>
+              <div className="flex items-center gap-3">
+                <Icon className="h-10 w-10 text-cyan-300" />
+                <h3 className="text-xl text-zinc-100">{title}</h3>
+              </div>
               <p className="mt-3 leading-7 resume-muted">{description}</p>
             </article>
           ))}

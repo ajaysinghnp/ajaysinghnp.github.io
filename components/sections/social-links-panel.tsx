@@ -14,11 +14,11 @@ interface SocialLinksPanelProps {
   heading?: string;
 }
 
-export default function SocialLinksPanel({ heading = "// elsewhere" }: SocialLinksPanelProps) {
+export default function SocialLinksPanel({ heading = "elsewhere" }: SocialLinksPanelProps) {
   return (
     <div>
       <p className="section-code">{heading}</p>
-      <div className="social-links-panel mt-5 divide-y divide-[var(--site-border)] border-y border-[var(--site-surface-border)]">
+      <div className="social-links-panel mt-5 divide-y divide-(--site-border) border-y border-(--site-surface-border)">
         {links.map(({ label, handle, href, icon: Icon }) => (
           <Link
             key={label}
