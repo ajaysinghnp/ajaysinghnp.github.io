@@ -60,7 +60,10 @@ export default function HomeRedesign() {
       <section className="relative z-10 mx-auto grid max-w-7xl gap-12 pb-20 pt-16 lg:grid-cols-[1.15fr_0.85fr] lg:pb-28 lg:pt-24">
         <motion.div initial="hidden" animate="show" variants={reveal} custom={0.1} className="lg:order-last">
           <div className="mb-8 flex items-center gap-3 text-xs uppercase tracking-[0.2em] text-cyan-300"><span className="h-2 w-2 animate-pulse rounded-full bg-cyan-300 shadow-[0_0_18px_#67e8f9]" /> Signal online / Kathmandu, Nepal</div>
-          <h1 className="max-w-5xl text-[clamp(4rem,11vw,10rem)] font-semibold leading-[0.96] tracking-[-0.045em] text-zinc-50">Ajay<br /><span className="text-cyan-300">Singh.</span></h1>
+          <h1 className="max-w-5xl text-[clamp(4rem,11vw,10rem)] font-semibold leading-[0.96] tracking-[-0.045em] sparkle-text">
+            Ajay<br />
+            <span className="font-accent">Singh.</span>
+          </h1>
           <p className="mt-10 max-w-2xl text-xl leading-8 text-zinc-400 sm:text-2xl">I make useful software, small tools, and thoughtful experiments for the space between people and technology.</p>
           <div className="mt-10 flex flex-wrap items-center gap-5">
             <Link href="/projects" className="glow-action shine-border shine-border-contrast inline-flex items-center gap-3 rounded px-5 py-3 text-sm font-semibold text-[#090b0d]">Explore the work <ArrowUpRight className="h-4 w-4" /></Link>

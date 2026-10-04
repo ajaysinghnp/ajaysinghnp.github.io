@@ -1160,3 +1160,211 @@ html:not(.dark) body [class~="text-zinc-500"] {
     transform: translateX(320%);
   }
 }
+
+/* Utility classes for the animated gradient for text headers and cta buttons */
+/* globals.css (Tailwind v4) */
+@theme inline {
+  --font-grotesk: var(--font-space-grotesk);
+  --font-accent: var(--font-playfair);
+}
+
+@layer components {
+
+  /* ============ SPARKLE TEXT: glint sweep + twinkle stars ============ */
+  .sparkle-text {
+    --sp-base: #67e8f9;
+    /* cyan-300; override per element */
+    --sp-glint: #fff;
+    position: relative;
+    display: inline-block;
+    padding: 0 0.06em 0.12em 0;
+    /* stops the clip cutting the g and the period */
+    background-image: linear-gradient(115deg,
+        var(--sp-base) 0 42%,
+        color-mix(in oklab, var(--sp-base) 40%, #fff) 47%,
+        var(--sp-glint) 50%,
+        color-mix(in oklab, var(--sp-base) 40%, #fff) 53%,
+        var(--sp-base) 58% 100%);
+    background-size: 250% 100%;
+    background-repeat: no-repeat;
+    background-position: 100% 0;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: sparkle-sweep 5s cubic-bezier(0.45, 0, 0.2, 1) infinite;
+  }
+
+  .sparkle-text:hover {
+    animation-duration: 1.4s;
+  }
+
+  /* one 4-point star hovering at the top-right of the word */
+  .sparkle-text::before {
+    content: "";
+    position: absolute;
+    top: 0.02em;
+    right: -0.1em;
+    width: 0.15em;
+    height: 0.15em;
+    background: linear-gradient(140deg, #fff, var(--sp-base));
+    clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
+    pointer-events: none;
+    animation: sparkle-twinkle 2.6s ease-in-out infinite;
+  }
+
+  /* fine glitter dust around the letters */
+  .sparkle-text::after {
+    content: "";
+    position: absolute;
+    inset: -8% -4%;
+    pointer-events: none;
+    background:
+      radial-gradient(2.5px 2.5px at 18% 30%, #fff 45%, transparent 55%),
+      radial-gradient(2px 2px at 66% 18%, #fff 45%, transparent 55%),
+      radial-gradient(3px 3px at 84% 62%, #fff 45%, transparent 55%),
+      radial-gradient(2px 2px at 38% 74%, #fff 45%, transparent 55%),
+      radial-gradient(2.5px 2.5px at 8% 66%, #fff 45%, transparent 55%);
+    animation: sparkle-dust 2.4s ease-in-out infinite;
+  }
+
+  /* ============ SPARKLE BUTTON: stars pop on hover ============ */
+  .sparkle {
+    position: relative;
+    isolation: isolate;
+    transition: box-shadow 0.35s, border-color 0.35s;
+  }
+
+  .sparkle:is(:hover, :focus-visible) {
+    box-shadow:
+      0 0 30px -6px rgb(103 232 249 / 0.6),
+      0 0 60px -18px #22d3ee;
+  }
+
+  .sparkle-stars {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .sparkle-stars>i {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background: linear-gradient(140deg, #fff, #67e8f9);
+    clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
+    transform: scale(0);
+  }
+
+  .sparkle-stars>i:nth-child(1) {
+    --i: 0;
+    top: -10px;
+    left: 12%;
+  }
+
+  .sparkle-stars>i:nth-child(2) {
+    --i: 1;
+    top: -14px;
+    right: 20%;
+  }
+
+  .sparkle-stars>i:nth-child(3) {
+    --i: 2;
+    bottom: -10px;
+    right: 8%;
+    width: 10px;
+    height: 10px;
+  }
+
+  .sparkle-stars>i:nth-child(4) {
+    --i: 3;
+    bottom: -12px;
+    left: 26%;
+    width: 10px;
+    height: 10px;
+  }
+
+  .sparkle:is(:hover, :focus-visible) .sparkle-stars>i {
+    animation: sparkle-pop 0.75s cubic-bezier(0.2, 0.9, 0.3, 1.4) calc(var(--i) * 90ms) both;
+  }
+
+  /* modifier: stars twinkle continuously (hover still triggers the pop) */
+  .sparkle-loop .sparkle-stars>i {
+    animation: sparkle-twinkle 2.8s ease-in-out calc(var(--i) * 550ms) infinite;
+  }
+
+  /* ============ keyframes ============ */
+  @keyframes sparkle-sweep {
+    0% {
+      background-position: 100% 0;
+    }
+
+    55%,
+    100% {
+      background-position: 0% 0;
+    }
+
+    /* rest before the next pass */
+  }
+
+  @keyframes sparkle-pop {
+    0% {
+      transform: scale(0) rotate(0);
+    }
+
+    60% {
+      transform: scale(1.25) rotate(40deg);
+    }
+
+    100% {
+      transform: scale(1) rotate(45deg);
+    }
+  }
+
+  @keyframes sparkle-twinkle {
+
+    0%,
+    100% {
+      transform: scale(0) rotate(0);
+      opacity: 0;
+    }
+
+    50% {
+      transform: scale(1) rotate(45deg);
+      opacity: 1;
+    }
+  }
+
+  @keyframes sparkle-dust {
+
+    0%,
+    100% {
+      opacity: 0.25;
+      transform: scale(1);
+    }
+
+    50% {
+      opacity: 1;
+      transform: scale(1.04);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+
+    .sparkle-text,
+    .sparkle-text::before,
+    .sparkle-text::after,
+    .sparkle-loop .sparkle-stars>i {
+      animation: none;
+    }
+
+    .sparkle-text::after {
+      opacity: 0.5;
+    }
+
+    .sparkle:is(:hover, :focus-visible) .sparkle-stars>i {
+      animation: none;
+      transform: scale(1) rotate(45deg);
+    }
+  }
+}

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Space_Grotesk, Playfair_Display } from "next/font/google";
 
 import "@/app/globals.css";
 import "@/app/mdx.css";
@@ -8,6 +9,20 @@ import { ThemeProvider } from "@/providers/theme";
 import { cn } from "@/lib/utils";
 import Layout from "@/components/layout";
 import SiteBackground from "@/components/site-background";
+
+const grotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-space-grotesk",
+  display: "swap",
+});
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  style: ["italic"],
+  variable: "--font-playfair",
+  display: "swap",
+});
+
 
 const title = "Ajay Singh";
 const description = "A Personal Portfolio for Ajay Singh.";
@@ -63,7 +78,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={calSans.variable} suppressHydrationWarning>
+    <html lang="en" className={cn(grotesk.variable, playfair.variable, calSans.variable)} suppressHydrationWarning>
       <head>
         <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png" />
