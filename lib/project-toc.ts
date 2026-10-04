@@ -30,10 +30,7 @@ function isHeading(node: Root["children"][number]): node is Heading {
 export async function extractProjectToc(source: string): Promise<ProjectTocItem[]> {
   if (!source) return [];
 
-  const processor = unified()
-    .use(remarkParse)
-    .use(remarkGemoji)
-    .use(remarkMath);
+  const processor = unified().use(remarkParse).use(remarkGemoji).use(remarkMath);
   const tree = processor.parse(source) as Root;
   const transformed = (await processor.run(tree)) as Root;
   const slugger = new GithubSlugger();

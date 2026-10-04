@@ -7,15 +7,10 @@ interface ProjectDescriptionProps {
   className?: string;
 }
 
-export function ProjectDescription({
-  children,
-  className,
-}: ProjectDescriptionProps) {
+export function ProjectDescription({ children, className }: ProjectDescriptionProps) {
   return (
     <div className={`project-description ${className ?? ""}`}>
-      <ReactMarkdown remarkPlugins={[remarkGfm, remarkGemoji]}>
-        {children}
-      </ReactMarkdown>
+      <ReactMarkdown remarkPlugins={[remarkGfm, remarkGemoji]}>{children}</ReactMarkdown>
     </div>
   );
 }

@@ -10,12 +10,9 @@ const fetchJson = async <T>(url: string): Promise<T> => {
   return response.json() as Promise<T>;
 };
 
-export const fetchProjectsFromApi = (): Promise<Project[]> =>
-  fetchJson<Project[]>("/api/projects");
+export const fetchProjectsFromApi = (): Promise<Project[]> => fetchJson<Project[]>("/api/projects");
 
-export const fetchProjectFromApi = async (
-  slug: string,
-): Promise<Project | null> => {
+export const fetchProjectFromApi = async (slug: string): Promise<Project | null> => {
   const response = await fetch(`/api/projects/${encodeURIComponent(slug)}`);
 
   if (response.status === 404) {

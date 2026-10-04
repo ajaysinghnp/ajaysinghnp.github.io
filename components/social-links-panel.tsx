@@ -19,9 +19,19 @@ export default function SocialLinksPanel({ heading = "// elsewhere" }: SocialLin
       <p className="section-code">{heading}</p>
       <div className="social-links-panel mt-5 divide-y divide-[var(--site-border)] border-y border-[var(--site-surface-border)]">
         {links.map(({ label, handle, href, icon: Icon }) => (
-          <Link key={label} href={href} target="_blank" rel="noreferrer" className="flex items-center justify-between py-4 text-sm transition hover:text-cyan-300">
-            <span className="flex items-center gap-3"><Icon className="h-4 w-4 text-cyan-300" /> {label}</span>
-            <span className="resume-muted flex items-center gap-2 text-xs">{handle} <ArrowUpRight className="h-3.5 w-3.5" /></span>
+          <Link
+            key={label}
+            href={href}
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center justify-between py-4 text-sm transition hover:text-cyan-300"
+          >
+            <span className="flex items-center gap-3">
+              <Icon className="h-4 w-4 text-cyan-300" /> {label}
+            </span>
+            <span className="flex items-center gap-2 text-xs resume-muted">
+              {handle} <ArrowUpRight className="h-3.5 w-3.5" />
+            </span>
           </Link>
         ))}
       </div>

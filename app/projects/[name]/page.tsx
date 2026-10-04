@@ -28,7 +28,7 @@ export default async function ProjectLoadingPage({ params }: Props) {
   const toc = await extractProjectToc(readme);
 
   return (
-    <main className="resume-shell pb-16">
+    <main className="pb-16 resume-shell">
       <ProjectHeader project_name={rawName} />
       <div className={toc.length ? "project-content-layout" : undefined}>
         {toc.length > 0 && <ProjectToc items={toc} />}

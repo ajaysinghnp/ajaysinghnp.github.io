@@ -200,8 +200,7 @@ const posts = [
   },
   {
     title: "A Comprehensive Guide to Machine Learning",
-    excerpt:
-      "Learn the fundamentals of machine learning and its practical applications.",
+    excerpt: "Learn the fundamentals of machine learning and its practical applications.",
     content: `
   # A Comprehensive Guide to Machine Learning
   
@@ -462,8 +461,7 @@ const posts = [
   },
   {
     title: "A Beginner's Guide to Kubernetes",
-    excerpt:
-      "Learn the basics of Kubernetes, a powerful container orchestration tool.",
+    excerpt: "Learn the basics of Kubernetes, a powerful container orchestration tool.",
     content: `
   # A Beginner's Guide to Kubernetes
   
@@ -502,8 +500,7 @@ const posts = [
   },
   {
     title: "Understanding Neural Networks: A Beginner's Guide",
-    excerpt:
-      "Dive into the basics of neural networks, a fundamental concept in deep learning.",
+    excerpt: "Dive into the basics of neural networks, a fundamental concept in deep learning.",
     content: `
     # Understanding Neural Networks: A Beginner's Guide
     
@@ -656,8 +653,7 @@ const posts = [
   },
   {
     title: "Mastering CSS Flexbox: A Complete Guide",
-    excerpt:
-      "Learn how to create flexible, responsive web layouts using CSS Flexbox.",
+    excerpt: "Learn how to create flexible, responsive web layouts using CSS Flexbox.",
     content: `
     # Mastering CSS Flexbox: A Complete Guide
     
@@ -999,8 +995,7 @@ const posts = [
   },
   {
     title: "A Guide to Responsive Web Design",
-    excerpt:
-      "Learn how to create responsive websites that work across all devices.",
+    excerpt: "Learn how to create responsive websites that work across all devices.",
     content: `
     # A Guide to Responsive Web Design
     
@@ -1111,6 +1106,6 @@ created_at: "${post.created_at}"
 updated_at: "${post.updated_at}"
 slug: "${post.slug}"
 ---
-${post.content}`
+${post.content}`,
   );
 });

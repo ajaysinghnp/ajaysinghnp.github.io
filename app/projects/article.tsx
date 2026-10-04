@@ -10,32 +10,36 @@ type Props = {
 
 export const Article: React.FC<Props> = ({ project, views }) => {
   if (!project) {
-    return <div className="relativeflex justify-center items-center text-white">Could not Load the Project</div>;
+    return (
+      <div className="relativeflex items-center justify-center text-white">
+        Could not Load the Project
+      </div>
+    );
   }
   return (
     <Link href={`/projects/${project.name}`}>
       <article className="p-4 md:p-8">
-        <div className="flex justify-between gap-2 items-center">
-          <span className="text-xs duration-1000 text-zinc-200 group-hover:text-white group-hover:border-zinc-200 drop-shadow-orange">
+        <div className="flex items-center justify-between gap-2">
+          <span className="drop-shadow-orange text-xs text-zinc-200 duration-1000 group-hover:border-zinc-200 group-hover:text-white">
             {project.date ? (
               <time dateTime={new Date(project.date).toISOString()}>
                 {Intl.DateTimeFormat(undefined, { dateStyle: "medium" }).format(
-                  new Date(project.date)
+                  new Date(project.date),
                 )}
               </time>
             ) : (
               <span>SOON</span>
             )}
           </span>
-          <span className="text-zinc-500 text-xs  flex items-center gap-1">
-            <Eye className="w-4 h-4" />{" "}
+          <span className="flex items-center gap-1 text-xs text-zinc-500">
+            <Eye className="h-4 w-4" />{" "}
             {Intl.NumberFormat("en-US", { notation: "compact" }).format(views)}
           </span>
         </div>
-        <h2 className="z-20 text-xl font-medium duration-1000 lg:text-3xl text-zinc-200 group-hover:text-white font-display">
+        <h2 className="z-20 font-display text-xl font-medium text-zinc-200 duration-1000 group-hover:text-white lg:text-3xl">
           {project.title}
         </h2>
-        <p className="z-20 mt-4 text-sm  duration-1000 text-zinc-400 group-hover:text-zinc-200">
+        <p className="z-20 mt-4 text-sm text-zinc-400 duration-1000 group-hover:text-zinc-200">
           {project.description}
         </p>
       </article>

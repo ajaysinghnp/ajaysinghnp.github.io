@@ -35,9 +35,8 @@ const ProjectHeader = ({ project_name }: Props) => {
     data: project,
     error,
     isLoading,
-  } = useSWR<Project | null>(
-    `/api/projects/${encodeURIComponent(project_name)}`,
-    () => fetchProjectFromApi(project_name),
+  } = useSWR<Project | null>(`/api/projects/${encodeURIComponent(project_name)}`, () =>
+    fetchProjectFromApi(project_name),
   );
 
   const updateScrollState = useCallback(() => {
@@ -77,7 +76,10 @@ const ProjectHeader = ({ project_name }: Props) => {
 
   if (isLoading) {
     return (
-      <section role="status" className="resume-surface shine-border-hover my-8 animate-pulse rounded-2xl p-8">
+      <section
+        role="status"
+        className="shine-border-hover my-8 animate-pulse resume-surface rounded-2xl p-8"
+      >
         <p className="resume-muted">Loading project details...</p>
       </section>
     );
@@ -85,14 +87,17 @@ const ProjectHeader = ({ project_name }: Props) => {
 
   if (error || !project) {
     return (
-      <section role="status" className="resume-surface shine-border-hover my-8 rounded-2xl p-8">
-        <Link href="/projects" className="inline-flex items-center gap-2 text-sm text-[var(--site-accent)] hover:underline">
+      <section role="status" className="shine-border-hover my-8 resume-surface rounded-2xl p-8">
+        <Link
+          href="/projects"
+          className="inline-flex items-center gap-2 text-sm text-[var(--site-accent)] hover:underline"
+        >
           <ArrowLeft className="h-4 w-4" /> Back to projects
         </Link>
         <h1 className="mt-6 text-3xl font-semibold text-[var(--site-text)]">
           {error ? "Project details are unavailable." : "Project not found."}
         </h1>
-        {error && <p className="resume-muted mt-3">Please try again in a moment.</p>}
+        {error && <p className="mt-3 resume-muted">Please try again in a moment.</p>}
       </section>
     );
   }
@@ -106,7 +111,9 @@ const ProjectHeader = ({ project_name }: Props) => {
 
   const isCompact = isPastHeader || manuallyCollapsed;
   const title = project.title.replaceAll("-", " ");
-  const transition = prefersReducedMotion ? { duration: 0 } : { duration: 0.28, ease: "easeOut" as const };
+  const transition = prefersReducedMotion
+    ? { duration: 0 }
+    : { duration: 0.28, ease: "easeOut" as const };
 
   return (
     <>
@@ -121,15 +128,15 @@ const ProjectHeader = ({ project_name }: Props) => {
               All projects
             </Link>
 
-            <div className="resume-surface shine-border-hover overflow-hidden rounded-2xl p-6 sm:p-9 lg:p-12">
+            <div className="shine-border-hover overflow-hidden resume-surface rounded-2xl p-6 sm:p-9 lg:p-12">
               <div className="section-code">Project / {project.visibility}</div>
               <div className="mt-5 grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
                 <div>
-                  <h1 className="max-w-4xl break-words text-4xl font-semibold leading-tight tracking-[-0.055em] text-[var(--site-text)] sm:text-6xl">
+                  <h1 className="max-w-4xl text-4xl leading-tight font-semibold tracking-[-0.055em] break-words text-[var(--site-text)] sm:text-6xl">
                     {title}
                   </h1>
                   {project.description && (
-                    <ProjectDescription className="resume-lead mt-5 max-w-3xl text-base leading-8 sm:text-lg">
+                    <ProjectDescription className="mt-5 max-w-3xl text-base leading-8 resume-lead sm:text-lg">
                       {project.description}
                     </ProjectDescription>
                   )}
@@ -138,7 +145,7 @@ const ProjectHeader = ({ project_name }: Props) => {
                   href={project.url}
                   target="_blank"
                   rel="noreferrer"
-                  className="glow-action shine-border shine-border-contrast inline-flex w-fit items-center gap-2 rounded px-5 py-3 text-sm font-semibold text-[#090b0d]"
+                  className="shine-border inline-flex w-fit items-center gap-2 glow-action rounded px-5 py-3 text-sm font-semibold text-[#090b0d] shine-border-contrast"
                 >
                   <GitBranch className="h-4 w-4" />
                   View on GitHub
@@ -147,13 +154,23 @@ const ProjectHeader = ({ project_name }: Props) => {
               </div>
 
               <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-[var(--site-border)] pt-5">
-                <span className="resume-muted text-sm">
-                  Updated {new Date(project.updated_at).toLocaleDateString(undefined, { month: "long", year: "numeric" })}
+                <span className="text-sm resume-muted">
+                  Updated{" "}
+                  {new Date(project.updated_at).toLocaleDateString(undefined, {
+                    month: "long",
+                    year: "numeric",
+                  })}
                 </span>
                 {stats.map(({ label, value, icon: Icon }) => (
-                  <span key={label} className="resume-muted inline-flex items-center gap-2 text-sm" title={`${value} ${label.toLowerCase()}`}>
+                  <span
+                    key={label}
+                    className="inline-flex items-center gap-2 text-sm resume-muted"
+                    title={`${value} ${label.toLowerCase()}`}
+                  >
                     <Icon className="h-4 w-4 text-[var(--site-accent)]" />
-                    <span className="font-medium text-[var(--site-text)]">{formatCount(value)}</span>
+                    <span className="font-medium text-[var(--site-text)]">
+                      {formatCount(value)}
+                    </span>
                     <span>{label}</span>
                   </span>
                 ))}
@@ -168,7 +185,7 @@ const ProjectHeader = ({ project_name }: Props) => {
                 <button
                   type="button"
                   onClick={() => setManuallyCollapsed(true)}
-                  className="resume-muted inline-flex cursor-pointer items-center gap-1.5 text-sm transition hover:text-[var(--site-accent)]"
+                  className="inline-flex cursor-pointer items-center gap-1.5 text-sm resume-muted transition hover:text-[var(--site-accent)]"
                   aria-label="Collapse project overview"
                 >
                   <Minimize2 className="h-4 w-4" />
@@ -187,7 +204,7 @@ const ProjectHeader = ({ project_name }: Props) => {
             initial={{ opacity: 0, y: -16 }}
             animate={{ opacity: 1, y: 0, transition }}
             exit={{ opacity: 0, y: -16, transition }}
-            className="project-compact-header fixed left-1/2 top-[4.75rem] z-40 flex w-[80%] -translate-x-1/2 items-center justify-between gap-2 rounded-xl border px-3 py-2 shadow-xl sm:gap-4 sm:px-5"
+            className="fixed top-[4.75rem] left-1/2 z-40 flex w-[80%] -translate-x-1/2 items-center justify-between gap-2 rounded-xl border project-compact-header px-3 py-2 shadow-xl sm:gap-4 sm:px-5"
           >
             <Link
               href="/projects"
@@ -216,7 +233,7 @@ const ProjectHeader = ({ project_name }: Props) => {
               aria-label="Expand project overview"
               title="Show project overview"
               onClick={scrollBackToOverview}
-              className="site-icon-button site-control shine-border-hover inline-flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full border border-[var(--site-surface-border)] text-[var(--site-muted)] transition hover:bg-cyan-400/[0.14] hover:text-cyan-600"
+              className="shine-border-hover site-icon-button inline-flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full border site-control border-[var(--site-surface-border)] text-[var(--site-muted)] transition hover:bg-cyan-400/[0.14] hover:text-cyan-600"
             >
               <ArrowDown className="h-4 w-4" />
             </button>

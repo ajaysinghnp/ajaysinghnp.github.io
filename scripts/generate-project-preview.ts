@@ -3,10 +3,7 @@ import path from "node:path";
 
 import { PROJECT_REPOSITORY_SETTINGS } from "../data/repos";
 import { socialMedia } from "../data/social";
-import {
-  getProjectPreviewFileName,
-  PROJECT_PREVIEW_MANIFEST_PATH,
-} from "../lib/project-preview";
+import { getProjectPreviewFileName, PROJECT_PREVIEW_MANIFEST_PATH } from "../lib/project-preview";
 import { GIT_USERNAME } from "../types/github";
 import { chromium, type Browser } from "playwright";
 
@@ -21,18 +18,12 @@ interface GitHubRepository {
   forks_count?: number;
 }
 
-const outputDirectory = path.join(
-  process.cwd(),
-  "public",
-  "generated-project-previews",
-);
+const outputDirectory = path.join(process.cwd(), "public", "generated-project-previews");
 
 const githubHeaders = {
   Accept: "application/vnd.github+json",
   "X-GitHub-Api-Version": "2022-11-28",
-  ...(process.env.GITHUB_TOKEN
-    ? { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` }
-    : {}),
+  ...(process.env.GITHUB_TOKEN ? { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` } : {}),
 };
 
 async function fetchRepositories(): Promise<GitHubRepository[]> {
@@ -55,9 +46,7 @@ async function fetchRepositories(): Promise<GitHubRepository[]> {
     const links: string[] = (response.headers.get("link") ?? "")
       .split(",")
       .map((link: string) => link.trim());
-    const nextLink: string | undefined = links.find((link: string) =>
-      /;\s*rel="next"/.test(link),
-    );
+    const nextLink: string | undefined = links.find((link: string) => /;\s*rel="next"/.test(link));
     nextUrl = nextLink?.match(/<([^>]+)>/)?.[1] ?? null;
   }
 
@@ -67,10 +56,7 @@ async function fetchRepositories(): Promise<GitHubRepository[]> {
         !repository.private &&
         !PROJECT_REPOSITORY_SETTINGS.excludedFromProjectList.includes(repository.name),
     )
-    .sort(
-      (a, b) =>
-        new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime(),
-    );
+    .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime());
 }
 
 function getPreviewTarget(repository: GitHubRepository): string {
@@ -131,9 +117,12 @@ async function capturePreview(
           if (image instanceof HTMLImageElement) await image.decode();
         });
       } catch (error) {
-        throw new Error("The hero portrait failed to load; refusing to capture an incomplete preview.", {
-          cause: error,
-        });
+        throw new Error(
+          "The hero portrait failed to load; refusing to capture an incomplete preview.",
+          {
+            cause: error,
+          },
+        );
       }
     }
     if (localDevelopmentUrl && targetUrl === localDevelopmentUrl) {
@@ -167,12 +156,11 @@ async function capturePreview(
       const temporaryPath = `${outputPath}.tmp`;
       await writeFile(temporaryPath, image);
       await rename(temporaryPath, outputPath);
-      console.info(`Generated ${theme}-theme featured preview for ${repository.name} from ${targetUrl}`);
+      console.info(
+        `Generated ${theme}-theme featured preview for ${repository.name} from ${targetUrl}`,
+      );
     }
-    const manifestPath = path.join(
-      outputDirectory,
-      path.basename(PROJECT_PREVIEW_MANIFEST_PATH),
-    );
+    const manifestPath = path.join(outputDirectory, path.basename(PROJECT_PREVIEW_MANIFEST_PATH));
     const manifestTemporaryPath = `${manifestPath}.tmp`;
     await writeFile(
       manifestTemporaryPath,
@@ -192,8 +180,7 @@ async function main(): Promise<void> {
     const repositories = await fetchRepositories();
     const featuredRepository =
       repositories.find(
-        (repository) =>
-          repository.name === PROJECT_REPOSITORY_SETTINGS.featuredRepositoryName,
+        (repository) => repository.name === PROJECT_REPOSITORY_SETTINGS.featuredRepositoryName,
       ) ?? repositories[0];
 
     if (!featuredRepository) {
@@ -203,9 +190,7 @@ async function main(): Promise<void> {
 
     const devUrlArgumentIndex = process.argv.indexOf("--dev-url");
     const localDevelopmentUrl =
-      devUrlArgumentIndex >= 0
-        ? process.argv[devUrlArgumentIndex + 1]
-        : undefined;
+      devUrlArgumentIndex >= 0 ? process.argv[devUrlArgumentIndex + 1] : undefined;
     await capturePreview(featuredRepository, localDevelopmentUrl);
   } catch (error) {
     console.warn(

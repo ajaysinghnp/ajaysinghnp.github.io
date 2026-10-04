@@ -28,7 +28,7 @@ export const Navigation: React.FC<Props> = ({ gitTheme = false }: Props) => {
   return (
     <header
       className={cn(
-        "site-navigation sticky top-0 z-50 border-b transition-all duration-300",
+        "sticky top-0 z-50 border-b site-navigation transition-all duration-300",
         isScrolled && "site-navigation-scrolled",
       )}
     >
@@ -37,7 +37,7 @@ export const Navigation: React.FC<Props> = ({ gitTheme = false }: Props) => {
           href="/"
           className="flex shrink-0 items-center gap-3 text-sm font-semibold tracking-wide"
         >
-          <span className="site-logo site-control shine-border flex h-8 w-8 items-center justify-center rounded border p-1">
+          <span className="site-logo shine-border flex h-8 w-8 items-center justify-center rounded border site-control p-1">
             <Image
               src="/images/logo-black.svg"
               alt="Ajay Singh logo"
@@ -58,7 +58,7 @@ export const Navigation: React.FC<Props> = ({ gitTheme = false }: Props) => {
             AJAY SINGH<span className="site-accent">_</span>
           </span>
         </Link>
-        <nav className="hidden items-center gap-6 text-xs uppercase tracking-[0.16em] md:flex">
+        <nav className="hidden items-center gap-6 text-xs tracking-[0.16em] uppercase md:flex">
           {navigation.map((item) => (
             <Link
               key={item.href}
@@ -77,14 +77,14 @@ export const Navigation: React.FC<Props> = ({ gitTheme = false }: Props) => {
             href={gitTheme ? socialMedia.github.theme : socialMedia.github.href}
             target="_blank"
             rel="noopener noreferrer"
-            className="site-icon-button site-control shine-border-hover hover:bg-cyan-400/[0.14] hover:text-cyan-600"
+            className="shine-border-hover site-icon-button site-control hover:bg-cyan-400/[0.14] hover:text-cyan-600"
             aria-label="Open GitHub"
           >
             <GitBranch className="h-4 w-4" />
           </Link>
           <ModeToggle
             variant={null}
-            className="site-icon-button site-control shine-border-hover hover:bg-cyan-400/[0.14] hover:text-cyan-600"
+            className="shine-border-hover site-icon-button site-control hover:bg-cyan-400/[0.14] hover:text-cyan-600"
           />
         </div>
       </div>

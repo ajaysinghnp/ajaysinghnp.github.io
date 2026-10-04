@@ -23,7 +23,6 @@ const playfair = Playfair_Display({
   display: "swap",
 });
 
-
 const title = "Ajay Singh";
 const description = "A Personal Portfolio for Ajay Singh.";
 const url = "https://ajaysingh.com.np";
@@ -72,26 +71,28 @@ export const metadata: Metadata = {
 
 // const popins = Poppins({ weight: ["300", "400", "500", "600", "700", "800", "900"], subsets: ["latin"] });
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={cn(grotesk.variable, playfair.variable, calSans.variable)} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={cn(grotesk.variable, playfair.variable, calSans.variable)}
+      suppressHydrationWarning
+    >
       <head>
         <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png" />
         <link rel="manifest" href="/favicon/site.webmanifest" />
       </head>
-      <body className={cn(
-        "site-body",
-        process.env.NODE_ENV === "development" && "debug-screens"
-      )}>
+      <body className={cn("site-body", process.env.NODE_ENV === "development" && "debug-screens")}>
         {/* Theme cycle: system -> dark -> light */}
         {/* enableSystem reads OS preference and stores it - when no localStorage exists, first visit shows OS theme */}
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
           <SiteBackground />
           <Layout>{children}</Layout>
         </ThemeProvider>

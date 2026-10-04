@@ -1,5 +1,4 @@
-export const slugify = (text: string) =>
-  text.toLowerCase().replace(/ /g, "-").replaceAll(".", "");
+export const slugify = (text: string) => text.toLowerCase().replace(/ /g, "-").replaceAll(".", "");
 
 export const formatDate = (date: string) =>
   new Date(date).toLocaleDateString("en-US", {
@@ -20,8 +19,7 @@ export const sortAlpha = (a: string, b: string) => a.localeCompare(b);
 export const sortSlugAlpha = (a: { slug: string }, b: { slug: string }) =>
   a.slug.localeCompare(b.slug);
 
-export const sortSlugCount = (a: { count: number }, b: { count: number }) =>
-  b.count - a.count;
+export const sortSlugCount = (a: { count: number }, b: { count: number }) => b.count - a.count;
 
 export const initials = (name: string) => {
   const [first, last] = name.split(" ");

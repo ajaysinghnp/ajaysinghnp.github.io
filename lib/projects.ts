@@ -62,9 +62,9 @@ export const fetchProjects = async (): Promise<Project[]> => {
   }
 
   return allRepos
-    .filter((repo: Repo) =>
-      !repo.private
-      && !PROJECT_REPOSITORY_SETTINGS.excludedFromProjectList.includes(repo.name),
+    .filter(
+      (repo: Repo) =>
+        !repo.private && !PROJECT_REPOSITORY_SETTINGS.excludedFromProjectList.includes(repo.name),
     )
     .map((repo: Repo) => ({
       id: repo.id,

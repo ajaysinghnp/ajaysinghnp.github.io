@@ -62,12 +62,18 @@ export const options = {
     format: "md",
     rehypePlugins: [
       rehypeSlug,
-      [rehypeAutolinkHeadings, { behavior: "append", properties: { className: ["subheading-anchor"] } }],
+      [
+        rehypeAutolinkHeadings,
+        { behavior: "append", properties: { className: ["subheading-anchor"] } },
+      ],
       rehypeKatex,
-      [rehypePrettyCode, {
-        theme: { light: "github-light", dark: "github-dark" },
-        defaultLang: "plaintext",
-      }],
+      [
+        rehypePrettyCode,
+        {
+          theme: { light: "github-light", dark: "github-dark" },
+          defaultLang: "plaintext",
+        },
+      ],
       rehypeDiffLines,
       rehypeMarkInlineCode,
     ],
@@ -75,7 +81,10 @@ export const options = {
       remarkGemoji,
       remarkGfm,
       remarkMath,
-      [remarkToc, { ordered: true, tight: false, maxDepth: 3, parents: ["listItem", "root"], skip: "delta" }],
+      [
+        remarkToc,
+        { ordered: true, tight: false, maxDepth: 3, parents: ["listItem", "root"], skip: "delta" },
+      ],
     ],
   },
 };

@@ -1,6 +1,5 @@
 import LocalFont from "next/font/local";
 
-
 export const calSans = LocalFont({
   src: "../public/fonts/CalSans-SemiBold.ttf",
   variable: "--font-calsans",

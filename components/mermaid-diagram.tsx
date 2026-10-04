@@ -47,7 +47,9 @@ export function MermaidDiagram({ chart }: MermaidDiagramProps) {
     return (
       <details className="mermaid-error">
         <summary>Diagram could not be rendered. Show source</summary>
-        <pre><code>{chart}</code></pre>
+        <pre>
+          <code>{chart}</code>
+        </pre>
       </details>
     );
   }

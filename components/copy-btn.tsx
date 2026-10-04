@@ -33,7 +33,7 @@ export function CopyButton({ text, className }: CopyButtonProps) {
       className={cn(
         buttonClasses,
         className,
-        "code-copy-button absolute right-2 top-2 z-10 gap-1.5 px-2 py-1",
+        "code-copy-button absolute top-2 right-2 z-10 gap-1.5 px-2 py-1",
       )}
     >
       {isCopied ? <CopyCheck size={16} /> : <CopyIcon size={16} />}

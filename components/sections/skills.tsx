@@ -1,32 +1,38 @@
-import { resume } from '@/data/resume'
-import { PocketKnife } from 'lucide-react'
-import React from 'react'
+import { resume } from "@/data/resume";
+import { PocketKnife } from "lucide-react";
+import React from "react";
 
 const Skills = () => {
   return (
-    <section className="flex flex-col gap-4 bg-zinc-900/60 rounded p-6 border border-zinc-600/60">
-      <div className="section-header flex gap-4 items-center text-2xl">
+    <section className="flex flex-col gap-4 rounded border border-zinc-600/60 bg-zinc-900/60 p-6">
+      <div className="section-header flex items-center gap-4 text-2xl">
         <PocketKnife className="h-8 w-8 text-purple-600" />
-        <h2 className="uppercase text-purple-600">Skills</h2>
+        <h2 className="text-purple-600 uppercase">Skills</h2>
       </div>
-      <div className="grid grid-cols-3 ml-2 gap-2">
+      <div className="ml-2 grid grid-cols-3 gap-2">
         {resume.skills.map((skill, index) => {
           return (
-            <div className="flex flex-col justify-center rounded p-4 border border-zinc-600/60" key={index}>
+            <div
+              className="flex flex-col justify-center rounded border border-zinc-600/60 p-4"
+              key={index}
+            >
               <div className="flex items-center gap-4">
                 <span className="text-slate-300/60">{skill.percentage}%</span>
-                <div className="w-full h-2 bg-slate-300/60 rounded-full">
-                  <div className="h-full bg-slate-300/80 rounded-full" style={{ width: `${skill.percentage}%` }}></div>
+                <div className="h-2 w-full rounded-full bg-slate-300/60">
+                  <div
+                    className="h-full rounded-full bg-slate-300/80"
+                    style={{ width: `${skill.percentage}%` }}
+                  ></div>
                 </div>
               </div>
-              <h3 className="uppercase text-purple-600">{skill.label}</h3>
-              <p className="text-slate-300/60 text-justify">{skill.description}</p>
+              <h3 className="text-purple-600 uppercase">{skill.label}</h3>
+              <p className="text-justify text-slate-300/60">{skill.description}</p>
             </div>
-          )
+          );
         })}
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default Skills
+export default Skills;

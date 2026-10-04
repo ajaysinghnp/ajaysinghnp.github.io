@@ -62,8 +62,12 @@ export function ProjectToc({ items }: ProjectTocProps) {
             className={[
               "project-toc-link hover:bg-[color-mix(in_srgb,var(--site-accent)_9%,transparent)] hover:text-[var(--site-text)]",
               nested ? "project-toc-child-link" : "",
-              activeId === item.id ? "font-semibold bg-[color-mix(in_srgb,var(--site-accent)_9%,transparent)] text-[var(--site-text)] shine-border" : "",
-            ].filter(Boolean).join(" ")}
+              activeId === item.id
+                ? "shine-border bg-[color-mix(in_srgb,var(--site-accent)_9%,transparent)] font-semibold text-[var(--site-text)]"
+                : "",
+            ]
+              .filter(Boolean)
+              .join(" ")}
             onClick={() => activateItem(item.id)}
           >
             {item.title}
@@ -78,13 +82,17 @@ export function ProjectToc({ items }: ProjectTocProps) {
     <nav className="project-toc" aria-label="Table of contents">
       <details className="project-toc-mobile">
         <summary>
-          <span><ListTree className="h-4 w-4" /> On this page</span>
+          <span>
+            <ListTree className="h-4 w-4" /> On this page
+          </span>
           <ChevronDown className="project-toc-chevron h-4 w-4" />
         </summary>
         {renderItems(items)}
       </details>
       <div className="project-toc-desktop">
-        <p className="project-toc-title"><ListTree className="h-4 w-4" /> On this page</p>
+        <p className="project-toc-title">
+          <ListTree className="h-4 w-4" /> On this page
+        </p>
         {renderItems(items)}
       </div>
     </nav>

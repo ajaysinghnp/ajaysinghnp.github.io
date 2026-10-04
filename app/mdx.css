@@ -1,8 +1,8 @@
-.project-readme [data-rehype-pretty-code-figure] pre>code {
+.project-readme [data-rehype-pretty-code-figure] pre > code {
   counter-reset: line;
 }
 
-.project-readme [data-rehype-pretty-code-figure] pre>code>[data-line]::before {
+.project-readme [data-rehype-pretty-code-figure] pre > code > [data-line]::before {
   counter-increment: line;
   content: counter(line);
   display: inline-block;
@@ -15,7 +15,7 @@
   user-select: none;
 }
 
-span[data-rehype-pretty-code-figure]>code {
+span[data-rehype-pretty-code-figure] > code {
   padding: 0 0.5rem;
   border-radius: var(--site-radius);
 }
