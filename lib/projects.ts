@@ -1,7 +1,8 @@
 import "server-only";
 
 import { PROJECT_REPOSITORY_SETTINGS } from "@/data/repos";
-import { GIT_USERNAME, Project, Repo } from "@/types/github";
+import type { Project, Repo } from "@/types/github";
+import { GIT_USERNAME } from "@/types/github";
 
 const GITHUB_API = "https://api.github.com";
 const GITHUB_API_VERSION = "2022-11-28";

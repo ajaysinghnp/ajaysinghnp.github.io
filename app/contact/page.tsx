@@ -1,15 +1,16 @@
 import Link from "next/link";
+
 import { ArrowUpRight, Mail, MapPin } from "lucide-react";
 
-import { socialMedia } from "@/data/social";
 import SocialLinksPanel from "@/components/social-links-panel";
+import { socialMedia } from "@/data/social";
 
 export default function ContactPage() {
   return (
     <main className="w-full pb-20 resume-shell">
-      <header className="grid gap-10 border-b border-[var(--site-border)] pb-14 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
+      <header className="grid gap-10 border-b resume-intro pb-14 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
         <div>
-          <p className="section-code">// contact / open channel</p>
+          <p className="section-code">contact / open channel</p>
           <h1 className="mt-5 max-w-4xl text-6xl leading-[0.92] font-semibold tracking-[-0.06em] text-zinc-50 sm:text-8xl">
             Let&apos;s make something useful<span className="text-cyan-300">.</span>
           </h1>
@@ -21,10 +22,10 @@ export default function ContactPage() {
       </header>
 
       <section className="mt-14 grid gap-12 lg:grid-cols-[1.1fr_0.9fr]">
-        <div className="shine-border-hover flex min-h-[22rem] flex-col justify-between resume-surface p-6 sm:p-8">
+        <div className="shine-border-hover flex min-h-88 flex-col justify-between resume-surface p-6 sm:p-8">
           <div>
-            <p className="section-code">// best way to reach me</p>
-            <h2 className="mt-5 max-w-xl text-4xl font-semibold tracking-[-0.05em] text-zinc-50 sm:text-5xl">
+            <p className="section-code">best way to reach me</p>
+            <h2 className="mt-5 max-w-xl text-4xl font-semibold tracking-tighter text-zinc-50 sm:text-5xl">
               Email works best.
             </h2>
             <p className="mt-5 max-w-lg text-lg leading-8 resume-muted">
@@ -45,7 +46,7 @@ export default function ContactPage() {
 
         <div className="space-y-8">
           <div>
-            <p className="section-code">// currently around</p>
+            <p className="section-code">currently around</p>
             <div className="mt-4 flex items-center gap-3 text-lg resume-meta">
               <MapPin className="h-5 w-5 text-cyan-300" /> Kathmandu, Nepal
             </div>

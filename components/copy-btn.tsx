@@ -1,8 +1,10 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-import { CopyCheck, CopyIcon } from "lucide-react";
 import { useState } from "react";
+
+import { CopyCheck, CopyIcon } from "lucide-react";
+
+import { cn } from "@/lib/utils";
 
 const buttonClasses =
   "shine-border-hover flex cursor-pointer items-center rounded text-xs font-medium";

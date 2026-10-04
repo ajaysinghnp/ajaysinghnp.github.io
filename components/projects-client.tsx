@@ -1,16 +1,17 @@
 "use client";
 
-import Link from "next/link";
-import Image from "next/image";
-import { ArrowUpRight, Eye, GitBranch, GitFork, Star } from "lucide-react";
-import { motion } from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
 
-import { PROJECT_REPOSITORY_SETTINGS } from "@/data/repos";
-import { getProjectPreviewSrc, PROJECT_PREVIEW_MANIFEST_PATH } from "@/lib/project-preview";
-import { socialMedia } from "@/data/social";
-import type { Project } from "@/types/github";
+import { motion } from "framer-motion";
+import { ArrowUpRight, Eye, GitBranch, GitFork, Star } from "lucide-react";
+
 import { ProjectDescription } from "@/components/project-description";
+import { PROJECT_REPOSITORY_SETTINGS } from "@/data/repos";
+import { socialMedia } from "@/data/social";
+import { getProjectPreviewSrc, PROJECT_PREVIEW_MANIFEST_PATH } from "@/lib/project-preview";
+import type { Project } from "@/types/github";
 
 const reveal = {
   hidden: { opacity: 0, y: 16 },
@@ -35,11 +36,13 @@ function FeaturedProjectPreview({ project }: { project: Project }) {
         const response = await fetch(`${PROJECT_PREVIEW_MANIFEST_PATH}?check=${Date.now()}`, {
           cache: "no-store",
         });
+
         if (response.ok) {
           const manifest = (await response.json()) as {
             repository: string;
             generatedAt: string;
           };
+
           if (isMounted && manifest.repository === project.name) {
             setPreviewVersion(manifest.generatedAt);
           }
@@ -51,11 +54,14 @@ function FeaturedProjectPreview({ project }: { project: Project }) {
       }
 
       if (isMounted && process.env.NODE_ENV === "development") {
-        timer = setTimeout(checkPreview, 2_000);
+        timer = setTimeout(() => {
+          void checkPreview();
+        }, 2_000);
       }
     };
 
     void checkPreview();
+
     return () => {
       isMounted = false;
       if (timer) clearTimeout(timer);
@@ -71,7 +77,7 @@ function FeaturedProjectPreview({ project }: { project: Project }) {
   if (!previewVersion || failedVersion === previewVersion) return null;
 
   return (
-    <div className="relative mt-7 aspect-video w-full overflow-hidden rounded-lg border border-[var(--site-surface-border)] project-card-preview">
+    <div className="relative mt-7 aspect-video w-full overflow-hidden rounded-lg border border-(--site-surface-border) project-card-preview">
       <Image
         src={`${getProjectPreviewSrc(project.name, "light")}?v=${encodeURIComponent(previewVersion)}`}
         alt=""
@@ -90,7 +96,7 @@ function FeaturedProjectPreview({ project }: { project: Project }) {
         priority
         onError={() => setFailedVersion(previewVersion)}
       />
-      <div className="absolute inset-x-0 top-0 z-10 flex h-5 items-center gap-1.5 border-b border-[var(--site-border)] px-2 project-card-preview-bar sm:h-8 sm:gap-2 sm:px-3">
+      <div className="absolute inset-x-0 top-0 z-10 flex h-5 items-center gap-1.5 border-b resume-intro px-2 project-card-preview-bar sm:h-8 sm:gap-2 sm:px-3">
         <span className="flex gap-1" aria-hidden="true">
           <i className="project-card-preview-dot sm:size-[0.38rem]" />
           <i className="project-card-preview-dot sm:size-[0.38rem]" />
@@ -182,7 +188,7 @@ function ProjectCard({ project, featured = false }: { project: Project; featured
         </div>
         <div className="mt-6">
           <h3
-            className={`project-card-title group-hover:text-[var(--project-card-accent)] ${featured ? "text-3xl sm:text-4xl" : "text-2xl"} font-semibold tracking-[-0.04em] transition`}
+            className={`project-card-title group-hover:project-card-index ${featured ? "text-3xl sm:text-4xl" : "text-2xl"} font-semibold tracking-[-0.04em] transition`}
           >
             {project.title}
           </h3>
@@ -193,7 +199,7 @@ function ProjectCard({ project, featured = false }: { project: Project; featured
           </ProjectDescription>
         </div>
         {featured && <FeaturedProjectPreview project={project} />}
-        <div className="mt-auto flex items-center justify-between border-t border-[var(--site-border)] pt-4">
+        <div className="mt-auto flex items-center justify-between border-t resume-intro pt-4">
           <span className="text-xs font-medium resume-muted">
             Updated{" "}
             {new Date(project.updated_at).toLocaleDateString("en-US", {
@@ -202,7 +208,7 @@ function ProjectCard({ project, featured = false }: { project: Project; featured
               timeZone: "UTC",
             })}
           </span>
-          <span className="inline-flex items-center gap-1.5 text-sm project-card-link transition group-hover:text-[var(--project-card-accent)]">
+          <span className="inline-flex items-center gap-1.5 text-sm project-card-link transition group-hover:project-card-index">
             Read more
             <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </span>
@@ -253,11 +259,11 @@ export function ProjectsClient({ projects }: { projects: Project[] }) {
 
   return (
     <main className="w-full pb-20 resume-shell">
-      <header className="grid gap-10 border-b border-[var(--site-border)] pb-14 lg:grid-cols-[1fr_0.8fr] lg:items-end">
+      <header className="grid gap-10 border-b resume-intro pb-14 lg:grid-cols-[1fr_0.8fr] lg:items-end">
         <div>
-          <p className="section-code">// projects / open signal</p>
-          <h1 className="mt-5 max-w-4xl text-6xl leading-[0.92] font-semibold tracking-[-0.06em] text-[var(--site-text)] sm:text-8xl">
-            Things I&apos;ve made<span className="text-[var(--site-accent)]">.</span>
+          <p className="section-code">projects / open signal</p>
+          <h1 className="mt-5 max-w-4xl text-6xl leading-[0.92] font-semibold tracking-[-0.06em] text-(--site-text) sm:text-8xl">
+            Things I&apos;ve made<span className="site-nav-active">.</span>
           </h1>
         </div>
         <p className="max-w-xl text-xl leading-8 resume-lead">
@@ -272,7 +278,7 @@ export function ProjectsClient({ projects }: { projects: Project[] }) {
             <p className="section-code">
               // featured projects / {String(selected.length + 1).padStart(2, "0")}
             </p>
-            <h2 className="mt-3 text-3xl font-semibold tracking-[-0.05em] text-[var(--site-text)] sm:text-4xl">
+            <h2 className="mt-3 text-3xl font-semibold tracking-tighter text-(--site-text) sm:text-4xl">
               Featured projects.
             </h2>
           </div>
@@ -292,9 +298,9 @@ export function ProjectsClient({ projects }: { projects: Project[] }) {
           <div className="mb-8 flex items-end justify-between gap-6">
             <div>
               <p className="section-code">
-                // project index / {String(remaining.length).padStart(2, "0")} repos
+                project index / {String(remaining.length).padStart(2, "0")} repos
               </p>
-              <h2 className="mt-4 text-4xl font-semibold tracking-[-0.05em] text-[var(--site-text)] sm:text-5xl">
+              <h2 className="mt-4 text-4xl font-semibold tracking-tighter text-(--site-text) sm:text-5xl">
                 More experiments.
               </h2>
             </div>
@@ -302,7 +308,7 @@ export function ProjectsClient({ projects }: { projects: Project[] }) {
               href={socialMedia.github.href}
               target="_blank"
               rel="noreferrer"
-              className="hidden items-center gap-2 text-sm text-[var(--site-accent)] transition hover:text-[var(--site-text)] sm:inline-flex"
+              className="hidden items-center gap-2 text-sm site-nav-active transition hover:text-(--site-text) sm:inline-flex"
             >
               Browse GitHub <GitBranch className="h-4 w-4" />
             </Link>
@@ -314,7 +320,7 @@ export function ProjectsClient({ projects }: { projects: Project[] }) {
           </div>
           <div className="hidden gap-4 sm:grid sm:grid-cols-2 xl:hidden">
             {twoColumns.map((column, columnIndex) => (
-              <div key={columnIndex} className="grid grid-cols-1 gap-4">
+              <div key={`col-sm-${columnIndex + 1}`} className="grid grid-cols-1 gap-4">
                 {column.map((project) => (
                   <ProjectCard key={project.name} project={project} />
                 ))}
@@ -323,7 +329,7 @@ export function ProjectsClient({ projects }: { projects: Project[] }) {
           </div>
           <div className="hidden gap-4 xl:grid xl:grid-cols-3">
             {threeColumns.map((column, columnIndex) => (
-              <div key={columnIndex} className="grid grid-cols-1 gap-4">
+              <div key={`col-xl-${columnIndex + 1}`} className="grid grid-cols-1 gap-4">
                 {column.map((project) => (
                   <ProjectCard key={project.name} project={project} />
                 ))}
@@ -350,7 +356,7 @@ export function ProjectsState({
       role="status"
       className="flex min-h-[55vh] w-full flex-col items-center justify-center gap-5 px-5 text-center resume-shell"
     >
-      <p className="section-code">// projects / signal</p>
+      <p className="section-code">projects / signal</p>
       <h1 className="text-3xl text-[var(--site-text)]">{label}</h1>
       {description && <p className="max-w-lg leading-7 resume-muted">{description}</p>}
       {action}

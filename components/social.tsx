@@ -9,6 +9,7 @@ import {
   MessageSquare,
   Play,
 } from "lucide-react";
+
 import { socialMedia } from "@/data/social";
 import type { Social } from "@/types/social";
 
@@ -83,7 +84,7 @@ const Social = ({ icononly = true }: Props) => {
           key={s.href}
           rel="noopener noreferrer"
           title={
-            s.label == "Github" ? `Explore SourceCode @${s.label}` : `Connect with me @${s.handle}`
+            s.label === "Github" ? `Explore SourceCode @${s.label}` : `Connect with me @${s.handle}`
           }
           target="_blank"
           className="group relative flex flex-col items-center px-4 duration-700 md:gap-8"

@@ -1,14 +1,13 @@
 "use client";
 
-import { motion, useMotionTemplate, useMotionValue, useSpring } from "framer-motion";
-
-import { MouseEventHandler, PropsWithChildren } from "react";
+import { motion, useMotionTemplate, useSpring } from "framer-motion";
+import type { MouseEvent, PropsWithChildren } from "react";
 
 export const Card: React.FC<PropsWithChildren> = ({ children }) => {
   const mouseX = useSpring(0, { stiffness: 500, damping: 100 });
   const mouseY = useSpring(0, { stiffness: 500, damping: 100 });
 
-  function onMouseMove({ currentTarget, clientX, clientY }: any) {
+  function onMouseMove({ currentTarget, clientX, clientY }: MouseEvent<HTMLDivElement>) {
     const { left, top } = currentTarget.getBoundingClientRect();
     mouseX.set(clientX - left);
     mouseY.set(clientY - top);
@@ -19,12 +18,12 @@ export const Card: React.FC<PropsWithChildren> = ({ children }) => {
   return (
     <div
       onMouseMove={onMouseMove}
-      className="group shine-border-hover relative overflow-hidden rounded-xl border border-zinc-600 bg-gradient-to-tl from-zinc-900 via-zinc-400/10 to-zinc-900 duration-700 hover:border-zinc-400/50 hover:bg-zinc-800/10 md:gap-8"
+      className="group shine-border-hover relative overflow-hidden rounded-xl border border-zinc-600 bg-linear-to-tl from-zinc-900 via-zinc-400/10 to-zinc-900 duration-700 hover:border-zinc-400/50 hover:bg-zinc-800/10 md:gap-8"
     >
       <div className="pointer-events-none">
-        <div className="absolute inset-0 z-0 [mask-image:linear-gradient(black,transparent)] transition duration-1000" />
+        <div className="absolute inset-0 z-0 mask-[linear-gradient(black,transparent)] transition duration-1000" />
         <motion.div
-          className="absolute inset-0 z-10 bg-gradient-to-br via-zinc-100/10 opacity-100 transition duration-1000 group-hover:opacity-50"
+          className="absolute inset-0 z-10 bg-linear-to-br via-zinc-100/10 opacity-100 transition duration-1000 group-hover:opacity-50"
           style={style}
         />
         <motion.div

@@ -1,9 +1,11 @@
-import { extractProjectToc } from "@/lib/project-toc";
-import ProjectHeader from "./header";
+import { notFound } from "next/navigation";
+
 import { MDX } from "@/components/mdx";
 import { ProjectToc } from "@/components/project-toc";
-import { fetchProjects, fetchProjectReadme } from "@/lib/projects";
-import { notFound } from "next/navigation";
+import { extractProjectToc } from "@/lib/project-toc";
+import { fetchProjectReadme, fetchProjects } from "@/lib/projects";
+
+import ProjectHeader from "./header";
 
 export const revalidate = 21600;
 export const dynamicParams = true;

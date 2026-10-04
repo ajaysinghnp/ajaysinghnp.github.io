@@ -1,7 +1,8 @@
 import "server-only";
 
-import axios from "axios";
 import { NextResponse } from "next/server";
+
+import axios from "axios";
 
 export const githubApiErrorResponse = (error: unknown, resource: string): NextResponse => {
   const upstreamStatus = axios.isAxiosError(error) ? error.response?.status : undefined;

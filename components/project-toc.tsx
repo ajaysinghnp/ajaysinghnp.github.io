@@ -1,8 +1,10 @@
 "use client";
 
-import type { ProjectTocItem } from "@/lib/project-toc";
-import { ChevronDown, ListTree } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
+
+import { ChevronDown, ListTree } from "lucide-react";
+
+import type { ProjectTocItem } from "@/lib/project-toc";
 
 interface ProjectTocProps {
   items: ProjectTocItem[];

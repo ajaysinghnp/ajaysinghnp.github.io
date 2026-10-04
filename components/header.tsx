@@ -1,7 +1,8 @@
-import React from "react";
-import { cn } from "@/lib/utils";
-import Image from "next/image";
 import { Homemade_Apple } from "next/font/google";
+import Image from "next/image";
+import Link from "next/link";
+
+import { cn } from "@/lib/utils";
 
 const homemadeApple = Homemade_Apple({ weight: ["400"], subsets: ["latin"] });
 
@@ -21,19 +22,19 @@ const Header = () => {
         <nav>
           <ul className={cn("text-muted-100 flex flex-row gap-12 font-medium uppercase")}>
             <li className="text-primary-100 hover:text-primary-100 font-bold">
-              <a href="/">Profile</a>
+              <Link href="/">Profile</Link>
             </li>
             <li className="hover:text-primary-100">
-              <a href="/about">About</a>
+              <Link href="/about">About</Link>
             </li>
             <li className="hover:text-primary-100">
-              <a href="/about">Skills</a>
+              <Link href="/about">Skills</Link>
             </li>
             <li className="hover:text-primary-100">
-              <a href="/about">Projects</a>
+              <Link href="/projects">Projects</Link>
             </li>
             <li className="hover:text-primary-100">
-              <a href="/about">Contact</a>
+              <Link href="/contact">Contact</Link>
             </li>
           </ul>
         </nav>

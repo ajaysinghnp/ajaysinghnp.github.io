@@ -1,9 +1,9 @@
 "use client";
 
-import { ProjectDescription } from "@/components/project-description";
-import { socialMedia } from "@/data/social";
-import { fetchProjectFromApi } from "@/lib/projects-client";
-import type { Project } from "@/types/github";
+import { useCallback, useEffect, useRef, useState } from "react";
+import Link from "next/link";
+
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   ArrowDown,
   ArrowLeft,
@@ -14,10 +14,12 @@ import {
   Minimize2,
   Star,
 } from "lucide-react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import Link from "next/link";
-import { useCallback, useEffect, useRef, useState } from "react";
 import useSWR from "swr";
+
+import { ProjectDescription } from "@/components/project-description";
+import { socialMedia } from "@/data/social";
+import { fetchProjectFromApi } from "@/lib/projects-client";
+import type { Project } from "@/types/github";
 
 interface Props {
   project_name: string;

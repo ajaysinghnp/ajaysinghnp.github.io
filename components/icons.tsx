@@ -1,4 +1,3 @@
-import { cn } from "@/lib/utils";
 import {
   BriefcaseBusiness,
   Camera,
@@ -8,6 +7,8 @@ import {
   MessageSquare,
   Play,
 } from "lucide-react";
+
+import { cn } from "@/lib/utils";
 
 interface Props {
   name: string;

@@ -2,23 +2,16 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
-import {
-  ArrowUpRight,
-  BriefcaseBusiness,
-  GitBranch,
-  Mail,
-  MapPin,
-  Rss,
-  Sparkles,
-} from "lucide-react";
 
+import { motion } from "framer-motion";
+import { ArrowUpRight, BriefcaseBusiness, GitBranch, Mail, Rss } from "lucide-react";
+
+import { Navigation } from "@/components/nav";
+import SocialLinksPanel from "@/components/social-links-panel";
 import { about } from "@/data/about";
 import { navigation } from "@/data/navigation";
 import { resume } from "@/data/resume";
 import { socialMedia } from "@/data/social";
-import { Navigation } from "@/components/nav";
-import SocialLinksPanel from "@/components/social-links-panel";
 
 const projects = [
   {
@@ -160,7 +153,7 @@ export default function HomeRedesign() {
       <section className="relative z-10 mx-auto max-w-7xl py-24 lg:py-32" id="work">
         <div className="mb-10 flex items-end justify-between gap-6">
           <div>
-            <p className="section-code">// selected_work</p>
+            <p className="section-code">selected_work</p>
             <h2 className="mt-4 text-4xl font-semibold tracking-[-0.06em] text-zinc-50 sm:text-6xl">
               Useful by design.
             </h2>
@@ -215,7 +208,7 @@ export default function HomeRedesign() {
       >
         <div className="mx-auto grid max-w-7xl gap-14 py-24 lg:grid-cols-[0.8fr_1.2fr] lg:py-32">
           <div>
-            <p className="section-code">// context</p>
+            <p className="section-code">context</p>
             <h2 className="mt-5 max-w-md text-4xl leading-tight font-semibold tracking-[-0.06em] text-zinc-50 sm:text-5xl">
               Curiosity with somewhere useful to go.
             </h2>
@@ -245,7 +238,7 @@ export default function HomeRedesign() {
 
       <section className="relative z-10 mx-auto grid max-w-7xl gap-14 py-24 lg:grid-cols-[1fr_0.8fr] lg:py-32">
         <div>
-          <p className="section-code">// field_notes</p>
+          <p className="section-code">field_notes</p>
           <h2 className="mt-5 max-w-xl text-4xl font-semibold tracking-[-0.06em] text-zinc-50 sm:text-6xl">
             The signal continues in the notes.
           </h2>

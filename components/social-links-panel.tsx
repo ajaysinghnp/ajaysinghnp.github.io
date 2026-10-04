@@ -1,4 +1,5 @@
 import Link from "next/link";
+
 import { ArrowUpRight, BriefcaseBusiness, GitBranch, Play } from "lucide-react";
 
 import { socialMedia } from "@/data/social";

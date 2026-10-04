@@ -1160,6 +1160,10 @@ html:not(.dark) body [class~="text-zinc-500"] {
   animation: frame-spin 8s linear infinite;
 }
 
+.section-code::before {
+  content: "// ";
+}
+
 @keyframes shuttle-horizontal {
   from {
     transform: translate3d(0, 0, 0) rotate(-8deg);

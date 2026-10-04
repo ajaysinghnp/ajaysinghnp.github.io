@@ -6,7 +6,7 @@ export default function Loading() {
         aria-label="Loading page"
       >
         <div className="flex items-center justify-between border-b border-[var(--site-border)] pb-4 text-xs tracking-[0.18em] uppercase">
-          <span className="section-code">// loading / signal</span>
+          <span className="section-code">loading / signal</span>
           <span className="live-dot" />
         </div>
         <div className="mt-10 flex items-center gap-4">

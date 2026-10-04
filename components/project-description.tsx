@@ -1,6 +1,6 @@
 import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 import remarkGemoji from "remark-gemoji";
+import remarkGfm from "remark-gfm";
 
 interface ProjectDescriptionProps {
   children: string;

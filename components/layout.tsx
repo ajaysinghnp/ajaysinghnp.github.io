@@ -1,9 +1,10 @@
 "use client";
 
 import React from "react";
+import { usePathname } from "next/navigation";
+
 import { Navigation } from "./nav";
 import SiteFooter from "./site-footer";
-import { usePathname } from "next/navigation";
 
 interface Props {
   children: React.ReactNode;
@@ -12,7 +13,7 @@ interface Props {
 const Layout = ({ children }: Props) => {
   const pathname = usePathname();
   if (pathname === "/") {
-    console.log("homepage");
+    // console.info("homepage");
     return children;
   }
   return (

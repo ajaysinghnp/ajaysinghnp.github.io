@@ -1,9 +1,10 @@
+import type { MDXRemoteProps } from "next-mdx-remote/rsc";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeKatex from "rehype-katex";
 import rehypePrettyCode from "rehype-pretty-code";
 import rehypeSlug from "rehype-slug";
-import remarkGfm from "remark-gfm";
 import remarkGemoji from "remark-gemoji";
+import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import remarkToc from "remark-toc";
 
@@ -57,7 +58,7 @@ function getText(node: HastNode): string {
   return node.value ?? (node.children ?? []).map(getText).join("");
 }
 
-export const options = {
+export const options: NonNullable<MDXRemoteProps["options"]> = {
   mdxOptions: {
     format: "md",
     rehypePlugins: [

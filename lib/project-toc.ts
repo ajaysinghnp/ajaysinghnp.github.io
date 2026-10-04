@@ -1,9 +1,9 @@
 import GithubSlugger from "github-slugger";
-import { unified } from "unified";
-import remarkParse from "remark-parse";
+import type { Heading, PhrasingContent, Root } from "mdast";
 import remarkGemoji from "remark-gemoji";
 import remarkMath from "remark-math";
-import type { Heading, PhrasingContent, Root } from "mdast";
+import remarkParse from "remark-parse";
+import { unified } from "unified";
 
 export interface ProjectTocItem {
   id: string;
@@ -16,7 +16,7 @@ function getHeadingText(nodes: PhrasingContent[]): string {
     .map((node) => {
       if (node.type === "text" || node.type === "inlineCode") return node.value;
       if (node.type === "image" || node.type === "imageReference") return node.alt ?? "";
-      if ("children" in node) return getHeadingText(node.children as PhrasingContent[]);
+      if ("children" in node) return getHeadingText(node.children);
       if ("value" in node && typeof node.value === "string") return node.value;
       return "";
     })
@@ -31,7 +31,7 @@ export async function extractProjectToc(source: string): Promise<ProjectTocItem[
   if (!source) return [];
 
   const processor = unified().use(remarkParse).use(remarkGemoji).use(remarkMath);
-  const tree = processor.parse(source) as Root;
+  const tree = processor.parse(source);
   const transformed = (await processor.run(tree)) as Root;
   const slugger = new GithubSlugger();
   const roots: ProjectTocItem[] = [];
@@ -40,7 +40,7 @@ export async function extractProjectToc(source: string): Promise<ProjectTocItem[
   for (const node of transformed.children) {
     if (!isHeading(node) || node.depth < 2 || node.depth > 4) continue;
 
-    const title = getHeadingText(node.children as PhrasingContent[]).trim();
+    const title = getHeadingText(node.children).trim();
     if (!title) continue;
 
     const item: ProjectTocItem = {

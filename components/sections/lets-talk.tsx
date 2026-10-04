@@ -1,6 +1,7 @@
 import React from "react";
-import { Input } from "@/components/ui/input";
+
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 const LetsTalk = () => {
   return (
@@ -104,12 +105,12 @@ const LetsTalk = () => {
                 rows={4}
                 placeholder="Share your thoughts..."
                 className="w-full rounded border border-zinc-300/60 bg-transparent px-3.5 py-2 text-zinc-300 shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6"
-              ></textarea>
+              />
             </div>
           </div>
         </div>
         <div className="mt-10 flex justify-end gap-4">
-          <Button type="reset" variant={"outline"} className="bg-transparent">
+          <Button type="reset" variant="outline" className="bg-transparent">
             Clear
           </Button>
           <Button

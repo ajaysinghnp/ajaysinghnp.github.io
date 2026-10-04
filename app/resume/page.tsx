@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+
 import { ArrowUpRight, Check, Mail, MapPin, Sparkles } from "lucide-react";
 
 import { resume } from "@/data/resume";
@@ -13,7 +14,7 @@ export default function ResumePage() {
     <main className="w-full pb-20 resume-shell">
       <header className="grid gap-10 border-b resume-intro pb-12 lg:grid-cols-[1fr_0.7fr] lg:items-end">
         <div>
-          <p className="section-code">// resume / selected signal</p>
+          <p className="section-code">resume / selected signal</p>
           <h1 className="mt-5 max-w-4xl text-6xl leading-[0.92] font-semibold tracking-[-0.06em] text-zinc-50 sm:text-8xl">
             Ajay Singh<span className="text-cyan-300">.</span>
           </h1>
@@ -57,14 +58,14 @@ export default function ResumePage() {
               />
             </div>
             <div className="mt-6 border-t border-current/10 pt-5">
-              <p className="section-code">// working mode</p>
+              <p className="section-code">working mode</p>
               <p className="mt-3 text-lg leading-7 resume-lead">
                 Hardware-minded. Software-curious. Always looking for the simpler system.
               </p>
             </div>
           </div>
           <div>
-            <p className="section-code">// capabilities</p>
+            <p className="section-code">capabilities</p>
             <div className="mt-4 flex flex-wrap gap-2">
               {capabilities.map((skill) => (
                 <span
@@ -77,7 +78,7 @@ export default function ResumePage() {
             </div>
           </div>
           <div className="shine-border-hover resume-surface p-5">
-            <p className="section-code">// education</p>
+            <p className="section-code">education</p>
             <div className="mt-5 space-y-5">
               {education.map((item) => (
                 <div key={item.degree}>
@@ -93,7 +94,7 @@ export default function ResumePage() {
         <div className="space-y-14">
           <section>
             <div className="mb-6 flex items-center justify-between">
-              <p className="section-code">// experience</p>
+              <p className="section-code">experience</p>
               <span className="text-xs tracking-[0.16em] resume-muted uppercase">signal / 01</span>
             </div>
             {resume.workExperiences.map((job) => (
@@ -119,7 +120,7 @@ export default function ResumePage() {
 
           <section>
             <div className="mb-6 flex items-center justify-between">
-              <p className="section-code">// selected strengths</p>
+              <p className="section-code">selected strengths</p>
               <Sparkles className="h-4 w-4 text-cyan-300" />
             </div>
             <div className="grid gap-3 sm:grid-cols-2">
@@ -140,7 +141,7 @@ export default function ResumePage() {
 
           <section className="shine-border-hover flex flex-col gap-5 resume-surface p-6 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <p className="section-code">// next conversation</p>
+              <p className="section-code">next conversation</p>
               <h2 className="mt-2 text-2xl text-zinc-50">Have a useful problem to work through?</h2>
             </div>
             <Link

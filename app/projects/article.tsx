@@ -1,7 +1,8 @@
 import Link from "next/link";
+
 import { Eye } from "lucide-react";
 
-import { Project } from "@/types/github";
+import type { Project } from "@/types/github";
 
 type Props = {
   project: Project;

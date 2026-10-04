@@ -1,11 +1,11 @@
 import { mkdir, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { type Browser, chromium } from "playwright";
 
 import { PROJECT_REPOSITORY_SETTINGS } from "../data/repos";
 import { socialMedia } from "../data/social";
 import { getProjectPreviewFileName, PROJECT_PREVIEW_MANIFEST_PATH } from "../lib/project-preview";
 import { GIT_USERNAME } from "../types/github";
-import { chromium, type Browser } from "playwright";
 
 interface GitHubRepository {
   name: string;

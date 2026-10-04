@@ -1,14 +1,16 @@
 "use client";
-import Link from "next/link";
-import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import { GitBranch } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
+
+import { GitBranch } from "lucide-react";
 
 import { navigation } from "@/data/navigation";
 import { socialMedia } from "@/data/social";
-import { ModeToggle } from "./theme-toggle";
 import { cn } from "@/lib/utils";
+
+import { ModeToggle } from "./theme-toggle";
 
 interface Props {
   gitTheme?: boolean;

@@ -1,6 +1,5 @@
-import { about } from "@/data/about";
-import React from "react";
 import { angelina } from "@/components/local-fonts";
+import { about } from "@/data/about";
 import { cn } from "@/lib/utils";
 
 const About = () => {
@@ -9,7 +8,7 @@ const About = () => {
       <h1
         className={cn(
           angelina.className,
-          "mb-4 text-4xl leading-[4rem] font-bold text-purple-500 capitalize",
+          "mb-4 text-4xl leading-16 font-bold text-purple-500 capitalize",
         )}
       >
         {about.title}
@@ -18,8 +17,8 @@ const About = () => {
         {about.quote}
       </p>
       <div className="my-8 flex w-full justify-between px-8">
-        {about.highlights.map((highlight, index) => (
-          <div className="border-l border-purple-500 px-8" key={index}>
+        {about.highlights.map((highlight) => (
+          <div className="border-l border-purple-500 px-8" key={highlight.label}>
             <h2 className="mb-2 text-3xl leading-10">{highlight.label}</h2>
             <p className="text-md text-muted-foreground">{highlight.description}</p>
           </div>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+
 import { ArrowUpRight, CircuitBoard, Lightbulb, Mail, Workflow } from "lucide-react";
 
 import { about } from "@/data/about";
@@ -28,9 +29,9 @@ const principles = [
 export default function AboutPage() {
   return (
     <main className="w-full pb-20 resume-shell">
-      <header className="grid gap-10 border-b border-[var(--site-border)] pb-14 lg:grid-cols-[1.15fr_0.85fr] lg:items-end">
+      <header className="grid gap-10 border-b resume-intro pb-14 lg:grid-cols-[1.15fr_0.85fr] lg:items-end">
         <div>
-          <p className="section-code">// about / the longer signal</p>
+          <p className="section-code">about / the longer signal</p>
           <h1 className="mt-5 max-w-4xl text-6xl leading-[0.92] font-semibold tracking-[-0.06em] text-zinc-50 sm:text-8xl">
             I love creativity<span className="text-cyan-300">.</span>
           </h1>
@@ -40,8 +41,8 @@ export default function AboutPage() {
 
       <section className="mt-14 grid gap-12 lg:grid-cols-[0.8fr_1.2fr]">
         <div>
-          <p className="section-code">// the short version</p>
-          <h2 className="mt-5 max-w-md text-4xl leading-tight font-semibold tracking-[-0.05em] text-zinc-50">
+          <p className="section-code">the short version</p>
+          <h2 className="mt-5 max-w-md text-4xl leading-tight font-semibold tracking-tighter text-zinc-50">
             A practical mind with room for wonder.
           </h2>
         </div>
@@ -51,7 +52,7 @@ export default function AboutPage() {
             {about.highlights.map((highlight) => (
               <div key={highlight.label} className="shine-border-hover resume-surface p-4">
                 <p className="text-2xl font-semibold text-zinc-100">{highlight.label}</p>
-                <p className="mt-2 text-xs leading-5 tracking-[0.1em] resume-muted uppercase">
+                <p className="mt-2 text-xs leading-5 tracking-widest resume-muted uppercase">
                   {highlight.description}
                 </p>
               </div>
@@ -63,7 +64,7 @@ export default function AboutPage() {
       <section className="mt-20 border-y border-[var(--site-border)] py-14">
         <div className="mb-8 flex items-end justify-between gap-5">
           <div>
-            <p className="section-code">// working principles</p>
+            <p className="section-code">working principles</p>
             <h2 className="mt-4 text-4xl font-semibold tracking-[-0.05em] text-zinc-50 sm:text-5xl">
               How I approach the work.
             </h2>
@@ -88,7 +89,7 @@ export default function AboutPage() {
 
       <section className="mt-20 grid gap-12 lg:grid-cols-[1fr_0.8fr]">
         <div>
-          <p className="section-code">// current interests</p>
+          <p className="section-code">current interests</p>
           <h2 className="mt-4 text-4xl font-semibold tracking-[-0.05em] text-zinc-50 sm:text-5xl">
             Learning by building.
           </h2>
@@ -108,7 +109,7 @@ export default function AboutPage() {
           </div>
         </div>
         <div className="shine-border-hover resume-surface p-6">
-          <p className="section-code">// keep in touch</p>
+          <p className="section-code">keep in touch</p>
           <h2 className="mt-4 text-2xl text-zinc-50">Good ideas become better conversations.</h2>
           <p className="mt-3 leading-7 resume-muted">
             For collaborations, questions, or a problem worth exploring, email is the best place to

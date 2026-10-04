@@ -1,6 +1,6 @@
-import { resume } from "@/data/resume";
 import { PocketKnife } from "lucide-react";
-import React from "react";
+
+import { resume } from "@/data/resume";
 
 const Skills = () => {
   return (
@@ -10,11 +10,11 @@ const Skills = () => {
         <h2 className="text-purple-600 uppercase">Skills</h2>
       </div>
       <div className="ml-2 grid grid-cols-3 gap-2">
-        {resume.skills.map((skill, index) => {
+        {resume.skills.map((skill) => {
           return (
             <div
               className="flex flex-col justify-center rounded border border-zinc-600/60 p-4"
-              key={index}
+              key={skill.label}
             >
               <div className="flex items-center gap-4">
                 <span className="text-slate-300/60">{skill.percentage}%</span>
@@ -22,7 +22,7 @@ const Skills = () => {
                   <div
                     className="h-full rounded-full bg-slate-300/80"
                     style={{ width: `${skill.percentage}%` }}
-                  ></div>
+                  />
                 </div>
               </div>
               <h3 className="text-purple-600 uppercase">{skill.label}</h3>

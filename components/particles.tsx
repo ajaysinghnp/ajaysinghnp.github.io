@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useRef, useEffect, useCallback } from "react";
+import { useCallback, useEffect, useRef } from "react";
+
 import { useMousePosition } from "@/lib/mouse";
 import { cn } from "@/lib/utils";
 
@@ -10,6 +11,31 @@ interface ParticlesProps {
   staticity?: number;
   ease?: number;
   refresh?: boolean;
+}
+
+type Circle = {
+  x: number;
+  y: number;
+  translateX: number;
+  translateY: number;
+  size: number;
+  alpha: number;
+  targetAlpha: number;
+  dx: number;
+  dy: number;
+  magnetism: number;
+};
+
+function debounce<Args extends unknown[]>(fn: (...args: Args) => void, wait: number) {
+  let timeout: ReturnType<typeof setTimeout> | undefined;
+
+  const debounced = (...args: Args) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => fn(...args), wait);
+  };
+  debounced.cancel = () => clearTimeout(timeout);
+
+  return debounced;
 }
 
 export default function Particles({
@@ -22,68 +48,18 @@ export default function Particles({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const canvasContainerRef = useRef<HTMLDivElement>(null);
   const context = useRef<CanvasRenderingContext2D | null>(null);
-  const circles = useRef<any[]>([]);
-  const mousePosition = useMousePosition();
+  const circles = useRef<Circle[]>([]);
+  const { x: mouseX, y: mouseY } = useMousePosition();
   const mouse = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const canvasSize = useRef<{ w: number; h: number }>({ w: 0, h: 0 });
   const dpr = typeof window !== "undefined" ? window.devicePixelRatio : 1;
   const animationFrameId = useRef<number | null>(null);
 
-  useEffect(() => {
-    if (canvasRef.current) {
-      context.current = canvasRef.current.getContext("2d");
+  const clearContext = useCallback(() => {
+    if (context.current) {
+      context.current.clearRect(0, 0, canvasSize.current.w, canvasSize.current.h);
     }
-    initCanvas();
-    animate();
-    window.addEventListener("resize", debounce(initCanvas, 100));
-
-    return () => {
-      window.removeEventListener("resize", debounce(initCanvas, 100));
-      if (animationFrameId.current) {
-        cancelAnimationFrame(animationFrameId.current);
-      }
-    };
   }, []);
-
-  useEffect(() => {
-    onMouseMove();
-  }, [mousePosition.x, mousePosition.y]);
-
-  useEffect(() => {
-    initCanvas();
-  }, [refresh]);
-
-  const initCanvas = useCallback(() => {
-    resizeCanvas();
-    drawParticles();
-  }, []);
-
-  const onMouseMove = useCallback(() => {
-    if (canvasRef.current) {
-      const rect = canvasRef.current.getBoundingClientRect();
-      const { w, h } = canvasSize.current;
-      const x = mousePosition.x - rect.left - w / 2;
-      const y = mousePosition.y - rect.top - h / 2;
-      const inside = x < w / 2 && x > -w / 2 && y < h / 2 && y > -h / 2;
-      if (inside) {
-        mouse.current.x = x;
-        mouse.current.y = y;
-      }
-    }
-  }, [mousePosition]);
-
-  type Circle = {
-    x: number;
-    y: number;
-    translateX: number;
-    translateY: number;
-    size: number;
-    alpha: number;
-    targetAlpha: number;
-    dx: number;
-    dy: number;
-    magnetism: number;
-  };
 
   const resizeCanvas = useCallback(() => {
     if (canvasContainerRef.current && canvasRef.current && context.current) {
@@ -105,22 +81,12 @@ export default function Particles({
     const translateY = 0;
     const size = Math.floor(Math.random() * 2) + 0.1;
     const alpha = 0;
-    const targetAlpha = parseFloat((Math.random() * 0.6 + 0.1).toFixed(1));
+    const targetAlpha = Number.parseFloat((Math.random() * 0.6 + 0.1).toFixed(1));
     const dx = (Math.random() - 0.5) * 0.4; // Increased variation in velocity
     const dy = (Math.random() - 0.5) * 0.4; // Increased variation in velocity
     const magnetism = 0.1 + Math.random() * 4;
-    return {
-      x,
-      y,
-      translateX,
-      translateY,
-      size,
-      alpha,
-      targetAlpha,
-      dx,
-      dy,
-      magnetism,
-    };
+
+    return { x, y, translateX, translateY, size, alpha, targetAlpha, dx, dy, magnetism };
   }, []);
 
   const drawCircle = useCallback(
@@ -142,20 +108,31 @@ export default function Particles({
     [dpr],
   );
 
-  const clearContext = useCallback(() => {
-    if (context.current) {
-      context.current.clearRect(0, 0, canvasSize.current.w, canvasSize.current.h);
-    }
-  }, []);
-
   const drawParticles = useCallback(() => {
     clearContext();
-    const particleCount = quantity;
-    for (let i = 0; i < particleCount; i++) {
-      const circle = circleParams();
-      drawCircle(circle);
+    for (let i = 0; i < quantity; i++) {
+      drawCircle(circleParams());
     }
   }, [clearContext, circleParams, drawCircle, quantity]);
+
+  const initCanvas = useCallback(() => {
+    resizeCanvas();
+    drawParticles();
+  }, [resizeCanvas, drawParticles]);
+
+  const onMouseMove = useCallback(() => {
+    if (canvasRef.current) {
+      const rect = canvasRef.current.getBoundingClientRect();
+      const { w, h } = canvasSize.current;
+      const x = mouseX - rect.left - w / 2;
+      const y = mouseY - rect.top - h / 2;
+      const inside = x < w / 2 && x > -w / 2 && y < h / 2 && y > -h / 2;
+      if (inside) {
+        mouse.current.x = x;
+        mouse.current.y = y;
+      }
+    }
+  }, [mouseX, mouseY]);
 
   const remapValue = useCallback(
     (value: number, start1: number, end1: number, start2: number, end2: number): number => {
@@ -165,9 +142,10 @@ export default function Particles({
     [],
   );
 
-  const animate = useCallback(() => {
+  // One animation frame: update every particle and redraw
+  const drawFrame = useCallback(() => {
     clearContext();
-    circles.current.forEach((circle: Circle, i: number) => {
+    circles.current.forEach((circle, i) => {
       const edge = [
         circle.x + circle.translateX - circle.size,
         canvasSize.current.w - circle.x - circle.translateX - circle.size,
@@ -175,7 +153,7 @@ export default function Particles({
         canvasSize.current.h - circle.y - circle.translateY - circle.size,
       ];
       const closestEdge = edge.reduce((a, b) => Math.min(a, b));
-      const remapClosestEdge = parseFloat(remapValue(closestEdge, 0, 20, 0, 1).toFixed(2));
+      const remapClosestEdge = Number.parseFloat(remapValue(closestEdge, 0, 20, 0, 1).toFixed(2));
       if (remapClosestEdge > 1) {
         circle.alpha += 0.02;
         if (circle.alpha > circle.targetAlpha) {
@@ -197,32 +175,55 @@ export default function Particles({
         circle.y > canvasSize.current.h + circle.size
       ) {
         circles.current.splice(i, 1);
-        const newCircle = circleParams();
-        drawCircle(newCircle);
+        drawCircle(circleParams());
       } else {
-        drawCircle(
-          {
-            ...circle,
-            x: circle.x,
-            y: circle.y,
-            translateX: circle.translateX,
-            translateY: circle.translateY,
-            alpha: circle.alpha,
-          },
-          true,
-        );
+        drawCircle({ ...circle }, true);
       }
     });
-    animationFrameId.current = window.requestAnimationFrame(animate);
   }, [clearContext, drawCircle, remapValue, ease, staticity, circleParams]);
 
-  const debounce = (func: Function, wait: number) => {
-    let timeout: NodeJS.Timeout;
-    return (...args: any[]) => {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => func(...args), wait);
+  // Acquire the 2D context once
+  useEffect(() => {
+    if (canvasRef.current) {
+      context.current = canvasRef.current.getContext("2d");
+    }
+  }, []);
+
+  // (Re)initialise on mount, when `refresh` flips, or when particle settings change
+  useEffect(() => {
+    initCanvas();
+  }, [initCanvas, refresh]);
+
+  // Debounced resize handling, with proper cleanup
+  useEffect(() => {
+    const handleResize = debounce(initCanvas, 100);
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      handleResize.cancel();
     };
-  };
+  }, [initCanvas]);
+
+  // Track the pointer
+  useEffect(() => {
+    onMouseMove();
+  }, [onMouseMove]);
+
+  // Animation loop
+  useEffect(() => {
+    const tick = () => {
+      drawFrame();
+      animationFrameId.current = window.requestAnimationFrame(tick);
+    };
+    tick();
+
+    return () => {
+      if (animationFrameId.current !== null) {
+        cancelAnimationFrame(animationFrameId.current);
+      }
+    };
+  }, [drawFrame]);
 
   return (
     <div className={cn("fixed inset-0 z-0", className)} ref={canvasContainerRef} aria-hidden="true">

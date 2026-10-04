@@ -1,6 +1,7 @@
-import { resume } from "@/data/resume";
 import { GraduationCap } from "lucide-react";
-import React from "react";
+
+import { resume } from "@/data/resume";
+
 import PingingDot from "../pinging-dot";
 
 const Education = () => {
@@ -11,10 +12,13 @@ const Education = () => {
         <h2 className="uppercase">Education/Qualifications</h2>
       </div>
       <ul className="ml-2 flex flex-col">
-        {resume.education.map((education, index) => {
+        {resume.education.map((education) => {
           return (
-            <li className="relative flex items-center gap-8 py-4" key={index}>
-              <div className="absolute left-[5px] h-full w-[2px] bg-slate-300/60"></div>
+            <li
+              className="relative flex items-center gap-8 py-4"
+              key={`${education.degree}-${education.school}-${education.date}`}
+            >
+              <div className="absolute left-1.25 h-full w-0.5 bg-slate-300/60" />
               <PingingDot />
               <div>
                 <h3 className="text-purple-600 uppercase">

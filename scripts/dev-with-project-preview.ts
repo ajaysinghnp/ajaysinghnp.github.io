@@ -78,7 +78,7 @@ async function startDevelopmentServer(): Promise<void> {
   const cliArgs = process.argv.slice(2);
   const cliPort = getPortFromArgs(cliArgs);
   const envPort = process.env.PORT ? parseInt(process.env.PORT, 10) : undefined;
-  const port = cliPort !== null ? cliPort : envPort !== undefined ? envPort : 3000;
+  const port = cliPort ?? envPort ?? 3000;
   const localUrl = `http://127.0.0.1:${port}/`;
 
   const nextCli = path.join(process.cwd(), "node_modules", "next", "dist", "bin", "next");

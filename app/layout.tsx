@@ -1,14 +1,16 @@
-import type { Metadata } from "next";
-import { Space_Grotesk, Playfair_Display } from "next/font/google";
-
 import "@/app/globals.css";
 import "@/app/mdx.css";
 import "katex/dist/katex.min.css";
-import { calSans } from "@/components/local-fonts";
-import { ThemeProvider } from "@/providers/theme";
-import { cn } from "@/lib/utils";
+
+import { Playfair_Display, Space_Grotesk } from "next/font/google";
+
+import type { Metadata } from "next";
+
 import Layout from "@/components/layout";
+import { calSans } from "@/components/local-fonts";
 import SiteBackground from "@/components/site-background";
+import { cn } from "@/lib/utils";
+import { ThemeProvider } from "@/providers/theme";
 
 const grotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -33,11 +35,11 @@ export const metadata: Metadata = {
     default: title,
     template: `%s | ${title}`,
   },
-  description: description,
+  description,
   openGraph: {
-    title: title,
-    description: description,
-    url: url,
+    title,
+    description,
+    url,
     siteName: title,
     images: [
       {
@@ -61,7 +63,7 @@ export const metadata: Metadata = {
     },
   },
   twitter: {
-    title: title,
+    title,
     card: "summary_large_image",
   },
   icons: {

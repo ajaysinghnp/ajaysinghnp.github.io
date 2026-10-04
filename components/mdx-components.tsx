@@ -1,8 +1,15 @@
+import { isValidElement } from "react";
+
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
+
 import { cn } from "@/lib/utils";
-import type { ReactNode } from "react";
+
 import { CopyButton } from "./copy-btn";
 import { InlineCodeCopy } from "./inline-code-copy";
 import { MermaidDiagram } from "./mermaid-diagram";
+
+type CodeProps = ComponentPropsWithoutRef<"code"> & { "data-inline-code"?: string };
+type PreProps = ComponentPropsWithoutRef<"pre"> & { raw?: string };
 
 function getTextContent(node: ReactNode): string {
   if (typeof node === "string" || typeof node === "number") {
@@ -21,73 +28,70 @@ function getTextContent(node: ReactNode): string {
 }
 
 export const components = {
-  h1: (props: any) => (
-    <h1 {...props} className={cn("text-[var(--site-text)]", props.className)}>
-      {props.children}
+  h1: ({ className, children, ...props }: ComponentPropsWithoutRef<"h1">) => (
+    <h1 {...props} className={cn("text-(--site-text)", className)}>
+      {children}
     </h1>
   ),
-  h2: (props: any) => (
-    <h2 {...props} className={cn("text-[var(--site-text)]", props.className)}>
-      {props.children}
+  h2: ({ className, children, ...props }: ComponentPropsWithoutRef<"h2">) => (
+    <h2 {...props} className={cn("text-(--site-text)", className)}>
+      {children}
     </h2>
   ),
-  h3: (props: any) => (
-    <h3 {...props} className={cn("text-[var(--site-text)]", props.className)}>
-      {props.children}
+  h3: ({ className, children, ...props }: ComponentPropsWithoutRef<"h3">) => (
+    <h3 {...props} className={cn("text-(--site-text)", className)}>
+      {children}
     </h3>
   ),
-  h4: (props: any) => (
-    <h4 {...props} className={cn("text-[var(--site-text)]", props.className)}>
-      {props.children}
+  h4: ({ className, children, ...props }: ComponentPropsWithoutRef<"h4">) => (
+    <h4 {...props} className={cn("text-(--site-text)", className)}>
+      {children}
     </h4>
   ),
-  p: (props: any) => (
-    <p {...props} className={cn("text-[var(--site-muted)]", props.className)}>
-      {props.children}
+  p: ({ className, children, ...props }: ComponentPropsWithoutRef<"p">) => (
+    <p {...props} className={cn("text-(--site-muted)", className)}>
+      {children}
     </p>
   ),
-  a: (props: any) => (
-    <a
-      {...props}
-      className={cn("text-[var(--site-accent)] no-underline hover:underline", props.className)}
-    >
-      {props.children}
+  a: ({ className, children, ...props }: ComponentPropsWithoutRef<"a">) => (
+    <a {...props} className={cn("site-nav-active no-underline hover:underline", className)}>
+      {children}
     </a>
   ),
-  li: (props: any) => (
-    <li {...props} className={cn("text-[var(--site-muted)]", props.className)}>
-      {props.children}
+  li: ({ className, children, ...props }: ComponentPropsWithoutRef<"li">) => (
+    <li {...props} className={cn("text-(--site-muted)", className)}>
+      {children}
     </li>
   ),
-  strong: (props: any) => (
-    <strong {...props} className={cn("font-bold text-[var(--site-text)]", props.className)}>
-      {props.children}
+  strong: ({ className, children, ...props }: ComponentPropsWithoutRef<"strong">) => (
+    <strong {...props} className={cn("font-bold text-(--site-text)", className)}>
+      {children}
     </strong>
   ),
-  code: (props: any) => {
+  code: ({ children, ...props }: CodeProps) => {
     if (props["data-inline-code"] !== "true") {
-      return <code {...props}>{props.children}</code>;
+      return <code {...props}>{children}</code>;
     }
 
-    const text = getTextContent(props.children);
     return (
-      <InlineCodeCopy text={text}>
-        <code {...props}>{props.children}</code>
+      <InlineCodeCopy text={getTextContent(children)}>
+        <code {...props}>{children}</code>
       </InlineCodeCopy>
     );
   },
-  pre: (props: any) => {
-    const codeProps = props.children?.props;
-    if (codeProps?.["data-language"] === "mermaid") {
-      return <MermaidDiagram chart={props.raw ?? ""} />;
+  pre: ({ raw, className, children, ...props }: PreProps) => {
+    const child = isValidElement<{ "data-language"?: string }>(children) ? children : null;
+
+    if (child?.props["data-language"] === "mermaid") {
+      return <MermaidDiagram chart={raw ?? ""} />;
     }
 
-    const code = props.raw ?? getTextContent(props.children).replace(/\n$/, "");
+    const code = raw ?? getTextContent(children).replace(/\n$/, "");
 
     return (
       <div className="code-block-wrapper">
-        <pre {...props} className={cn(props.className)}>
-          {props.children}
+        <pre {...props} className={cn(className)}>
+          {children}
         </pre>
         <CopyButton text={code} />
       </div>
