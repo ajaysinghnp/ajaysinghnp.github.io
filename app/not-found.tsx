@@ -25,7 +25,7 @@ export default function NotFound() {
           </Link>
           <Link
             href="/projects"
-            className="inline-flex items-center gap-2 py-3 text-sm text-cyan-300 transition hover:text-cyan-200"
+            className="sparkle inline-flex gap-2 rounded-sm border border-cyan-300/40 bg-cyan-300/10 px-6 py-3 text-cyan-100 hover:border-cyan-300"
           >
             Browse projects <ArrowUpRight className="h-4 w-4" />
           </Link>

@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { motion } from "framer-motion";
-import { ArrowUpRight, BriefcaseBusiness, GitBranch, Mail, Rss } from "lucide-react";
+import { ArrowUpRight, BriefcaseBusiness, GitMerge, Mail, Rss } from "lucide-react";
 
 import { Navigation } from "@/components/nav";
 import SocialLinksPanel from "@/components/social-links-panel";
@@ -84,9 +84,9 @@ export default function HomeRedesign() {
             <Link
               href={socialMedia.github.href}
               target="_blank"
-              className="sparkle inline-flex gap-2 rounded-sm border border-cyan-300/40 bg-cyan-300/10 px-6 py-3 font-grotesk text-cyan-100 hover:border-cyan-300"
+              className="sparkle inline-flex gap-2 rounded-sm border border-cyan-300/40 bg-cyan-300/10 px-6 py-3 text-cyan-100 hover:border-cyan-300"
             >
-              <GitBranch className="h-4 w-4" /> GitHub
+              <GitMerge className="h-4 w-4" /> GitHub
             </Link>
           </div>
         </motion.div>
