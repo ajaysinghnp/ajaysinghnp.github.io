@@ -1,5 +1,4 @@
 import { execFileSync, spawn } from "node:child_process";
-import { createServer } from "node:net";
 import path from "node:path";
 import { setTimeout as delay } from "node:timers/promises";
 
@@ -31,21 +30,25 @@ async function captureFromExistingServer(): Promise<boolean> {
   }
 }
 
-function getAvailablePort(): Promise<number> {
-  return new Promise((resolve, reject) => {
-    const server = createServer();
-    server.once("error", reject);
-    server.listen(0, "127.0.0.1", () => {
-      const address = server.address();
-      if (!address || typeof address === "string") {
-        server.close();
-        reject(new Error("Could not determine a local development port."));
-        return;
+function getPortFromArgs(args: string[]): number | null {
+  for (let i = 0; i < args.length; i++) {
+    if (args[i] === "--port") {
+      if (i + 1 < args.length) {
+        const value = args[i + 1];
+        const port = parseInt(value, 10);
+        if (!isNaN(port)) {
+          return port;
+        }
       }
-      const { port } = address;
-      server.close((error) => (error ? reject(error) : resolve(port)));
-    });
-  });
+    } else if (args[i].startsWith("--port=")) {
+      const value = args[i].split("=")[1];
+      const port = parseInt(value, 10);
+      if (!isNaN(port)) {
+        return port;
+      }
+    }
+  }
+  return null;
 }
 
 async function waitForServer(url: string, child: ReturnType<typeof spawn>): Promise<void> {
@@ -72,14 +75,19 @@ async function waitForServer(url: string, child: ReturnType<typeof spawn>): Prom
 async function startDevelopmentServer(): Promise<void> {
   if (await captureFromExistingServer()) return;
 
-  const port = await getAvailablePort();
+  const cliArgs = process.argv.slice(2);
+  const cliPort = getPortFromArgs(cliArgs);
+  const envPort = process.env.PORT ? parseInt(process.env.PORT, 10) : undefined;
+  const port = cliPort !== null ? cliPort : envPort !== undefined ? envPort : 3000;
   const localUrl = `http://127.0.0.1:${port}/`;
+
   const nextCli = path.join(process.cwd(), "node_modules", "next", "dist", "bin", "next");
   const child = spawn(
     process.execPath,
-    [nextCli, "dev", "--hostname", "127.0.0.1", "--port", String(port), ...process.argv.slice(2)],
+    [nextCli, "dev", "--hostname", "127.0.0.1", ...process.argv.slice(2)],
     { stdio: "inherit", env: process.env },
   );
+
   const childExit = new Promise<number>((resolve, reject) => {
     child.once("error", reject);
     child.once("exit", (code, signal) => {
