@@ -262,8 +262,8 @@ export function ProjectsClient({ projects }: { projects: Project[] }) {
       <header className="grid gap-10 border-b resume-intro pb-14 lg:grid-cols-[1fr_0.8fr] lg:items-end">
         <div>
           <p className="section-code">projects / open signal</p>
-          <h1 className="mt-5 max-w-4xl text-6xl leading-[0.92] font-semibold tracking-[-0.06em] text-(--site-text) sm:text-8xl">
-            Things I&apos;ve made<span className="site-nav-active">.</span>
+          <h1 className="sparkle-text mt-5 max-w-4xl text-6xl leading-[0.92] font-semibold tracking-[-0.06em] sm:text-8xl">
+            Things I&apos;ve made.
           </h1>
         </div>
         <p className="max-w-xl text-xl leading-8 resume-lead">

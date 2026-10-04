@@ -32,8 +32,8 @@ export default function AboutPage() {
       <header className="grid gap-10 border-b resume-intro pb-14 lg:grid-cols-[1.15fr_0.85fr] lg:items-end">
         <div>
           <p className="section-code">about / the longer signal</p>
-          <h1 className="mt-5 max-w-4xl text-6xl leading-[0.92] font-semibold tracking-[-0.06em] text-zinc-50 sm:text-8xl">
-            I love creativity<span className="text-cyan-300">.</span>
+          <h1 className="sparkle-text mt-5 max-w-4xl text-6xl leading-[0.92] font-semibold tracking-[-0.06em] sm:text-8xl">
+            I love creativity.
           </h1>
         </div>
         <p className="max-w-xl text-xl leading-8 resume-lead">{about.quote}</p>

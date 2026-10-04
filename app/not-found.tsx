@@ -10,8 +10,8 @@ export default function NotFound() {
           <SearchX className="h-7 w-7" />
         </div>
         <p className="mt-8 section-code">404 / signal lost</p>
-        <h1 className="mt-4 text-7xl font-semibold tracking-[-0.08em] text-zinc-50 sm:text-9xl">
-          404<span className="text-cyan-300">.</span>
+        <h1 className="sparkle-text mt-4 text-7xl font-semibold tracking-[-0.08em] sm:text-9xl">
+          404.
         </h1>
         <p className="mx-auto mt-5 max-w-md text-lg leading-8 resume-lead">
           This route does not exist, or it moved somewhere else while the system was changing.
