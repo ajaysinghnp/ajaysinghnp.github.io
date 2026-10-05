@@ -1,3 +1,4 @@
+// pages/project/[name]/page.tsx
 import { notFound } from "next/navigation";
 
 import { MDX } from "@/components/mdx/mdx";
@@ -29,9 +30,18 @@ export default async function ProjectLoadingPage({ params }: Props) {
   const readme = await fetchProjectReadme(rawName);
   const toc = await extractProjectToc(readme);
 
+  if (readme === undefined || readme === "") {
+    return (
+      <main>
+        <h1>Loading the ReadMe</h1>
+        <p>Please while we load the readme file from the project...</p>
+      </main>
+    );
+  }
+
   return (
     <main className="pb-16 resume-shell">
-      <ProjectHeader project_name={rawName} />
+      <ProjectHeader project_name={rawName} readme={readme} />
       <div className={toc.length ? "project-content-layout" : undefined}>
         {toc.length > 0 && <ProjectToc items={toc} />}
         <MDX source={readme} />

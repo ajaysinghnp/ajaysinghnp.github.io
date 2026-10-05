@@ -1,5 +1,6 @@
 allowBuilds:
   contentlayer: false
+  core-js: false
   esbuild: false
   protobufjs: false
   unrs-resolver: false
