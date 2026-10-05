@@ -1252,11 +1252,11 @@ html:not(.dark) body [class~="text-zinc-500"] {
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    animation: sparkle-sweep 5s cubic-bezier(0.45, 0, 0.2, 1) infinite;
+    animation: sparkle-sweep 30s cubic-bezier(0.5, 0, 0.5, 1) infinite;
   }
 
   .sparkle-text:hover {
-    animation-duration: 1.4s;
+    animation-duration: 10s;
   }
 
   /* one 4-point star hovering at the top-right of the word */
