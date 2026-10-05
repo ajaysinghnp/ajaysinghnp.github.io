@@ -13,6 +13,43 @@ export async function html2pdf(source: HTMLElement, title: string) {
 
     wrapper = document.createElement("div");
     wrapper.setAttribute("data-theme", "light");
+    wrapper.setAttribute("data-pdf-export", ""); // <- new
+
+    // <- new: PDF-only styles, scoped to the wrapper
+    const pdfStyle = document.createElement("style");
+    pdfStyle.textContent = `
+      [data-pdf-export] pre,
+      [data-pdf-export] pre * {
+        white-space: pre-wrap !important;
+        overflow-wrap: anywhere !important;
+        word-break: break-word !important;
+        min-width: 0 !important;
+      }
+      [data-pdf-export] pre {
+        overflow: visible !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+      }
+      [data-pdf-export] :not(pre) > code {
+        overflow-wrap: anywhere !important;
+      }
+      [data-pdf-export] table {
+        width: 100% !important;
+        table-layout: fixed !important;
+      }
+      [data-pdf-export] td,
+      [data-pdf-export] th {
+        overflow-wrap: anywhere !important;
+      }
+      [data-pdf-export] img,
+      [data-pdf-export] svg {
+        max-width: 100% !important;
+        height: auto;
+      }
+    `;
+    wrapper.appendChild(pdfStyle);
+
+    // ...Object.assign(wrapper.style, {...}) and the rest stay the same
     Object.assign(wrapper.style, {
       position: "fixed",
       left: "-10000px",
