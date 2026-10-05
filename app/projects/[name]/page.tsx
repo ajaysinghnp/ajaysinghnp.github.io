@@ -1,63 +1,34 @@
-// pages/project/[name]/page.tsx
-import { useRef } from "react";
 import { notFound } from "next/navigation";
 
 import { MDX } from "@/components/mdx/mdx";
-import { ProjectToc } from "@/components/mdx/project-toc";
+import ProjectDetailsClient from "@/components/mdx/project-detail-client";
 import { extractProjectToc } from "@/lib/project-toc";
 import { fetchProjectReadme, fetchProjects } from "@/lib/projects";
-
-import ProjectHeader from "./header";
 
 export const revalidate = 21600;
 export const dynamicParams = true;
 
 type Props = {
-  params: Promise<{
-    name: string;
-  }>;
+  params: Promise<{ name: string }>;
 };
 
 export async function generateStaticParams() {
-  return []; // don't hit GitHub at build; render on first visit, then cache
+  return [];
 }
 
 export default async function ProjectLoadingPage({ params }: Props) {
-  const { name: rawName } = await params;
-  const projects = await fetchProjects(); // cached, also filters private and excluded repos
+  const { name: projectName } = await params;
+  const projects = await fetchProjects();
 
-  if (!projects.some((p) => p.name === rawName)) notFound();
+  if (!projects.some((p) => p.name === projectName)) notFound();
 
-  const readmeRef = useRef<HTMLDivElement>(null);
-
-  const readme = await fetchProjectReadme(rawName);
+  const readme = await fetchProjectReadme(projectName);
   const toc = await extractProjectToc(readme);
 
-  if (readme === undefined || readme === "") {
-    return (
-      <main>
-        <h1>Loading the ReadMe</h1>
-        <p>Please while we load the readme file from the project...</p>
-      </main>
-    );
-  }
-
   return (
-    <main className="pb-16 resume-shell">
-      <ProjectHeader
-        project_name={rawName}
-        readme={readme}
-        readmeRef={readmeRef}
-      />
-
-      <div className={toc.length ? "project-content-layout" : undefined}>
-        {toc.length > 0 && <ProjectToc items={toc} />}
-
-        <MDX
-          ref={readmeRef}
-          source={readme}
-        />
-      </div>
-    </main>
+    <ProjectDetailsClient project_name={projectName} toc={toc} readme={readme}>
+      {/* rendered on the server, passed through as children */}
+      <MDX source={readme} />
+    </ProjectDetailsClient>
   );
 }

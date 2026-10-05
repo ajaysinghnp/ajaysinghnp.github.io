@@ -202,9 +202,9 @@ importers:
       github-slugger:
         specifier: ^2.0.0
         version: 2.0.0
-      html2canvas:
-        specifier: ^1.4.1
-        version: 1.4.1
+      html2canvas-pro:
+        specifier: ^2.5.1
+        version: 2.5.1
       html2pdf.js:
         specifier: ^0.14.0
         version: 0.14.0
@@ -2823,6 +2823,10 @@ packages:
 
   html-void-elements@3.0.0:
     resolution: {integrity: sha512-bEqo66MRXsUGxWHV5IP0PUiAWwoEjba4VCzg0LjFJBpchPaTfyfCKTG6bc5F8ucKec3q5y6qOdGyYTSBEvhCrg==}
+
+  html2canvas-pro@2.5.1:
+    resolution: {integrity: sha512-xx3I2Bv9xZGryEcEbGMdzJeIgWzdXLzXGirTbNuS9Rf+cjkLnM5umrlP6J+ZtbYe/cYea7bIkPNCOzwcceGTPg==}
+    engines: {node: '>=24.0.0'}
 
   html2canvas@1.4.1:
     resolution: {integrity: sha512-fPU6BHNpsyIhr8yyMpTLLxAbkaK8ArIBcmZIRiBLiDhjeqvXolaEmDGmELFuX9I4xDcaKKcJl+TKZLqruBbmWA==}
@@ -7026,6 +7030,11 @@ snapshots:
   html-url-attributes@3.0.1: {}
 
   html-void-elements@3.0.0: {}
+
+  html2canvas-pro@2.5.1:
+    dependencies:
+      css-line-break: 2.1.0
+      text-segmentation: 1.0.3
 
   html2canvas@1.4.1:
     dependencies:

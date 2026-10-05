@@ -21,6 +21,7 @@ import { ProjectDescription } from "@/components/mdx/project-description";
 import type { Position } from "@/components/ui/notification-bubble";
 import { Notification } from "@/components/ui/notification-bubble";
 import { socialMedia } from "@/data/social";
+import { html2pdf } from "@/lib/html2pdf";
 import { fetchProjectFromApi } from "@/lib/projects-client";
 import type { Project } from "@/types/github";
 
@@ -28,7 +29,7 @@ interface Props {
   project_name: string;
   readme: string;
   readmeRef: React.RefObject<HTMLElement | null>;
-};
+}
 
 interface NotificationState {
   id: number;
@@ -36,17 +37,6 @@ interface NotificationState {
   anchorRef: React.RefObject<HTMLButtonElement | null>;
   position: Position;
 }
-
-
-function escapeHtml(value: string) {
-  return value
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
-
 
 const formatCount = (count: number) =>
   Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 1 }).format(count);
@@ -88,144 +78,26 @@ const ProjectHeader = ({ project_name, readme, readmeRef }: Props) => {
   }
 
   async function handleDownloadPDF() {
-    const htmlElement = readmeRef.current;
+    const source = readmeRef.current;
 
-    if (!htmlElement) {
+    if (!source) {
       showNotification(
         "Unable to create PDF: README is still loading.",
         copyButtonRef,
         "bottom-center",
       );
-
       return;
     }
 
-    try {
-      const [{ default: html2canvas }, { default: JsPDF }] =
-        await Promise.all([
-          import("html2canvas"),
-          import("jspdf"),
-        ]);
+    const documentTitle = `${project?.title ?? "project"}`
+      .replaceAll("-", " ")
+      .replace(/[^\w\s-]/g, "")
+      .trim();
 
-      const documentTitle = `${project?.title ?? "project"}`
-        .replaceAll("-", " ")
-        .replace(/[^\w\s-]/g, "")
-        .trim();
-
-      Object.assign(htmlElement.style, {
-        position: "absolute",
-        left: "0",
-        top: "0",
-        width: "794px",
-        minHeight: "1123px",
-        padding: "48px",
-        backgroundColor: "#ffffff",
-        color: "#17202a",
-        fontFamily:
-          'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-        fontSize: "15px",
-        lineHeight: "1.7",
-        zIndex: "999999",
-      });
-
-      document.body.appendChild(htmlElement);
-
-      await document.fonts.ready;
-
-      await new Promise<void>((resolve) => {
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => resolve());
-        });
-      });
-
-      const canvas = await html2canvas(htmlElement, {
-        scale: 2,
-        backgroundColor: "#ffffff",
-        useCORS: true,
-        allowTaint: true,
-        logging: true,
-        windowWidth: htmlElement.scrollWidth,
-        windowHeight: htmlElement.scrollHeight,
-        width: htmlElement.scrollWidth,
-        height: htmlElement.scrollHeight,
-      });
-
-      console.log("Canvas dimensions:", canvas.width, canvas.height);
-
-      // Temporary debugging:
-      // This lets you see whether html2canvas captured the README.
-      // Remove these two lines after testing.
-      canvas.style.position = "fixed";
-      canvas.style.top = "0";
-      document.body.appendChild(canvas);
-
-      const imageData = canvas.toDataURL("image/jpeg", 0.98);
-
-      const pdf = new JsPDF({
-        orientation: "portrait",
-        unit: "mm",
-        format: "a4",
-      });
-
-      const pageWidth = pdf.internal.pageSize.getWidth();
-      const pageHeight = pdf.internal.pageSize.getHeight();
-
-      const imageWidth = pageWidth;
-      const imageHeight =
-        (canvas.height * imageWidth) / canvas.width;
-
-      let heightLeft = imageHeight;
-      let position = 0;
-
-      pdf.addImage(
-        imageData,
-        "JPEG",
-        0,
-        position,
-        imageWidth,
-        imageHeight,
-      );
-
-      heightLeft -= pageHeight;
-
-      while (heightLeft > 0) {
-        position = heightLeft - imageHeight;
-
-        pdf.addPage();
-
-        pdf.addImage(
-          imageData,
-          "JPEG",
-          0,
-          position,
-          imageWidth,
-          imageHeight,
-        );
-
-        heightLeft -= pageHeight;
-      }
-
-      pdf.save(`${documentTitle || "README"}.pdf`);
-
-      showNotification(
-        "PDF downloaded.",
-        copyButtonRef,
-        "bottom-center",
-      );
-    } catch (error) {
-      console.error("Failed to generate PDF:", error);
-
-      showNotification(
-        "Failed to generate PDF. Try again.",
-        copyButtonRef,
-        "bottom-center",
-      );
-    } finally {
-      // Remove the temporary HTML and debugging canvas.
-      htmlElement?.remove();
+    if (await html2pdf(source, documentTitle)) {
+      showNotification("PDF downloaded.", copyButtonRef, "bottom-center");
     }
   }
-
 
   function showNotification(
     message: string,
@@ -367,7 +239,7 @@ const ProjectHeader = ({ project_name, readme, readmeRef }: Props) => {
                   Copy as Markdown
                 </button>
                 <button
-                  onClick={() => handleDownloadPDF(readme)}
+                  onClick={() => handleDownloadPDF()}
                   className="inline-flex cursor-pointer items-center gap-2 rounded px-4 py-2 text-sm font-medium site-nav-active hover:bg-(--site-accent)/10"
                 >
                   Download as PDF
@@ -471,7 +343,7 @@ const ProjectHeader = ({ project_name, readme, readmeRef }: Props) => {
                 Copy as Markdown
               </button>
               <button
-                onClick={() => handleDownloadPDF(readme)}
+                onClick={() => handleDownloadPDF()}
                 className="inline-flex cursor-pointer items-center gap-2 rounded px-4 py-2 text-sm font-medium site-nav-active hover:bg-(--site-accent)/10"
               >
                 Download as PDF
