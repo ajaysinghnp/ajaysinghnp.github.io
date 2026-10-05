@@ -30,6 +30,9 @@
     "date-fns": "^4.4.0",
     "framer-motion": "^13.5.1",
     "github-slugger": "^2.0.0",
+    "html2canvas": "^1.4.1",
+    "html2pdf.js": "^0.14.0",
+    "jspdf": "^4.2.1",
     "katex": "^0.18.10",
     "lucide-react": "^1.51.0",
     "marked": "^18.0.14",
@@ -55,6 +58,7 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.3",
     "@tailwindcss/typography": "^0.5.20",
+    "@types/html2pdf.js": "^0.10.0",
     "@types/mdast": "4.0.4",
     "@types/node": "^26.6.4",
     "@types/react": "^19.3.0",

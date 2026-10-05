@@ -15,7 +15,6 @@ import {
   Minimize2,
   Star,
 } from "lucide-react";
-import { marked } from "marked";
 import useSWR from "swr";
 
 import { ProjectDescription } from "@/components/mdx/project-description";
@@ -27,8 +26,9 @@ import type { Project } from "@/types/github";
 
 interface Props {
   project_name: string;
-  readme?: string;
-}
+  readme: string;
+  readmeRef: React.RefObject<HTMLElement | null>;
+};
 
 interface NotificationState {
   id: number;
@@ -37,10 +37,21 @@ interface NotificationState {
   position: Position;
 }
 
+
+function escapeHtml(value: string) {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+
 const formatCount = (count: number) =>
   Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 1 }).format(count);
 
-const ProjectHeader = ({ project_name, readme }: Props) => {
+const ProjectHeader = ({ project_name, readme, readmeRef }: Props) => {
   const sectionRef = useRef<HTMLElement>(null);
   const [isPastHeader, setIsPastHeader] = useState(false);
   const [manuallyCollapsed, setManuallyCollapsed] = useState(false);
@@ -76,10 +87,12 @@ const ProjectHeader = ({ project_name, readme }: Props) => {
     }
   }
 
-  async function handleDownloadPDF(content: string) {
-    if (!content || content.trim() === "") {
+  async function handleDownloadPDF() {
+    const htmlElement = readmeRef.current;
+
+    if (!htmlElement) {
       showNotification(
-        "Unable to create PDF: no README content found.",
+        "Unable to create PDF: README is still loading.",
         copyButtonRef,
         "bottom-center",
       );
@@ -88,288 +101,131 @@ const ProjectHeader = ({ project_name, readme }: Props) => {
     }
 
     try {
-      const htmlContent = await marked.parse(content);
+      const [{ default: html2canvas }, { default: JsPDF }] =
+        await Promise.all([
+          import("html2canvas"),
+          import("jspdf"),
+        ]);
 
-      const printWindow = window.open("", "_blank", "width=900,height=700");
-
-      if (!printWindow) {
-        throw new Error("The print window was blocked by the browser.");
-      }
-
-      const documentTitle = `${project?.title ?? "project"} README`
+      const documentTitle = `${project?.title ?? "project"}`
         .replaceAll("-", " ")
         .replace(/[^\w\s-]/g, "")
         .trim();
 
-      printWindow.document.write(`
-      <!doctype html>
-      <html lang="en">
-        <head>
-          <meta charset="UTF-8" />
-          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-          <title>${documentTitle}</title>
-
-          <style>
-            :root {
-              color-scheme: light;
-            }
-
-            * {
-              box-sizing: border-box;
-            }
-
-            html,
-            body {
-              margin: 0;
-              padding: 0;
-              background: #ffffff;
-              color: #17202a;
-              font-family:
-                Inter,
-                ui-sans-serif,
-                system-ui,
-                -apple-system,
-                BlinkMacSystemFont,
-                "Segoe UI",
-                sans-serif;
-              font-size: 15px;
-              line-height: 1.7;
-            }
-
-            body {
-              padding: 48px;
-            }
-
-            .document {
-              width: 100%;
-              max-width: 820px;
-              margin: 0 auto;
-            }
-
-            .document-header {
-              margin-bottom: 42px;
-              padding-bottom: 24px;
-              border-bottom: 2px solid #d8dee4;
-            }
-
-            .document-label {
-              margin: 0 0 10px;
-              color: #64748b;
-              font-size: 11px;
-              font-weight: 700;
-              letter-spacing: 0.16em;
-              text-transform: uppercase;
-            }
-
-            h1,
-            h2,
-            h3,
-            h4,
-            h5,
-            h6 {
-              color: #111827;
-              line-height: 1.25;
-              page-break-after: avoid;
-              break-after: avoid;
-            }
-
-            h1 {
-              margin: 0;
-              font-size: 34px;
-              letter-spacing: -0.04em;
-            }
-
-            h2 {
-              margin-top: 36px;
-              margin-bottom: 14px;
-              padding-bottom: 6px;
-              border-bottom: 1px solid #e5e7eb;
-              font-size: 24px;
-            }
-
-            h3 {
-              margin-top: 28px;
-              margin-bottom: 10px;
-              font-size: 19px;
-            }
-
-            h4,
-            h5,
-            h6 {
-              margin-top: 22px;
-              margin-bottom: 8px;
-              font-size: 16px;
-            }
-
-            p {
-              margin: 0 0 16px;
-              orphans: 3;
-              widows: 3;
-            }
-
-            ul,
-            ol {
-              margin: 0 0 18px;
-              padding-left: 28px;
-            }
-
-            li {
-              margin: 5px 0;
-            }
-
-            a {
-              color: #0369a1;
-              text-decoration: underline;
-              overflow-wrap: anywhere;
-            }
-
-            blockquote {
-              margin: 22px 0;
-              padding: 12px 18px;
-              border-left: 4px solid #38bdf8;
-              background: #f1f5f9;
-              color: #475569;
-              page-break-inside: avoid;
-              break-inside: avoid;
-            }
-
-            code {
-              padding: 2px 5px;
-              border-radius: 4px;
-              background: #eef2f7;
-              color: #334155;
-              font-family:
-                "SFMono-Regular",
-                Consolas,
-                "Liberation Mono",
-                monospace;
-              font-size: 0.9em;
-            }
-
-            pre {
-              margin: 20px 0;
-              padding: 18px;
-              overflow-x: auto;
-              border-radius: 8px;
-              background: #111827;
-              color: #f8fafc;
-              font-family:
-                "SFMono-Regular",
-                Consolas,
-                "Liberation Mono",
-                monospace;
-              font-size: 12px;
-              line-height: 1.6;
-              white-space: pre-wrap;
-              overflow-wrap: anywhere;
-              page-break-inside: avoid;
-              break-inside: avoid;
-            }
-
-            pre code {
-              padding: 0;
-              background: transparent;
-              color: inherit;
-              font-size: inherit;
-            }
-
-            table {
-              width: 100%;
-              margin: 22px 0;
-              border-collapse: collapse;
-              font-size: 14px;
-              page-break-inside: avoid;
-              break-inside: avoid;
-            }
-
-            th,
-            td {
-              padding: 9px 11px;
-              border: 1px solid #cbd5e1;
-              text-align: left;
-              vertical-align: top;
-            }
-
-            th {
-              background: #f1f5f9;
-              color: #1e293b;
-              font-weight: 700;
-            }
-
-            img {
-              display: block;
-              max-width: 100%;
-              height: auto;
-              margin: 20px auto;
-              page-break-inside: avoid;
-              break-inside: avoid;
-            }
-
-            hr {
-              margin: 30px 0;
-              border: 0;
-              border-top: 1px solid #d8dee4;
-            }
-
-            @page {
-              size: A4;
-              margin: 18mm;
-            }
-
-            @media print {
-              body {
-                padding: 0;
-              }
-
-              .document {
-                max-width: none;
-              }
-
-              a {
-                color: inherit;
-                text-decoration: none;
-              }
-
-              a[href^="http"]::after {
-                content: " (" attr(href) ")";
-                color: #64748b;
-                font-size: 0.8em;
-                overflow-wrap: anywhere;
-              }
-            }
-          </style>
-        </head>
-
-        <body>
-          <main class="document">
-            <header class="document-header">
-              <p class="document-label">Project README</p>
-              <h1>${documentTitle}</h1>
-            </header>
-
-            <article>
-              ${htmlContent}
-            </article>
-          </main>
-        </body>
-      </html>
-    `);
-
-      printWindow.document.close();
-
-      printWindow.addEventListener("load", () => {
-        printWindow.focus();
-        printWindow.print();
-        printWindow.close();
+      Object.assign(htmlElement.style, {
+        position: "absolute",
+        left: "0",
+        top: "0",
+        width: "794px",
+        minHeight: "1123px",
+        padding: "48px",
+        backgroundColor: "#ffffff",
+        color: "#17202a",
+        fontFamily:
+          'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+        fontSize: "15px",
+        lineHeight: "1.7",
+        zIndex: "999999",
       });
 
-      showNotification("PDF ready to print or save.", copyButtonRef, "bottom-center");
+      document.body.appendChild(htmlElement);
+
+      await document.fonts.ready;
+
+      await new Promise<void>((resolve) => {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => resolve());
+        });
+      });
+
+      const canvas = await html2canvas(htmlElement, {
+        scale: 2,
+        backgroundColor: "#ffffff",
+        useCORS: true,
+        allowTaint: true,
+        logging: true,
+        windowWidth: htmlElement.scrollWidth,
+        windowHeight: htmlElement.scrollHeight,
+        width: htmlElement.scrollWidth,
+        height: htmlElement.scrollHeight,
+      });
+
+      console.log("Canvas dimensions:", canvas.width, canvas.height);
+
+      // Temporary debugging:
+      // This lets you see whether html2canvas captured the README.
+      // Remove these two lines after testing.
+      canvas.style.position = "fixed";
+      canvas.style.top = "0";
+      document.body.appendChild(canvas);
+
+      const imageData = canvas.toDataURL("image/jpeg", 0.98);
+
+      const pdf = new JsPDF({
+        orientation: "portrait",
+        unit: "mm",
+        format: "a4",
+      });
+
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+
+      const imageWidth = pageWidth;
+      const imageHeight =
+        (canvas.height * imageWidth) / canvas.width;
+
+      let heightLeft = imageHeight;
+      let position = 0;
+
+      pdf.addImage(
+        imageData,
+        "JPEG",
+        0,
+        position,
+        imageWidth,
+        imageHeight,
+      );
+
+      heightLeft -= pageHeight;
+
+      while (heightLeft > 0) {
+        position = heightLeft - imageHeight;
+
+        pdf.addPage();
+
+        pdf.addImage(
+          imageData,
+          "JPEG",
+          0,
+          position,
+          imageWidth,
+          imageHeight,
+        );
+
+        heightLeft -= pageHeight;
+      }
+
+      pdf.save(`${documentTitle || "README"}.pdf`);
+
+      showNotification(
+        "PDF downloaded.",
+        copyButtonRef,
+        "bottom-center",
+      );
     } catch (error) {
       console.error("Failed to generate PDF:", error);
 
-      showNotification("Failed to generate PDF. Try again.", copyButtonRef, "bottom-center");
+      showNotification(
+        "Failed to generate PDF. Try again.",
+        copyButtonRef,
+        "bottom-center",
+      );
+    } finally {
+      // Remove the temporary HTML and debugging canvas.
+      htmlElement?.remove();
     }
   }
+
 
   function showNotification(
     message: string,
