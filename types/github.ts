@@ -1,7 +1,3 @@
-import { socialMedia } from "@/data/social";
-
-export const GIT_USERNAME = socialMedia.github.handle; // Replace with your GitHub username
-
 export interface RepoOwner {
   login: string;
   avatar_url: string;
@@ -10,6 +6,9 @@ export interface RepoOwner {
 }
 
 export interface Repo {
+  open_issues: number | undefined;
+  visibility: string;
+  default_branch: string;
   id: number;
   node_id: string;
   name: string;
@@ -25,6 +24,7 @@ export interface Repo {
   owner: RepoOwner;
   stargazers_count?: number;
   watchers_count?: number;
+  fork: boolean;
   forks?: number;
   forks_count?: number;
   subscribers_count?: number;
@@ -38,6 +38,7 @@ export interface Project {
   homepage?: string | null;
   description: string;
   repository?: string;
+  default_branch: string;
   watchers_count?: number;
   stargazers_count?: number;
   forks?: number;
@@ -49,4 +50,11 @@ export interface Project {
   pushed_at: string;
   private: boolean;
   published: boolean;
+}
+
+export interface ProjectReadme {
+  content: string;
+  repository: string;
+  branch: string;
+  path: string;
 }

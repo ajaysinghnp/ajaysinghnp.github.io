@@ -212,17 +212,27 @@
     inset: calc(0px - var(--shine-border-gap, 0px));
     border-radius: var(--shine-border-radius, inherit);
     padding: var(--shine-border-width, 1px);
-    background: conic-gradient(from var(--shine-angle),
-        transparent 0deg var(--shine-border-clear, 300deg),
-        color-mix(in srgb,
+    background: conic-gradient(
+      from var(--shine-angle),
+      transparent 0deg var(--shine-border-clear, 300deg),
+      color-mix(
+          in srgb,
           var(--shine-border-color, var(--site-shine-color, var(--site-accent))) 35%,
-          transparent) var(--shine-border-fade, 322deg),
-        var(--shine-border-color, var(--site-shine-color, var(--site-accent))) var(--shine-border-peak, 338deg),
-        color-mix(in srgb,
+          transparent
+        )
+        var(--shine-border-fade, 322deg),
+      var(--shine-border-color, var(--site-shine-color, var(--site-accent)))
+        var(--shine-border-peak, 338deg),
+      color-mix(
+          in srgb,
           var(--site-text) 80%,
-          var(--shine-border-color, var(--site-shine-color, var(--site-accent)))) var(--shine-border-mid, 344deg),
-        var(--shine-border-color, var(--site-shine-color, var(--site-accent))) var(--shine-border-end, 350deg),
-        transparent 360deg);
+          var(--shine-border-color, var(--site-shine-color, var(--site-accent)))
+        )
+        var(--shine-border-mid, 344deg),
+      var(--shine-border-color, var(--site-shine-color, var(--site-accent)))
+        var(--shine-border-end, 350deg),
+      transparent 360deg
+    );
     content: "";
     opacity: 1;
     pointer-events: none;
@@ -252,17 +262,27 @@
     inset: calc(0px - var(--shine-border-gap, 0px));
     border-radius: var(--shine-border-radius, inherit);
     padding: var(--shine-border-width, 1px);
-    background: conic-gradient(from var(--shine-angle),
-        transparent 0deg var(--shine-border-clear, 300deg),
-        color-mix(in srgb,
+    background: conic-gradient(
+      from var(--shine-angle),
+      transparent 0deg var(--shine-border-clear, 300deg),
+      color-mix(
+          in srgb,
           var(--shine-border-color, var(--site-shine-color, var(--site-accent))) 35%,
-          transparent) var(--shine-border-fade, 322deg),
-        var(--shine-border-color, var(--site-shine-color, var(--site-accent))) var(--shine-border-peak, 338deg),
-        color-mix(in srgb,
+          transparent
+        )
+        var(--shine-border-fade, 322deg),
+      var(--shine-border-color, var(--site-shine-color, var(--site-accent)))
+        var(--shine-border-peak, 338deg),
+      color-mix(
+          in srgb,
           var(--site-text) 80%,
-          var(--shine-border-color, var(--site-shine-color, var(--site-accent)))) var(--shine-border-mid, 344deg),
-        var(--shine-border-color, var(--site-shine-color, var(--site-accent))) var(--shine-border-end, 350deg),
-        transparent 360deg);
+          var(--shine-border-color, var(--site-shine-color, var(--site-accent)))
+        )
+        var(--shine-border-mid, 344deg),
+      var(--shine-border-color, var(--site-shine-color, var(--site-accent)))
+        var(--shine-border-end, 350deg),
+      transparent 360deg
+    );
     content: "";
     opacity: 0;
     pointer-events: none;
@@ -357,7 +377,7 @@
   padding: 1rem 0.75rem 1rem 1rem;
 }
 
-.project-content-layout>.project-readme {
+.project-content-layout > .project-readme {
   border-left: 0;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
@@ -366,7 +386,7 @@
 }
 
 .project-toc-title,
-.project-toc-mobile summary>span {
+.project-toc-mobile summary > span {
   position: relative;
   display: flex;
   align-items: center;
@@ -434,15 +454,15 @@
   padding-left: 0.72rem;
 }
 
-.project-toc-children>li {
+.project-toc-children > li {
   position: relative;
 }
 
-.project-toc-list>li {
+.project-toc-list > li {
   position: relative;
 }
 
-.project-toc-children>li::before {
+.project-toc-children > li::before {
   position: absolute;
   top: 0;
   left: -0.72rem;
@@ -454,7 +474,7 @@
   content: "";
 }
 
-.project-toc-list>li::before {
+.project-toc-list > li::before {
   position: absolute;
   top: 0;
   left: -0.72rem;
@@ -506,7 +526,7 @@
   display: none;
 }
 
-.project-toc-mobile summary>span {
+.project-toc-mobile summary > span {
   margin: 0;
 }
 
@@ -529,11 +549,11 @@
   border-bottom: 1px solid var(--site-border);
 }
 
-.project-description> :first-child {
+.project-description > :first-child {
   margin-top: 0;
 }
 
-.project-description> :last-child {
+.project-description > :last-child {
   margin-bottom: 0;
 }
 
@@ -683,7 +703,7 @@
   color: var(--site-muted);
 }
 
-.project-readme .code-block-wrapper>.code-copy-button {
+.project-readme .code-block-wrapper > .code-copy-button {
   position: absolute;
   top: 0.5rem;
   right: 0.5rem;
@@ -695,13 +715,13 @@
   line-height: 1.25rem;
 }
 
-.project-readme .code-block-wrapper>.code-copy-button:hover {
+.project-readme .code-block-wrapper > .code-copy-button:hover {
   border-color: var(--site-accent);
   background: color-mix(in srgb, var(--site-panel) 78%, var(--site-accent));
   color: var(--site-text);
 }
 
-.project-readme .code-block-wrapper>.code-copy-button:disabled {
+.project-readme .code-block-wrapper > .code-copy-button:disabled {
   cursor: default;
 }
 
@@ -809,7 +829,7 @@
     padding: 0.85rem 1rem;
   }
 
-  .project-content-layout>.project-readme {
+  .project-content-layout > .project-readme {
     border-left: 1px solid var(--site-border);
     border-top-left-radius: var(--site-radius);
     border-bottom-left-radius: var(--site-radius);
@@ -826,10 +846,12 @@
 
 @utility project-card {
   border-color: var(--site-surface-border);
-  background: linear-gradient(135deg,
-      var(--project-card-start),
-      var(--project-card-mid) 55%,
-      var(--project-card-end));
+  background: linear-gradient(
+    135deg,
+    var(--project-card-start),
+    var(--project-card-mid) 55%,
+    var(--project-card-end)
+  );
 }
 
 @utility project-card-glow {
@@ -953,7 +975,6 @@ html:not(.dark) .project-card-preview-light {
 }
 
 @layer base {
-
   h1,
   h2,
   h3 {
@@ -1071,7 +1092,7 @@ html:not(.dark) .project-card-preview-light {
   animation: shuttle-drift 20s ease-in-out infinite alternate;
 }
 
-.shuttle-band>div {
+.shuttle-band > div {
   position: relative;
   z-index: 1;
 }
@@ -1128,11 +1149,14 @@ html:not(.dark) body [class~="text-zinc-500"] {
   border: 3px solid transparent;
   background:
     linear-gradient(var(--photo-fill), var(--photo-fill)) padding-box,
-    conic-gradient(from var(--frame-angle),
-      var(--photo-a),
-      var(--photo-b),
-      var(--photo-c),
-      var(--photo-a)) border-box;
+    conic-gradient(
+        from var(--frame-angle),
+        var(--photo-a),
+        var(--photo-b),
+        var(--photo-c),
+        var(--photo-a)
+      )
+      border-box;
   animation: frame-spin 8s linear infinite;
 }
 
@@ -1172,9 +1196,9 @@ html:not(.dark) body [class~="text-zinc-500"] {
   }
 }
 
-.signal-shell>section:not(.shuttle-band),
-.signal-shell>footer>div,
-.signal-shell>.shuttle-band>div {
+.signal-shell > section:not(.shuttle-band),
+.signal-shell > footer > div,
+.signal-shell > .shuttle-band > div {
   max-width: 80% !important;
 }
 
@@ -1205,7 +1229,6 @@ html:not(.dark) body [class~="text-zinc-500"] {
 }
 
 @layer components {
-
   /* ============ SPARKLE TEXT: glint sweep + twinkle stars ============ */
   .sparkle-text {
     --sp-base: #67e8f9;
@@ -1215,12 +1238,14 @@ html:not(.dark) body [class~="text-zinc-500"] {
     display: inline-block;
     padding: 0 0.06em 0.12em 0;
     /* stops the clip cutting the g and the period */
-    background-image: linear-gradient(115deg,
-        var(--sp-base) 0 42%,
-        color-mix(in oklab, var(--sp-base) 40%, #fff) 47%,
-        var(--sp-glint) 50%,
-        color-mix(in oklab, var(--sp-base) 40%, #fff) 53%,
-        var(--sp-base) 58% 100%);
+    background-image: linear-gradient(
+      115deg,
+      var(--sp-base) 0 42%,
+      color-mix(in oklab, var(--sp-base) 40%, #fff) 47%,
+      var(--sp-glint) 50%,
+      color-mix(in oklab, var(--sp-base) 40%, #fff) 53%,
+      var(--sp-base) 58% 100%
+    );
     background-size: 250% 100%;
     background-repeat: no-repeat;
     background-position: 100% 0;
@@ -1285,7 +1310,7 @@ html:not(.dark) body [class~="text-zinc-500"] {
     z-index: 1;
   }
 
-  .sparkle-stars>i {
+  .sparkle-stars > i {
     position: absolute;
     width: 16px;
     height: 16px;
@@ -1294,19 +1319,19 @@ html:not(.dark) body [class~="text-zinc-500"] {
     transform: scale(0);
   }
 
-  .sparkle-stars>i:nth-child(1) {
+  .sparkle-stars > i:nth-child(1) {
     --i: 0;
     top: -10px;
     left: 12%;
   }
 
-  .sparkle-stars>i:nth-child(2) {
+  .sparkle-stars > i:nth-child(2) {
     --i: 1;
     top: -14px;
     right: 20%;
   }
 
-  .sparkle-stars>i:nth-child(3) {
+  .sparkle-stars > i:nth-child(3) {
     --i: 2;
     bottom: -10px;
     right: 8%;
@@ -1314,7 +1339,7 @@ html:not(.dark) body [class~="text-zinc-500"] {
     height: 10px;
   }
 
-  .sparkle-stars>i:nth-child(4) {
+  .sparkle-stars > i:nth-child(4) {
     --i: 3;
     bottom: -12px;
     left: 26%;
@@ -1322,12 +1347,12 @@ html:not(.dark) body [class~="text-zinc-500"] {
     height: 10px;
   }
 
-  .sparkle:is(:hover, :focus-visible) .sparkle-stars>i {
+  .sparkle:is(:hover, :focus-visible) .sparkle-stars > i {
     animation: sparkle-pop 0.75s cubic-bezier(0.2, 0.9, 0.3, 1.4) calc(var(--i) * 90ms) both;
   }
 
   /* modifier: stars twinkle continuously (hover still triggers the pop) */
-  .sparkle-loop .sparkle-stars>i {
+  .sparkle-loop .sparkle-stars > i {
     animation: sparkle-twinkle 2.8s ease-in-out calc(var(--i) * 550ms) infinite;
   }
 
@@ -1360,7 +1385,6 @@ html:not(.dark) body [class~="text-zinc-500"] {
   }
 
   @keyframes sparkle-twinkle {
-
     0%,
     100% {
       transform: scale(0) rotate(0);
@@ -1374,7 +1398,6 @@ html:not(.dark) body [class~="text-zinc-500"] {
   }
 
   @keyframes sparkle-dust {
-
     0%,
     100% {
       opacity: 0.25;
@@ -1388,11 +1411,10 @@ html:not(.dark) body [class~="text-zinc-500"] {
   }
 
   @media (prefers-reduced-motion: reduce) {
-
     .sparkle-text,
     .sparkle-text::before,
     .sparkle-text::after,
-    .sparkle-loop .sparkle-stars>i {
+    .sparkle-loop .sparkle-stars > i {
       animation: none;
     }
 
@@ -1400,7 +1422,7 @@ html:not(.dark) body [class~="text-zinc-500"] {
       opacity: 0.5;
     }
 
-    .sparkle:is(:hover, :focus-visible) .sparkle-stars>i {
+    .sparkle:is(:hover, :focus-visible) .sparkle-stars > i {
       animation: none;
       transform: scale(1) rotate(45deg);
     }

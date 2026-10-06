@@ -2,10 +2,11 @@ import { mkdir, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { type Browser, chromium } from "playwright";
 
+import { githubUsername } from "@/lib/github-config";
+
 import { PROJECT_REPOSITORY_SETTINGS } from "../data/repos";
 import { socialMedia } from "../data/social";
 import { getProjectPreviewFileName, PROJECT_PREVIEW_MANIFEST_PATH } from "../lib/project-preview";
-import { GIT_USERNAME } from "../types/github";
 
 interface GitHubRepository {
   name: string;
@@ -29,7 +30,7 @@ const githubHeaders = {
 async function fetchRepositories(): Promise<GitHubRepository[]> {
   const repositories: GitHubRepository[] = [];
   let nextUrl: string | null =
-    `https://api.github.com/users/${GIT_USERNAME}/repos?per_page=100&type=owner&sort=updated`;
+    `https://api.github.com/users/${githubUsername}/repos?per_page=100&type=owner&sort=updated`;
 
   while (nextUrl) {
     const response: Response = await fetch(nextUrl, {

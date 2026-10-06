@@ -305,7 +305,7 @@ export function ProjectsClient({ projects }: { projects: Project[] }) {
               </h2>
             </div>
             <Link
-              href={socialMedia.github.href}
+              href={`${socialMedia.github.href}?tab=repositories`}
               target="_blank"
               rel="noreferrer"
               className="hidden items-center gap-2 text-sm site-nav-active transition hover:text-(--site-text) sm:inline-flex"

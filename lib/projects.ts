@@ -1,11 +1,13 @@
 import "server-only";
 
 import { PROJECT_REPOSITORY_SETTINGS } from "@/data/repos";
-import type { Project, Repo } from "@/types/github";
-import { GIT_USERNAME } from "@/types/github";
+import type { Project, ProjectReadme, Repo } from "@/types/github";
+
+import { githubToken, githubUsername } from "./github-config";
 
 const GITHUB_API = "https://api.github.com";
 const GITHUB_API_VERSION = "2022-11-28";
+
 export const PROJECTS_REVALIDATE_SECONDS = 21600; // 6 hours
 
 export class GitHubHttpError extends Error {
@@ -19,7 +21,7 @@ export class GitHubHttpError extends Error {
 }
 
 const getGitHubApiHeaders = (): Record<string, string> => {
-  const token = process.env.GITHUB_TOKEN;
+  const token = githubToken;
 
   return {
     Accept: "application/vnd.github+json",
@@ -31,11 +33,20 @@ const getGitHubApiHeaders = (): Record<string, string> => {
 // Every GitHub call goes through here so it shares the 6-hour cache.
 async function githubFetch(url: string, tags: string[], accept?: string): Promise<Response> {
   const res = await fetch(url, {
-    headers: { ...getGitHubApiHeaders(), ...(accept ? { Accept: accept } : {}) },
-    next: { revalidate: PROJECTS_REVALIDATE_SECONDS, tags },
+    headers: {
+      ...getGitHubApiHeaders(),
+      ...(accept ? { Accept: accept } : {}),
+    },
+    next: {
+      revalidate: PROJECTS_REVALIDATE_SECONDS,
+      tags,
+    },
   });
 
-  if (!res.ok) throw new GitHubHttpError(res.status, url);
+  if (!res.ok) {
+    throw new GitHubHttpError(res.status, url);
+  }
+
   return res;
 }
 
@@ -45,16 +56,20 @@ const getNextPageUrl = (linkHeader: string): string | null => {
     .map((part) => part.trim())
     .find((part) => part.endsWith('rel="next"'));
 
-  if (!nextMatch) return null;
+  if (!nextMatch) {
+    return null;
+  }
 
   const urlMatch = nextMatch.match(/<([^>]+)>/);
+
   return urlMatch?.[1] ?? null;
 };
 
 export const fetchProjects = async (): Promise<Project[]> => {
   const allRepos: Repo[] = [];
+
   let nextPageUrl: string | null =
-    `${GITHUB_API}/users/${GIT_USERNAME}/repos?per_page=100&type=owner&sort=updated`;
+    `${GITHUB_API}/users/${githubUsername}/repos?per_page=100&type=owner&sort=updated`;
 
   while (nextPageUrl) {
     const res = await githubFetch(nextPageUrl, ["projects"]);
@@ -63,10 +78,15 @@ export const fetchProjects = async (): Promise<Project[]> => {
   }
 
   return allRepos
-    .filter(
-      (repo: Repo) =>
-        !repo.private && !PROJECT_REPOSITORY_SETTINGS.excludedFromProjectList.includes(repo.name),
-    )
+    .filter((repo: Repo) => {
+      const isExcluded = PROJECT_REPOSITORY_SETTINGS.excludedFromProjectList.some(
+        (excludedName) => excludedName.toLowerCase() === repo.name.toLowerCase(),
+      );
+
+      const isOwnedByUser = repo.owner?.login?.toLowerCase() === githubUsername.toLowerCase();
+
+      return !repo.private && !repo.fork && isOwnedByUser && !isExcluded;
+    })
     .map((repo: Repo) => ({
       id: repo.id,
       name: repo.name,
@@ -84,18 +104,22 @@ export const fetchProjects = async (): Promise<Project[]> => {
       pushed_at: repo.pushed_at,
       private: repo.private,
       published: true,
+      default_branch: repo.default_branch,
     }));
 };
 
 export const fetchProject = async (slug: string): Promise<Project | null> => {
   try {
     const res = await githubFetch(
-      `${GITHUB_API}/repos/${GIT_USERNAME}/${encodeURIComponent(slug)}`,
+      `${GITHUB_API}/repos/${githubUsername}/${encodeURIComponent(slug)}`,
       ["projects", `project:${slug}`],
     );
-    const repo = await res.json();
 
-    if (repo.private) return null;
+    const repo = (await res.json()) as Repo;
+
+    if (repo.private) {
+      return null;
+    }
 
     return {
       id: repo.id,
@@ -106,7 +130,7 @@ export const fetchProject = async (slug: string): Promise<Project | null> => {
       description: repo.description,
       watchers_count: repo.watchers_count,
       stargazers_count: repo.stargazers_count,
-      forks: repo.forks,
+      forks: repo.forks ?? repo.forks_count,
       visibility: repo.visibility,
       open_issues: repo.open_issues,
       subscribers_count: repo.subscribers_count,
@@ -115,33 +139,56 @@ export const fetchProject = async (slug: string): Promise<Project | null> => {
       pushed_at: repo.pushed_at,
       private: repo.private,
       published: true,
+
+      // Required for README assets in repositories using "master".
+      default_branch: repo.default_branch,
     };
   } catch (error) {
-    if (error instanceof GitHubHttpError && error.status === 404) return null;
+    if (error instanceof GitHubHttpError && error.status === 404) {
+      return null;
+    }
+
     throw error;
   }
 };
 
-export const fetchProjectReadme = async (project: string): Promise<string> => {
+export const fetchProjectReadme = async (project: string): Promise<ProjectReadme> => {
   const repoName = project.replace(/-readme/g, "");
 
   try {
-    // Cached, so this adds no extra GitHub request
     const meta = await fetchProject(repoName);
-    if (!meta) return "# Project unavailable\n\nThis repository is not public.";
+
+    if (!meta) {
+      return {
+        content: "# Project unavailable\n\nThis repository is not public.",
+        repository: repoName,
+        branch: "main",
+        path: "README.md",
+      };
+    }
 
     const res = await githubFetch(
-      `${GITHUB_API}/repos/${GIT_USERNAME}/${encodeURIComponent(repoName)}/readme`,
+      `${GITHUB_API}/repos/${githubUsername}/${encodeURIComponent(repoName)}/readme`,
       ["projects", `project:${repoName}`],
       "application/vnd.github.raw+json",
     );
-    return await res.text();
+
+    return {
+      content: await res.text(),
+      repository: repoName,
+      branch: meta.default_branch,
+      path: "README.md",
+    };
   } catch (error) {
-    // Repo exists but has no README
     if (error instanceof GitHubHttpError && error.status === 404) {
-      return "# README unavailable\n\nThis project doesn't have a README yet.";
+      return {
+        content: "# README unavailable\n\nThis project doesn't have a README yet.",
+        repository: repoName,
+        branch: "main",
+        path: "README.md",
+      };
     }
-    // Rate limits and outages: rethrow so ISR keeps serving the last good page
+
     console.warn(`Unable to fetch README for ${repoName}.`);
     throw error;
   }

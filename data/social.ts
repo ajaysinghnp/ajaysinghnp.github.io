@@ -35,5 +35,6 @@ export const socialMedia = {
     href: "https://github.com/ajaysinghnp",
     domain: "ajaysinghnp.github.io",
     custom_domain: "ajaysingh.com.np",
+    theme: "custom",
   },
 };

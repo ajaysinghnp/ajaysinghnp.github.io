@@ -20,15 +20,21 @@ export default async function ProjectLoadingPage({ params }: Props) {
   const { name: projectName } = await params;
   const projects = await fetchProjects();
 
-  if (!projects.some((p) => p.name === projectName)) notFound();
+  if (!projects.some((p) => p.name === projectName)) {
+    notFound();
+  }
 
   const readme = await fetchProjectReadme(projectName);
-  const toc = await extractProjectToc(readme);
+  const toc = await extractProjectToc(readme.content);
 
   return (
-    <ProjectDetailsClient project_name={projectName} toc={toc} readme={readme}>
-      {/* rendered on the server, passed through as children */}
-      <MDX source={readme} />
+    <ProjectDetailsClient project_name={projectName} toc={toc} readme={readme.content}>
+      <MDX
+        source={readme.content}
+        repository={readme.repository}
+        branch={readme.branch}
+        readmePath={readme.path}
+      />
     </ProjectDetailsClient>
   );
 }
