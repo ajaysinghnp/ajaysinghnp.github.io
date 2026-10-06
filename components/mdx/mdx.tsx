@@ -13,7 +13,7 @@ type MDXProps = {
 
 export function MDX({ source, repository, branch, readmePath = "README.md" }: MDXProps) {
   return (
-    <article className="project-readme prose-quoteless mx-auto prose mt-6 max-w-full rounded-2xl border p-6 sm:p-10 prose-p:leading-[1.5] prose-li:leading-[1.5]">
+    <article className="project-readme prose-quoteless mx-auto prose mt-6 max-w-full rounded-2xl border p-6 sm:p-10 prose-p:leading-normal prose-li:leading-normal">
       <MDXRemote
         source={source}
         options={{

@@ -83,7 +83,7 @@ export default function HomeRedesign() {
             <Link
               href={socialMedia.github.href}
               target="_blank"
-              className="sparkle inline-flex gap-2 rounded-sm border border-cyan-300/40 bg-cyan-300/10 px-6 py-3 text-cyan-100 hover:border-cyan-300"
+              className="sparkle inline-flex gap-2 rounded-sm border border-cyan-700/60 bg-cyan-300/10 px-6 py-3 hover:border-cyan-300"
             >
               <GitMerge className="h-4 w-4" /> GitHub
             </Link>

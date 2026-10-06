@@ -126,7 +126,7 @@ function ProjectCard({ project, featured = false }: { project: Project; featured
       whileInView="show"
       viewport={{ once: true, amount: 0.2 }}
       variants={reveal}
-      className={`group shine-border-hover relative w-full break-inside-avoid overflow-hidden rounded-xl border project-card transition duration-300 hover:-translate-y-1 hover:border-[color-mix(in_srgb,var(--project-card-accent)_50%,transparent)] hover:shadow-[var(--project-card-hover-shadow)] ${featured ? "h-full" : ""}`}
+      className={`group shine-border-hover relative w-full break-inside-avoid overflow-hidden rounded-xl border project-card transition duration-300 hover:-translate-y-1 hover:border-[color-mix(in_srgb,var(--project-card-accent)_50%,transparent)] hover:shadow-(--project-card-hover-shadow) ${featured ? "h-full" : ""}`}
     >
       <div
         aria-hidden="true"
@@ -357,7 +357,7 @@ export function ProjectsState({
       className="flex min-h-[55vh] w-full flex-col items-center justify-center gap-5 px-5 text-center resume-shell"
     >
       <p className="section-code">projects / signal</p>
-      <h1 className="text-3xl text-[var(--site-text)]">{label}</h1>
+      <h1 className="text-3xl text-(--site-text)">{label}</h1>
       {description && <p className="max-w-lg leading-7 resume-muted">{description}</p>}
       {action}
     </main>
