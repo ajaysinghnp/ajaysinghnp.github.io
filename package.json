@@ -30,6 +30,7 @@
     "date-fns": "^4.4.0",
     "framer-motion": "^13.5.1",
     "github-slugger": "^2.0.0",
+    "gray-matter": "^4.0.3",
     "html2canvas-pro": "^2.5.1",
     "html2pdf.js": "^0.14.0",
     "jspdf": "^4.2.1",
