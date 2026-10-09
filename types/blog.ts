@@ -31,3 +31,19 @@ export interface ContentEntry extends ContentRef {
   content: string;
   draft: boolean;
 }
+
+export interface PostSummary {
+  key: string;
+  href: string;
+  title: string;
+  description?: string;
+  date?: string;
+  updated?: string;
+  tags: string[];
+  tagLinks: { name: string; href: string }[];
+  minutes: number;
+  category: string;
+  categoryName: string;
+  hue: number;
+  isNew: boolean;
+}

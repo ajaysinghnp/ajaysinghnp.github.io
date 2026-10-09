@@ -1,6 +1,6 @@
 import { slug } from "github-slugger";
 
-import type { ContentEntry } from "@/types/blog";
+import type { ContentEntry, PostSummary } from "@/types/blog";
 
 export const prettifyCategory = (value: string) =>
   value.replace(/[-_]+/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
@@ -97,4 +97,44 @@ export function categoryCrumbs(
     const path = parts.slice(0, index + 1).join("/");
     return { label: categoryLabel(path, labels), href: categoryHref(basePath, path) };
   });
+}
+
+/* ---------- presentation helpers ---------- */
+
+// Stable hue per top-level category, so each one keeps the same accent colour everywhere.
+export const categoryHue = (category: string) => {
+  let hash = 0;
+  for (const char of category.split("/")[0]) hash = (hash * 31 + char.charCodeAt(0)) % 360;
+  return hash;
+};
+
+export const isRecent = (iso?: string, days = 30) => {
+  if (!iso) return false;
+  const age = Date.now() - new Date(iso).getTime();
+  return age >= 0 && age < days * 86_400_000;
+};
+
+// Lightweight shape for client components, so post bodies never reach the browser.
+export function toSummary(
+  entry: ContentEntry,
+  basePath: string,
+  labels: Record<string, string> = {},
+): PostSummary {
+  const { title, description, date, updated, tags } = entry.meta;
+
+  return {
+    key: entry.path,
+    href: entryHref(basePath, entry),
+    title: title ?? prettifyCategory(entry.slug),
+    description,
+    date,
+    updated,
+    tags,
+    tagLinks: tags.map((name) => ({ name, href: `${basePath}/tag/${tagSlug(name)}` })),
+    minutes: readingMinutes(entry.content),
+    category: entry.category,
+    categoryName: categoryLabel(entry.category, labels),
+    hue: categoryHue(entry.category),
+    isNew: isRecent(date),
+  };
 }
