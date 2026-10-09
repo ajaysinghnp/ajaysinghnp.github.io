@@ -10,7 +10,7 @@ export function Breadcrumbs({ items, className }: { items: Crumb[]; className?: 
   return (
     <nav aria-label="Breadcrumb" className={className}>
       {items.map((item, index) => (
-        <Fragment key={`${item.label}-${index}`}>
+        <Fragment key={item.href ?? item.label}>
           {index > 0 && " / "}
           {item.href ? (
             <Link href={item.href} className="hover:underline">
