@@ -1,6 +1,6 @@
 import { slug } from "github-slugger";
 
-import type { ContentEntry, PostSummary } from "@/types/blog";
+import type { Author, ContentEntry, PostSummary } from "@/types/blog";
 
 export const prettifyCategory = (value: string) =>
   value.replace(/[-_]+/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
@@ -137,4 +137,35 @@ export function toSummary(
     hue: categoryHue(entry.category),
     isNew: isRecent(date),
   };
+}
+
+/* ---------- authors ---------- */
+
+const normalize = (value?: string) => value?.trim().toLowerCase() ?? "";
+
+// A post's author value can be an id, a GitHub username or a full name, in that order.
+export function findAuthor(authors: Author[], value?: string): Author | null {
+  const needle = normalize(value);
+  if (!needle) return null;
+
+  return (
+    authors.find((author) => author.id === needle) ??
+    authors.find((author) => normalize(author.github) === needle) ??
+    authors.find((author) => normalize(author.name) === needle) ??
+    null
+  );
+}
+
+export const authorHref = (basePath: string, author: Author) =>
+  `${basePath}/author/${encodeURIComponent(author.id)}`;
+
+// First paragraph of the bio as plain text, for summaries.
+export function bioExcerpt(bio: string, max = 220) {
+  const paragraph = (bio.split(/\n\s*\n/)[0] ?? "")
+    .replace(/!?\[([^\]]*)\]\([^)]*\)/g, "$1")
+    .replace(/[*_`>#]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  return paragraph.length > max ? `${paragraph.slice(0, max - 1).trimEnd()}…` : paragraph;
 }

@@ -8,6 +8,7 @@ export interface ContentSource {
   revalidate: number;
   labels: Record<string, string>; // category path or segment -> display name
   listHidden: boolean; // list posts from hidden categories everywhere
+  authorsDir?: string; // folder of author profiles, e.g. "author"
 }
 
 export interface ContentMeta {
@@ -46,4 +47,21 @@ export interface PostSummary {
   categoryName: string;
   hue: number;
   isNew: boolean;
+}
+
+export interface AuthorLink {
+  label: string;
+  href: string;
+}
+
+export interface Author {
+  id: string;
+  name: string;
+  role?: string;
+  location?: string;
+  github?: string;
+  avatar?: string; // resolved image URL
+  links: AuthorLink[];
+  bio: string; // Markdown
+  path: string; // the author file's path in the repo
 }

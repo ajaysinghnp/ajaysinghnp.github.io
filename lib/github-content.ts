@@ -1,9 +1,10 @@
 import "server-only";
 
 import matter from "gray-matter";
+import path from "node:path";
 
 import { blogSource } from "@/data/blog";
-import type { ContentEntry, ContentRef, ContentSource } from "@/types/blog";
+import type { Author, AuthorLink, ContentEntry, ContentRef, ContentSource } from "@/types/blog";
 
 import { githubToken } from "./github-config";
 import { GitHubHttpError } from "./projects";
@@ -53,12 +54,18 @@ function toRef(categorySegments: string[], slug: string, path: string): ContentR
   };
 }
 
-// One API call returns every path in the repo; the folder conventions are interpreted here.
-export async function listRefs(source: ContentSource): Promise<ContentRef[]> {
+async function fetchTree(source: ContentSource) {
   const url = `${GITHUB_API}/repos/${source.repo}/git/trees/${encodeURIComponent(source.branch)}?recursive=1`;
   const { tree } = (await (await ghFetch(url, source)).json()) as {
     tree: { path: string; type: string }[];
   };
+
+  return tree;
+}
+
+// One API call returns every path in the repo; the folder conventions are interpreted here.
+export async function listRefs(source: ContentSource): Promise<ContentRef[]> {
+  const tree = await fetchTree(source);
 
   const prefix = source.dir ? `${source.dir.replace(/\/$/, "")}/` : "";
   const standalone: ContentRef[] = [];
@@ -174,4 +181,116 @@ export async function getEntry(
 
   const entry = await readEntry(source, ref);
   return entry.draft ? null : entry;
+}
+
+/* ---------- authors ---------- */
+
+const AUTHOR_FILE = /^([a-z0-9]+(?:-[a-z0-9]+)*)\.md$/;
+
+async function listAuthorRefs(source: ContentSource): Promise<{ id: string; path: string }[]> {
+  if (!source.authorsDir) return [];
+
+  const prefix = `${source.authorsDir.replace(/\/$/, "")}/`;
+  const refs: { id: string; path: string }[] = [];
+
+  for (const node of await fetchTree(source)) {
+    if (node.type !== "blob" || !node.path.startsWith(prefix)) continue;
+
+    const match = AUTHOR_FILE.exec(node.path.slice(prefix.length));
+    if (match && match[1] !== "readme") refs.push({ id: match[1], path: node.path });
+  }
+
+  return refs;
+}
+
+// Only http(s) links are accepted from content.
+function safeUrl(value: string | undefined): string | undefined {
+  if (!value) return undefined;
+
+  try {
+    const url = new URL(value);
+    return url.protocol === "https:" || url.protocol === "http:" ? url.toString() : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+function buildLinks(data: Record<string, unknown>, github: string | undefined): AuthorLink[] {
+  const links: AuthorLink[] = [];
+  const x = asString(data.x)?.replace(/^@/, "");
+  const linkedin = asString(data.linkedin);
+  const website = safeUrl(asString(data.website));
+  const email = asString(data.email);
+
+  if (github)
+    links.push({ label: "GitHub", href: `https://github.com/${encodeURIComponent(github)}` });
+  if (x) links.push({ label: "X", href: `https://x.com/${encodeURIComponent(x)}` });
+
+  if (linkedin) {
+    const href = /^https?:\/\//i.test(linkedin)
+      ? safeUrl(linkedin)
+      : `https://www.linkedin.com/in/${encodeURIComponent(linkedin)}`;
+    if (href) links.push({ label: "LinkedIn", href });
+  }
+
+  if (website) links.push({ label: "Website", href: website });
+
+  if (email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    links.push({ label: "Email", href: `mailto:${email}` });
+  }
+
+  return links;
+}
+
+// A URL, a file next to the author file, or the GitHub avatar as a fallback.
+function resolveAvatar(
+  source: ContentSource,
+  value: string | undefined,
+  github: string | undefined,
+): string | undefined {
+  if (value) {
+    if (/^https?:\/\//i.test(value)) return value;
+
+    const file = path.posix.normalize(path.posix.join(source.authorsDir ?? "", value));
+    if (file.startsWith("..")) return undefined;
+
+    const encoded = file.split("/").map(encodeURIComponent).join("/");
+    return `https://raw.githubusercontent.com/${source.repo}/${encodeURIComponent(source.branch)}/${encoded}`;
+  }
+
+  return github ? `https://github.com/${encodeURIComponent(github)}.png` : undefined;
+}
+
+async function readAuthor(
+  source: ContentSource,
+  ref: { id: string; path: string },
+): Promise<Author> {
+  const encoded = ref.path.split("/").map(encodeURIComponent).join("/");
+  const res = await ghFetch(
+    `${GITHUB_API}/repos/${source.repo}/contents/${encoded}?ref=${encodeURIComponent(source.branch)}`,
+    source,
+    "application/vnd.github.raw+json",
+  );
+
+  const { data, content } = matter(await res.text());
+  const github = asString(data.github)?.replace(/^@/, "");
+
+  return {
+    id: ref.id,
+    name: asString(data.name) ?? ref.id,
+    role: asString(data.role),
+    location: asString(data.location),
+    github,
+    avatar: resolveAvatar(source, asString(data.avatar), github),
+    links: buildLinks(data, github),
+    bio: content.trim(),
+    path: ref.path,
+  };
+}
+
+export async function listAuthors(source: ContentSource): Promise<Author[]> {
+  const refs = await listAuthorRefs(source);
+  const authors = await Promise.all(refs.map((ref) => readAuthor(source, ref)));
+
+  return authors.sort((a, b) => a.name.localeCompare(b.name));
 }

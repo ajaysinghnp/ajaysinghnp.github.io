@@ -8,6 +8,7 @@ export const blogConfig = {
   // either here or with the BLOG_BRANCH environment variable.
   branch: process.env.BLOG_BRANCH || "content",
   dir: "posts",
+  authorsDir: "authors",
   revalidateSeconds: 86400, // fallback only; the webhook refreshes on push
   cacheTag: "content:blog",
   listHidden: false,
@@ -32,6 +33,7 @@ export const blogSource: ContentSource = {
   repo: blogConfig.repo,
   branch: blogConfig.branch,
   dir: blogConfig.dir,
+  authorsDir: blogConfig.authorsDir,
   extensions: [".md", ".mdx"],
   tag: blogConfig.cacheTag,
   revalidate: blogConfig.revalidateSeconds,
