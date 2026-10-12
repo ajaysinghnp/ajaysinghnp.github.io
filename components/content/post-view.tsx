@@ -97,7 +97,13 @@ export async function PostView({ entry, source, basePath, rootLabel }: Props) {
             <Clock className="h-3.5 w-3.5" aria-hidden="true" />
             {readingMinutes(entry.content)} min read
           </Pill>
-          <PostActions title={heading} markdown={entry.content} className="ml-auto" />
+          <PostActions
+            title={heading}
+            markdown={entry.content}
+            contentId="post-content"
+            fallbackName={entry.slug}
+            className="ml-auto"
+          />
         </div>
 
         {tags.length > 0 && (
@@ -117,7 +123,7 @@ export async function PostView({ entry, source, basePath, rootLabel }: Props) {
 
       <div className={toc.length ? "project-content-layout" : undefined}>
         {toc.length > 0 && <ProjectToc items={toc} />}
-        <div className="min-w-0">
+        <div id="post-content" className="min-w-0">
           <ContentMdx
             source={entry.content}
             repo={source.repo}
