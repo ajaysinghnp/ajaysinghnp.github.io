@@ -6,8 +6,15 @@ import { Breadcrumbs } from "@/components/content/breadcrumbs";
 import { ContentIndex } from "@/components/content/content-index";
 import { PostView } from "@/components/content/post-view";
 import { blogConfig } from "@/data/blog";
-import { categoryCrumbs, categoryLabel, childCategories, collectTags } from "@/lib/content-format";
-import { contentSources, getEntry, listEntries } from "@/lib/github-content";
+import {
+  authorHref,
+  categoryCrumbs,
+  categoryLabel,
+  childCategories,
+  collectTags,
+  findAuthor,
+} from "@/lib/content-format";
+import { contentSources, getEntry, listAuthors, listEntries } from "@/lib/github-content";
 
 export const dynamicParams = true;
 
@@ -49,10 +56,22 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { entry } = resolved;
   const { title, description, date, updated, author, tags } = entry.meta;
 
+  const authorList = await listAuthors(source);
+  const resolvedAuthor = findAuthor(authorList, author);
+
+  let authorMeta: Metadata["authors"];
+  if (resolvedAuthor) {
+    authorMeta = [
+      { name: resolvedAuthor.name, url: authorHref(blogConfig.basePath, resolvedAuthor) },
+    ];
+  } else if (author) {
+    authorMeta = [{ name: author }];
+  }
+
   return {
     title: title ?? entry.slug,
     description,
-    authors: author ? [{ name: author }] : undefined,
+    authors: authorMeta,
     keywords: tags,
     robots: entry.hidden ? { index: false, follow: false } : undefined,
     openGraph: { type: "article", publishedTime: date, modifiedTime: updated },

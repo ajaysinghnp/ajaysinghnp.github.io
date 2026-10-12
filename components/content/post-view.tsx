@@ -2,6 +2,8 @@ import Link from "next/link";
 
 import { ArrowLeft, Clock } from "lucide-react";
 
+import { AuthorCard } from "@/components/content/author-card";
+import { AuthorPill } from "@/components/content/author-pill";
 import { Breadcrumbs } from "@/components/content/breadcrumbs";
 import { ContentMdx } from "@/components/content/content-mdx";
 import { PostActions } from "@/components/content/post-actions";
@@ -11,10 +13,12 @@ import { ProjectToc } from "@/components/mdx/project-toc";
 import {
   categoryCrumbs,
   categoryHue,
+  findAuthor,
   formatDate,
   readingMinutes,
   tagSlug,
 } from "@/lib/content-format";
+import { listAuthors } from "@/lib/github-content";
 import { extractProjectToc } from "@/lib/project-toc";
 import type { ContentEntry, ContentSource } from "@/types/blog";
 
@@ -34,8 +38,9 @@ function Pill({ children }: { children: React.ReactNode }) {
 }
 
 export async function PostView({ entry, source, basePath, rootLabel }: Props) {
-  const { title, description, date, updated, author, tags } = entry.meta;
-  const toc = await extractProjectToc(entry.content);
+  const { title, description, date, updated, author: authorValue, tags } = entry.meta;
+  const [toc, authors] = await Promise.all([extractProjectToc(entry.content), listAuthors(source)]);
+  const author = findAuthor(authors, authorValue);
   const crumbs = categoryCrumbs(entry.category, basePath, source.labels);
   const hue = categoryHue(entry.category);
   const heading = title ?? entry.slug;
@@ -73,17 +78,8 @@ export async function PostView({ entry, source, basePath, rootLabel }: Props) {
         )}
 
         <div className="relative mt-8 flex flex-wrap items-center gap-2 border-t resume-intro pt-5">
-          {author && (
-            <Pill>
-              <span
-                aria-hidden="true"
-                className="inline-flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-semibold text-white"
-                style={{ background: `hsl(${hue} 70% 42%)` }}
-              >
-                {author.charAt(0).toUpperCase()}
-              </span>
-              {author}
-            </Pill>
+          {authorValue && (
+            <AuthorPill author={author} fallbackName={authorValue} hue={hue} basePath={basePath} />
           )}
           {date && (
             <Pill>
@@ -132,6 +128,8 @@ export async function PostView({ entry, source, basePath, rootLabel }: Props) {
           />
         </div>
       </div>
+
+      {author && <AuthorCard author={author} basePath={basePath} hue={hue} />}
 
       <PostFooter entry={entry} source={source} basePath={basePath} />
     </main>
