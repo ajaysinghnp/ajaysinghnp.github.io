@@ -20,10 +20,12 @@ export function AuthorCard({ author, basePath, hue }: Props) {
       aria-label="About the author"
       className="shine-border-hover relative mt-10 flex flex-col gap-5 resume-surface rounded-2xl border p-6 sm:flex-row sm:items-center sm:p-8"
     >
-      <Avatar className="h-16 w-16 shrink-0">
-        {author.avatar && <AvatarImage src={author.avatar} alt={author.name} />}
+      <Avatar className="size-20 shrink-0 ring-1 ring-(--site-surface-border)">
+        {author.avatar && (
+          <AvatarImage src={author.avatar} alt={author.name} className="object-cover object-top" />
+        )}
         <AvatarFallback
-          className="text-xl font-semibold text-white"
+          className="text-2xl font-semibold text-white"
           style={{ background: `hsl(${hue} 70% 42%)` }}
         >
           {author.name.charAt(0).toUpperCase()}

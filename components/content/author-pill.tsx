@@ -17,8 +17,10 @@ export function AuthorPill({ author, fallbackName, hue, basePath }: Props) {
   const name = author?.name ?? fallbackName;
 
   const avatar = (
-    <Avatar className="h-5 w-5">
-      {author?.avatar && <AvatarImage src={author.avatar} alt="" />}
+    <Avatar className="size-5">
+      {author?.avatar && (
+        <AvatarImage src={author.avatar} alt="" className="object-cover object-top" />
+      )}
       <AvatarFallback
         className="text-[10px] font-semibold text-white"
         style={{ background: `hsl(${hue} 70% 42%)` }}

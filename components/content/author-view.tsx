@@ -43,11 +43,17 @@ export function AuthorView({ author, posts, source, basePath }: Props) {
           items={[{ label: "Blog", href: basePath }, { label: "Author" }]}
         />
 
-        <div className="relative mt-6 flex flex-col gap-6 sm:flex-row sm:items-center">
-          <Avatar className="h-24 w-24 shrink-0">
-            {author.avatar && <AvatarImage src={author.avatar} alt={author.name} />}
+        <div className="relative mt-6 flex flex-col gap-6 sm:flex-row sm:items-center sm:gap-8">
+          <Avatar className="size-28 shrink-0 ring-1 ring-(--site-surface-border) sm:size-36">
+            {author.avatar && (
+              <AvatarImage
+                src={author.avatar}
+                alt={author.name}
+                className="object-cover object-top"
+              />
+            )}
             <AvatarFallback
-              className="text-3xl font-semibold text-white"
+              className="text-4xl font-semibold text-white sm:text-5xl"
               style={{ background: `hsl(${hue} 70% 42%)` }}
             >
               {author.name.charAt(0).toUpperCase()}
