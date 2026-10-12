@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { type ReactNode, useCallback, useEffect, useState } from "react";
 
 import { ChevronDown, ListTree } from "lucide-react";
 
@@ -8,9 +8,11 @@ import type { ProjectTocItem } from "@/lib/project-toc";
 
 interface ProjectTocProps {
   items: ProjectTocItem[];
+  aside?: ReactNode; // optional block shown inside the desktop panel
+  asidePosition?: "top" | "bottom";
 }
 
-export function ProjectToc({ items }: ProjectTocProps) {
+export function ProjectToc({ items, aside, asidePosition = "top" }: ProjectTocProps) {
   const [activeId, setActiveId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -92,10 +94,16 @@ export function ProjectToc({ items }: ProjectTocProps) {
         {renderItems(items)}
       </details>
       <div className="project-toc-desktop">
+        {aside && asidePosition === "top" && (
+          <div className="mb-4 border-b border-(--site-surface-border) pb-4">{aside}</div>
+        )}
         <p className="project-toc-title">
           <ListTree className="h-4 w-4" /> On this page
         </p>
         {renderItems(items)}
+        {aside && asidePosition === "bottom" && (
+          <div className="mt-4 border-t border-(--site-surface-border) pt-4">{aside}</div>
+        )}
       </div>
     </nav>
   );

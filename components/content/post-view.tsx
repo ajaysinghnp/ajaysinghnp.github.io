@@ -22,6 +22,8 @@ import { listAuthors } from "@/lib/github-content";
 import { extractProjectToc } from "@/lib/project-toc";
 import type { ContentEntry, ContentSource } from "@/types/blog";
 
+import { AuthorAside } from "./author-aside";
+
 interface Props {
   entry: ContentEntry;
   source: ContentSource;
@@ -118,7 +120,14 @@ export async function PostView({ entry, source, basePath, rootLabel }: Props) {
       </header>
 
       <div className={toc.length ? "project-content-layout" : undefined}>
-        {toc.length > 0 && <ProjectToc items={toc} />}
+        {toc.length > 0 && (
+          <ProjectToc
+            items={toc}
+            aside={
+              author ? <AuthorAside author={author} basePath={basePath} hue={hue} /> : undefined
+            }
+          />
+        )}
         <div id="post-content" className="min-w-0">
           <ContentMdx
             source={entry.content}
@@ -129,7 +138,7 @@ export async function PostView({ entry, source, basePath, rootLabel }: Props) {
         </div>
       </div>
 
-      {author && <AuthorCard author={author} basePath={basePath} hue={hue} />}
+      {author && toc.length === 0 && <AuthorCard author={author} basePath={basePath} hue={hue} />}
 
       <PostFooter entry={entry} source={source} basePath={basePath} />
     </main>
