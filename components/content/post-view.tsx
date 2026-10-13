@@ -6,6 +6,7 @@ import { AuthorAside } from "@/components/content/author-aside";
 import { AuthorCard } from "@/components/content/author-card";
 import { AuthorPill } from "@/components/content/author-pill";
 import { Breadcrumbs } from "@/components/content/breadcrumbs";
+import { pillClass } from "@/components/content/chip";
 import { ContentMdx } from "@/components/content/content-mdx";
 import { PostActions } from "@/components/content/post-actions";
 import { PostFooter } from "@/components/content/post-footer";
@@ -21,6 +22,7 @@ import {
 } from "@/lib/content-format";
 import { listAuthors } from "@/lib/github-content";
 import { extractProjectToc } from "@/lib/project-toc";
+import { cn } from "@/lib/utils";
 import type { ContentEntry, ContentSource } from "@/types/blog";
 
 interface Props {
@@ -71,6 +73,7 @@ export async function PostView({ entry, source, basePath, rootLabel }: Props) {
             items={[{ label: rootLabel, href: basePath }, ...crumbs]}
           />
           <PostActions
+            actions={["markdown", "pdf"]}
             title={heading}
             markdown={entry.content}
             contentId="post-content"
@@ -85,6 +88,20 @@ export async function PostView({ entry, source, basePath, rootLabel }: Props) {
           <p className="relative mt-5 max-w-3xl text-base leading-8 resume-lead sm:text-lg">
             {description}
           </p>
+        )}
+
+        {tags.length > 0 && (
+          <div className="relative mt-5 flex flex-wrap gap-2">
+            {tags.map((tag) => (
+              <Link
+                key={tag}
+                href={`${basePath}/tag/${tagSlug(tag)}`}
+                className={cn(pillClass, "px-3 py-1 text-xs")}
+              >
+                #{tag}
+              </Link>
+            ))}
+          </div>
         )}
 
         <div className="relative mt-8 flex flex-wrap items-center gap-2 border-t resume-intro pt-5">
@@ -103,21 +120,16 @@ export async function PostView({ entry, source, basePath, rootLabel }: Props) {
             <Clock className="h-3.5 w-3.5" aria-hidden="true" />
             {readingMinutes(entry.content)} min read
           </Pill>
+          <PostActions
+            actions={["link"]}
+            size="compact"
+            title={heading}
+            markdown={entry.content}
+            contentId="post-content"
+            fallbackName={entry.slug}
+            className="ml-auto"
+          />
         </div>
-
-        {tags.length > 0 && (
-          <div className="relative mt-4 flex flex-wrap gap-2">
-            {tags.map((tag) => (
-              <Link
-                key={tag}
-                href={`${basePath}/tag/${tagSlug(tag)}`}
-                className="rounded-full border border-(--site-surface-border) px-3 py-1 text-xs site-nav-active transition hover:border-(--site-accent)"
-              >
-                #{tag}
-              </Link>
-            ))}
-          </div>
-        )}
       </header>
 
       <div className={toc.length ? "project-content-layout" : undefined}>

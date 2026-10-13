@@ -7,17 +7,15 @@ import { Check, FileDown, FileText, Link2, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type PdfState = "idle" | "working" | "done" | "error";
+type Action = "link" | "markdown" | "pdf";
 
-interface Props {
-  title: string;
-  markdown: string;
-  contentId: string; // id of the element holding the rendered article
-  fallbackName: string; // PDF file name when the title has no usable characters
-  className?: string;
-}
+const buttonBase =
+  "inline-flex cursor-pointer items-center gap-2 rounded text-sm font-medium site-nav-active hover:bg-(--site-accent)/10 disabled:cursor-wait disabled:opacity-70";
 
-const button =
-  "inline-flex cursor-pointer items-center gap-2 rounded px-4 py-2 text-sm font-medium site-nav-active hover:bg-(--site-accent)/10 disabled:cursor-wait disabled:opacity-70";
+const sizes = {
+  default: "px-4 py-2",
+  compact: "px-3 py-1.5",
+} as const;
 
 const pdfLabels: Record<PdfState, string> = {
   idle: "Download as PDF",
@@ -32,9 +30,28 @@ function PdfIcon({ state }: { state: PdfState }) {
   return <FileDown className="h-4 w-4" />;
 }
 
-export function PostActions({ title, markdown, contentId, fallbackName, className }: Props) {
+interface Props {
+  title: string;
+  markdown: string;
+  contentId: string; // id of the element holding the rendered article
+  fallbackName: string; // PDF file name when the title has no usable characters
+  actions?: Action[];
+  size?: keyof typeof sizes;
+  className?: string;
+}
+
+export function PostActions({
+  title,
+  markdown,
+  contentId,
+  fallbackName,
+  actions = ["link", "markdown", "pdf"],
+  size = "default",
+  className,
+}: Props) {
   const [copied, setCopied] = useState<"link" | "markdown" | null>(null);
   const [pdf, setPdf] = useState<PdfState>("idle");
+  const button = cn(buttonBase, sizes[size]);
 
   async function copy(kind: "link" | "markdown") {
     try {
@@ -74,18 +91,24 @@ export function PostActions({ title, markdown, contentId, fallbackName, classNam
 
   return (
     <div className={cn("flex flex-wrap gap-1", className)}>
-      <button type="button" onClick={() => copy("link")} className={button}>
-        {copied === "link" ? <Check className="h-4 w-4" /> : <Link2 className="h-4 w-4" />}
-        {copied === "link" ? "Copied" : "Copy link"}
-      </button>
-      <button type="button" onClick={() => copy("markdown")} className={button}>
-        {copied === "markdown" ? <Check className="h-4 w-4" /> : <FileText className="h-4 w-4" />}
-        {copied === "markdown" ? "Copied" : "Copy as Markdown"}
-      </button>
-      <button type="button" onClick={downloadPdf} disabled={pdf === "working"} className={button}>
-        <PdfIcon state={pdf} />
-        {pdfLabels[pdf]}
-      </button>
+      {actions.includes("link") && (
+        <button type="button" onClick={() => copy("link")} className={button}>
+          {copied === "link" ? <Check className="h-4 w-4" /> : <Link2 className="h-4 w-4" />}
+          {copied === "link" ? "Copied" : "Copy link"}
+        </button>
+      )}
+      {actions.includes("markdown") && (
+        <button type="button" onClick={() => copy("markdown")} className={button}>
+          {copied === "markdown" ? <Check className="h-4 w-4" /> : <FileText className="h-4 w-4" />}
+          {copied === "markdown" ? "Copied" : "Copy as Markdown"}
+        </button>
+      )}
+      {actions.includes("pdf") && (
+        <button type="button" onClick={downloadPdf} disabled={pdf === "working"} className={button}>
+          <PdfIcon state={pdf} />
+          {pdfLabels[pdf]}
+        </button>
+      )}
     </div>
   );
 }
