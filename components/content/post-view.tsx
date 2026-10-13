@@ -67,11 +67,27 @@ export async function PostView({ entry, source, basePath, rootLabel }: Props) {
           style={{ background: `hsl(${hue} 85% 55%)` }}
         />
 
-        <div className="relative flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
-          <Breadcrumbs
-            className="section-code"
-            items={[{ label: rootLabel, href: basePath }, ...crumbs]}
-          />
+        <div className="relative flex flex-wrap items-center justify-between gap-x-4 gap-y-3">
+          <div className="flex min-w-0 flex-wrap items-center gap-x-4 gap-y-2">
+            <Breadcrumbs
+              className="section-code"
+              items={[{ label: rootLabel, href: basePath }, ...crumbs]}
+            />
+            {tags.length > 0 && (
+              <ul className="flex flex-wrap gap-2">
+                {tags.map((tag) => (
+                  <li key={tag}>
+                    <Link
+                      href={`${basePath}/tag/${tagSlug(tag)}`}
+                      className={cn(pillClass, "inline-block px-3 py-1 text-xs")}
+                    >
+                      #{tag}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
           <PostActions
             actions={["markdown", "pdf"]}
             title={heading}
@@ -88,20 +104,6 @@ export async function PostView({ entry, source, basePath, rootLabel }: Props) {
           <p className="relative mt-5 max-w-3xl text-base leading-8 resume-lead sm:text-lg">
             {description}
           </p>
-        )}
-
-        {tags.length > 0 && (
-          <div className="relative mt-5 flex flex-wrap gap-2">
-            {tags.map((tag) => (
-              <Link
-                key={tag}
-                href={`${basePath}/tag/${tagSlug(tag)}`}
-                className={cn(pillClass, "px-3 py-1 text-xs")}
-              >
-                #{tag}
-              </Link>
-            ))}
-          </div>
         )}
 
         <div className="relative mt-8 flex flex-wrap items-center gap-2 border-t resume-intro pt-5">
