@@ -43,10 +43,13 @@ export function AuthorPill({ author, fallbackName, hue, basePath }: Props) {
   return (
     <Link
       href={authorHref(basePath, author)}
+      target="_blank"
+      rel="noopener noreferrer"
       className={cn(pillClass, "inline-flex items-center gap-1.5 px-3 py-1 text-xs")}
     >
       {avatar}
       {name}
+      <span className="sr-only">(opens in a new tab)</span>
     </Link>
   );
 }

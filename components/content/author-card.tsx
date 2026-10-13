@@ -41,9 +41,12 @@ export function AuthorCard({ author, basePath, hue }: Props) {
         {summary && <p className="mt-3 line-clamp-3 text-sm leading-7 resume-muted">{summary}</p>}
         <Link
           href={authorHref(basePath, author)}
+          target="_blank"
+          rel="noopener noreferrer"
           className="mt-3 inline-flex items-center gap-1.5 text-sm site-nav-active hover:underline"
         >
           More from {author.name}
+          <span className="sr-only">(opens in a new tab)</span>
           <ArrowUpRight className="h-4 w-4" />
         </Link>
       </div>
