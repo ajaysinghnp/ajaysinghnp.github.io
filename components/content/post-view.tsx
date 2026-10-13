@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { ArrowLeft, Clock } from "lucide-react";
+import { Clock } from "lucide-react";
 
 import { AuthorAside } from "@/components/content/author-aside";
 import { AuthorCard } from "@/components/content/author-card";
@@ -8,10 +8,10 @@ import { AuthorPill } from "@/components/content/author-pill";
 import { Breadcrumbs } from "@/components/content/breadcrumbs";
 import { pillClass } from "@/components/content/chip";
 import { ContentMdx } from "@/components/content/content-mdx";
+import { Pill } from "@/components/content/pill";
 import { PostActions } from "@/components/content/post-actions";
 import { PostFooter } from "@/components/content/post-footer";
-import { ReadingProgress } from "@/components/content/reading-progress";
-import { ProjectToc } from "@/components/mdx/project-toc";
+import { ContentPage } from "@/components/layouts/content-page";
 import {
   categoryCrumbs,
   categoryHue,
@@ -32,14 +32,6 @@ interface Props {
   rootLabel: string;
 }
 
-function Pill({ children }: { children: React.ReactNode }) {
-  return (
-    <span className="inline-flex items-center gap-1.5 rounded-full border border-(--site-surface-border) px-3 py-1 text-xs resume-muted">
-      {children}
-    </span>
-  );
-}
-
 export async function PostView({ entry, source, basePath, rootLabel }: Props) {
   const { title, description, date, updated, author: authorValue, tags } = entry.meta;
   const [toc, authors] = await Promise.all([extractProjectToc(entry.content), listAuthors(source)]);
@@ -49,64 +41,39 @@ export async function PostView({ entry, source, basePath, rootLabel }: Props) {
   const heading = title ?? entry.slug;
 
   return (
-    <main className="pb-16 resume-shell">
-      <ReadingProgress />
-
-      <Link
-        href={basePath}
-        className="mt-5 mb-6 inline-flex items-center gap-2 rounded-full border border-(--site-surface-border) px-4 py-2 text-sm text-(--site-muted) transition hover:border-(--site-accent) hover:site-nav-active"
-      >
-        <ArrowLeft className="h-4 w-4" />
-        All posts
-      </Link>
-
-      <header className="shine-border-hover relative overflow-hidden resume-surface rounded-2xl p-6 sm:p-9 lg:p-12">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -top-24 -right-16 h-72 w-72 rounded-full opacity-25 blur-3xl"
-          style={{ background: `hsl(${hue} 85% 55%)` }}
+    <ContentPage
+      backHref={basePath}
+      backLabel="All posts"
+      label={
+        <Breadcrumbs
+          className="section-code"
+          items={[{ label: rootLabel, href: basePath }, ...crumbs]}
         />
-
-        <div className="relative flex flex-wrap items-center justify-between gap-x-4 gap-y-3">
-          <div className="flex min-w-0 flex-wrap items-center gap-x-4 gap-y-2">
-            <Breadcrumbs
-              className="section-code"
-              items={[{ label: rootLabel, href: basePath }, ...crumbs]}
-            />
-            {tags.length > 0 && (
-              <ul className="flex flex-wrap gap-2">
-                {tags.map((tag) => (
-                  <li key={tag}>
-                    <Link
-                      href={`${basePath}/tag/${tagSlug(tag)}`}
-                      className={cn(pillClass, "inline-block px-3 py-1 text-xs")}
-                    >
-                      #{tag}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-          <PostActions
-            actions={["markdown", "pdf"]}
-            title={heading}
-            markdown={entry.content}
-            contentId="post-content"
-            fallbackName={entry.slug}
-          />
-        </div>
-
-        <h1 className="relative mt-5 max-w-4xl text-4xl leading-tight font-semibold tracking-[-0.055em] wrap-break-word text-(--site-text) sm:text-6xl">
-          {heading}
-        </h1>
-        {description && (
-          <p className="relative mt-5 max-w-3xl text-base leading-8 resume-lead sm:text-lg">
-            {description}
-          </p>
-        )}
-
-        <div className="relative mt-8 flex flex-wrap items-center gap-2 border-t resume-intro pt-5">
+      }
+      chips={
+        tags.length > 0 && (
+          <ul className="flex flex-wrap gap-2">
+            {tags.map((tag) => (
+              <li key={tag}>
+                <Link
+                  href={`${basePath}/tag/${tagSlug(tag)}`}
+                  className={cn(pillClass, "inline-block px-3 py-1 text-xs")}
+                >
+                  #{tag}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+      title={heading}
+      description={
+        description && (
+          <p className="mt-5 max-w-3xl text-base leading-8 resume-lead sm:text-lg">{description}</p>
+        )
+      }
+      meta={
+        <>
           {authorValue && (
             <AuthorPill author={author} fallbackName={authorValue} hue={hue} basePath={basePath} />
           )}
@@ -122,40 +89,29 @@ export async function PostView({ entry, source, basePath, rootLabel }: Props) {
             <Clock className="h-3.5 w-3.5" aria-hidden="true" />
             {readingMinutes(entry.content)} min read
           </Pill>
-          <PostActions
-            actions={["link"]}
-            size="compact"
-            title={heading}
-            markdown={entry.content}
-            contentId="post-content"
-            fallbackName={entry.slug}
-            className="ml-auto"
-          />
-        </div>
-      </header>
-
-      <div className={toc.length ? "project-content-layout" : undefined}>
-        {toc.length > 0 && (
-          <ProjectToc
-            items={toc}
-            aside={
-              author ? <AuthorAside author={author} basePath={basePath} hue={hue} /> : undefined
-            }
-          />
-        )}
-        <div id="post-content" className="min-w-0">
-          <ContentMdx
-            source={entry.content}
-            repo={source.repo}
-            branch={source.branch}
-            path={entry.path}
-          />
-        </div>
-      </div>
-
-      {author && toc.length === 0 && <AuthorCard author={author} basePath={basePath} hue={hue} />}
-
-      <PostFooter entry={entry} source={source} basePath={basePath} />
-    </main>
+        </>
+      }
+      metaEnd={<PostActions actions={["link"]} size="compact" title={heading} />}
+      markdown={`# ${heading}\n\n${entry.content}`}
+      fileName={entry.slug}
+      glow={`hsl(${hue} 85% 55%)`}
+      toc={toc}
+      tocAside={author && <AuthorAside author={author} basePath={basePath} hue={hue} />}
+      footer={
+        <>
+          {author && toc.length === 0 && (
+            <AuthorCard author={author} basePath={basePath} hue={hue} />
+          )}
+          <PostFooter entry={entry} source={source} basePath={basePath} />
+        </>
+      }
+    >
+      <ContentMdx
+        source={entry.content}
+        repo={source.repo}
+        branch={source.branch}
+        path={entry.path}
+      />
+    </ContentPage>
   );
 }

@@ -6,13 +6,13 @@ import { ChevronDown, ListTree } from "lucide-react";
 
 import type { ProjectTocItem } from "@/lib/project-toc";
 
-interface ProjectTocProps {
+interface ContentTocProps {
   items: ProjectTocItem[];
   aside?: ReactNode; // optional block shown inside the desktop panel
   asidePosition?: "top" | "bottom";
 }
 
-export function ProjectToc({ items, aside, asidePosition = "top" }: ProjectTocProps) {
+export function ContentToc({ items, aside, asidePosition = "top" }: ContentTocProps) {
   const [activeId, setActiveId] = useState<string | null>(null);
 
   useEffect(() => {

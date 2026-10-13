@@ -1,9 +1,8 @@
 import { notFound } from "next/navigation";
 
-import { MDX } from "@/components/mdx/mdx";
-import ProjectDetailsClient from "@/components/mdx/project-detail-client";
+import { ProjectView } from "@/components/mdx/project-view";
 import { extractProjectToc } from "@/lib/project-toc";
-import { fetchProjectReadme, fetchProjects } from "@/lib/projects";
+import { fetchProject, fetchProjectReadme, fetchProjects } from "@/lib/projects";
 
 export const revalidate = 21600;
 export const dynamicParams = true;
@@ -16,25 +15,21 @@ export async function generateStaticParams() {
   return [];
 }
 
-export default async function ProjectLoadingPage({ params }: Props) {
-  const { name: projectName } = await params;
+export default async function ProjectPage({ params }: Props) {
+  const { name } = await params;
   const projects = await fetchProjects();
 
-  if (!projects.some((p) => p.name === projectName)) {
+  if (!projects.some((p) => p.name === name)) {
     notFound();
   }
 
-  const readme = await fetchProjectReadme(projectName);
+  const [project, readme] = await Promise.all([fetchProject(name), fetchProjectReadme(name)]);
+
+  if (!project) {
+    notFound();
+  }
+
   const toc = await extractProjectToc(readme.content);
 
-  return (
-    <ProjectDetailsClient project_name={projectName} toc={toc} readme={readme.content}>
-      <MDX
-        source={readme.content}
-        repository={readme.repository}
-        branch={readme.branch}
-        readmePath={readme.path}
-      />
-    </ProjectDetailsClient>
-  );
+  return <ProjectView project={project} readme={readme} toc={toc} />;
 }

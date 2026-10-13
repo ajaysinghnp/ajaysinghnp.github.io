@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { Check, FileDown, FileText, Link2, Loader2 } from "lucide-react";
 
+import { CONTENT_ID } from "@/components/layouts/content-ids";
 import { cn } from "@/lib/utils";
 
 type PdfState = "idle" | "working" | "done" | "error";
@@ -31,10 +32,10 @@ function PdfIcon({ state }: { state: PdfState }) {
 }
 
 interface Props {
-  title: string;
-  markdown: string;
-  contentId: string; // id of the element holding the rendered article
-  fallbackName: string; // PDF file name when the title has no usable characters
+  title: string; // used for the PDF file name
+  markdown?: string; // exactly what "Copy as Markdown" puts on the clipboard
+  contentId?: string; // id of the element exported to PDF
+  fallbackName?: string; // PDF file name when the title has no usable characters
   actions?: Action[];
   size?: keyof typeof sizes;
   className?: string;
@@ -42,9 +43,9 @@ interface Props {
 
 export function PostActions({
   title,
-  markdown,
-  contentId,
-  fallbackName,
+  markdown = "",
+  contentId = CONTENT_ID,
+  fallbackName = "document",
   actions = ["link", "markdown", "pdf"],
   size = "default",
   className,
@@ -55,9 +56,7 @@ export function PostActions({
 
   async function copy(kind: "link" | "markdown") {
     try {
-      await navigator.clipboard.writeText(
-        kind === "link" ? window.location.href : `# ${title}\n\n${markdown}`,
-      );
+      await navigator.clipboard.writeText(kind === "link" ? window.location.href : markdown);
       setCopied(kind);
       setTimeout(() => setCopied(null), 2000);
     } catch (error) {
@@ -75,7 +74,7 @@ export function PostActions({
       const source = document.getElementById(contentId);
 
       if (source) {
-        // Loaded on demand so the PDF libraries don't ship with every post view.
+        // Loaded on demand so the PDF libraries don't ship with every page.
         const { html2pdf } = await import("@/lib/html2pdf");
         const name = title.replace(/[^\w\s-]/g, "").trim() || fallbackName;
 
