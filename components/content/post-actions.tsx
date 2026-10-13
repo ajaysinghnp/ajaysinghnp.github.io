@@ -17,7 +17,7 @@ interface Props {
 }
 
 const button =
-  "inline-flex cursor-pointer items-center gap-2 rounded px-3 py-1.5 text-sm font-medium site-nav-active hover:bg-(--site-accent)/10 disabled:cursor-wait disabled:opacity-70";
+  "inline-flex cursor-pointer items-center gap-2 rounded px-4 py-2 text-sm font-medium site-nav-active hover:bg-(--site-accent)/10 disabled:cursor-wait disabled:opacity-70";
 
 const pdfLabels: Record<PdfState, string> = {
   idle: "Download as PDF",

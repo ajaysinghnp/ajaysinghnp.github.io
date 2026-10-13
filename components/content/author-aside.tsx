@@ -18,6 +18,8 @@ export function AuthorAside({ author, basePath, hue }: Props) {
       <p className="mb-2 text-[10px] tracking-[0.16em] resume-muted uppercase">Written by</p>
       <Link
         href={authorHref(basePath, author)}
+        target="_blank"
+        rel="noopener noreferrer"
         className="group shine-border-hover relative flex items-center gap-3 rounded-xl border border-(--site-surface-border) p-3 transition hover:border-(--site-accent)"
       >
         <Avatar className="size-11 shrink-0">
@@ -34,6 +36,7 @@ export function AuthorAside({ author, basePath, hue }: Props) {
         <span className="min-w-0 flex-1">
           <span className="block truncate text-sm font-semibold text-(--site-text)">
             {author.name}
+            <span className="sr-only">(opens in a new tab)</span>
           </span>
           {author.role && (
             <span className="block truncate text-xs resume-muted">{author.role}</span>

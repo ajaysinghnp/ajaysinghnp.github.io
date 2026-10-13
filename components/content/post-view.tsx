@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { ArrowLeft, Clock } from "lucide-react";
 
+import { AuthorAside } from "@/components/content/author-aside";
 import { AuthorCard } from "@/components/content/author-card";
 import { AuthorPill } from "@/components/content/author-pill";
 import { Breadcrumbs } from "@/components/content/breadcrumbs";
@@ -21,8 +22,6 @@ import {
 import { listAuthors } from "@/lib/github-content";
 import { extractProjectToc } from "@/lib/project-toc";
 import type { ContentEntry, ContentSource } from "@/types/blog";
-
-import { AuthorAside } from "./author-aside";
 
 interface Props {
   entry: ContentEntry;
@@ -66,10 +65,19 @@ export async function PostView({ entry, source, basePath, rootLabel }: Props) {
           style={{ background: `hsl(${hue} 85% 55%)` }}
         />
 
-        <Breadcrumbs
-          className="relative section-code"
-          items={[{ label: rootLabel, href: basePath }, ...crumbs]}
-        />
+        <div className="relative flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+          <Breadcrumbs
+            className="section-code"
+            items={[{ label: rootLabel, href: basePath }, ...crumbs]}
+          />
+          <PostActions
+            title={heading}
+            markdown={entry.content}
+            contentId="post-content"
+            fallbackName={entry.slug}
+          />
+        </div>
+
         <h1 className="relative mt-5 max-w-4xl text-4xl leading-tight font-semibold tracking-[-0.055em] wrap-break-word text-(--site-text) sm:text-6xl">
           {heading}
         </h1>
@@ -95,13 +103,6 @@ export async function PostView({ entry, source, basePath, rootLabel }: Props) {
             <Clock className="h-3.5 w-3.5" aria-hidden="true" />
             {readingMinutes(entry.content)} min read
           </Pill>
-          <PostActions
-            title={heading}
-            markdown={entry.content}
-            contentId="post-content"
-            fallbackName={entry.slug}
-            className="ml-auto"
-          />
         </div>
 
         {tags.length > 0 && (
