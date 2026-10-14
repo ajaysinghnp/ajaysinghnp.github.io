@@ -13,6 +13,10 @@ import { ContentToc } from "@/components/layouts/content-toc";
 import type { ProjectTocItem } from "@/lib/project-toc";
 import { cn } from "@/lib/utils";
 
+const BAR_HEIGHT = "3rem";
+const SPACER_HEIGHT = "4rem"; // the bar plus a 1rem gap
+const FALLBACK_NAV_HEIGHT = 65;
+
 interface Props {
   backHref: string;
   backLabel: string; // e.g. "All posts"
@@ -26,7 +30,7 @@ interface Props {
   compactLinks?: ReactNode; // extra links in the sticky compact bar
   markdown: string; // what "Copy as Markdown" copies
   fileName: string; // PDF name fallback
-  glow?: string; // CSS colour of the header glow
+  glow?: string; // CSS color of the header glow
   toc: ProjectTocItem[];
   tocAside?: ReactNode;
   footer?: ReactNode;
@@ -53,34 +57,48 @@ export function ContentPage({
   children,
 }: Props) {
   const sectionRef = useRef<HTMLElement>(null);
+  const columnsRef = useRef<HTMLDivElement>(null);
   const [isPastHeader, setIsPastHeader] = useState(false);
   const [manuallyCollapsed, setManuallyCollapsed] = useState(false);
+  const [stickTop, setStickTop] = useState(FALLBACK_NAV_HEIGHT);
+  const [frame, setFrame] = useState({ left: 0, width: 0 });
   const prefersReducedMotion = useReducedMotion();
 
   const updateScrollState = useCallback(() => {
     const section = sectionRef.current;
     if (!section) return;
 
-    const navigation = document.querySelector(".site-navigation");
-    const navigationBottom = navigation?.getBoundingClientRect().bottom ?? 0;
-    setIsPastHeader(section.getBoundingClientRect().bottom <= navigationBottom);
+    const navigationRect = document.querySelector(".site-navigation")?.getBoundingClientRect();
+    setIsPastHeader(section.getBoundingClientRect().bottom <= (navigationRect?.bottom ?? 0));
+
+    if (navigationRect) setStickTop(Math.round(navigationRect.height));
+
+    // The bar is fixed, so it borrows its left edge and width from the columns wrapper.
+    const columns = columnsRef.current?.getBoundingClientRect();
+    if (columns) {
+      const left = Math.round(columns.left);
+      const width = Math.round(columns.width);
+      setFrame((previous) =>
+        previous.left === left && previous.width === width ? previous : { left, width },
+      );
+    }
   }, []);
 
   useEffect(() => {
-    let frame = 0;
+    let frameId = 0;
     const scheduleUpdate = () => {
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(updateScrollState);
+      cancelAnimationFrame(frameId);
+      frameId = requestAnimationFrame(updateScrollState);
     };
 
     scheduleUpdate();
     window.addEventListener("scroll", scheduleUpdate, { passive: true });
-    window.addEventListener("resize", updateScrollState);
+    window.addEventListener("resize", scheduleUpdate);
 
     return () => {
-      cancelAnimationFrame(frame);
+      cancelAnimationFrame(frameId);
       window.removeEventListener("scroll", scheduleUpdate);
-      window.removeEventListener("resize", updateScrollState);
+      window.removeEventListener("resize", scheduleUpdate);
     };
   }, [updateScrollState]);
 
@@ -95,10 +113,10 @@ export function ContentPage({
   const isCompact = isPastHeader || manuallyCollapsed;
   const transition = prefersReducedMotion
     ? { duration: 0 }
-    : { duration: 0.28, ease: "easeOut" as const };
+    : { duration: 0.2, ease: "easeOut" as const };
 
   return (
-    <main className="pb-16 resume-shell">
+    <div className="pb-16 resume-shell">
       <ReadingProgress />
 
       <section ref={sectionRef} className="project-overview-section pt-5">
@@ -167,14 +185,48 @@ export function ContentPage({
         )}
       </section>
 
+      <div
+        ref={columnsRef}
+        className="content-columns"
+        style={
+          {
+            "--content-stick-top": `${stickTop}px`,
+            "--content-bar-height": BAR_HEIGHT,
+          } as React.CSSProperties
+        }
+      >
+        {/* Reserves the bar's height so the columns start below it, sliding open instead of jumping. */}
+        <AnimatePresence initial={false}>
+          {isCompact && (
+            <motion.div
+              key="content-compact-spacer"
+              aria-hidden="true"
+              initial={{ height: 0 }}
+              animate={{ height: SPACER_HEIGHT, transition }}
+              exit={{ height: 0, transition }}
+            />
+          )}
+        </AnimatePresence>
+
+        <div className={toc.length ? "project-content-layout" : undefined}>
+          {toc.length > 0 && <ContentToc items={toc} aside={tocAside} />}
+          <main id={CONTENT_ID} className="min-w-0">
+            {children}
+          </main>
+        </div>
+      </div>
+
+      {footer}
+
       <AnimatePresence>
-        {isCompact && (
+        {isCompact && frame.width > 0 && (
           <motion.div
             key="content-compact-header"
-            initial={{ opacity: 0, y: -16 }}
-            animate={{ opacity: 1, y: 0, transition }}
-            exit={{ opacity: 0, y: -16, transition }}
-            className="fixed top-19 left-1/2 z-40 flex w-[80%] -translate-x-1/2 items-center justify-between gap-2 rounded-xl border project-compact-header px-3 py-2 shadow-xl sm:gap-4 sm:px-5"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1, transition }}
+            exit={{ opacity: 0, transition }}
+            style={{ position: "fixed", top: stickTop, left: frame.left, width: frame.width }}
+            className="z-40 flex h-12 items-center justify-between gap-2 rounded-xl border project-compact-header px-3 shadow-lg sm:gap-4 sm:px-5"
           >
             <Link
               href={backHref}
@@ -211,15 +263,6 @@ export function ContentPage({
           </motion.div>
         )}
       </AnimatePresence>
-
-      <div className={toc.length ? "project-content-layout" : undefined}>
-        {toc.length > 0 && <ContentToc items={toc} aside={tocAside} />}
-        <div id={CONTENT_ID} className="min-w-0">
-          {children}
-        </div>
-      </div>
-
-      {footer}
-    </main>
+    </div>
   );
 }
