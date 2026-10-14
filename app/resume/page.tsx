@@ -73,19 +73,40 @@ export default function ResumePage() {
             </div>
           </div>
           <div className="shine-border-hover resume-surface p-5">
-            <p className="section-code">education</p>
-            <div className="mt-5 space-y-5">
-              {education.map((item) => (
-                <div key={item.degree}>
-                  <p className="text-xs text-cyan-300">{item.date}</p>
-                  <h3 className="mt-1 text-lg text-zinc-100">{item.degree}</h3>
-                  <Link
-                    href={item.link}
-                    target="_blank"
-                    className="mt-1 inline-flex gap-2 text-sm resume-muted hover:underline"
-                  >
-                    {item.school} <ArrowUpRight className="h-4 w-4" />
-                  </Link>
+            <p className="section-code">education / journey</p>
+
+            <div className="mt-6 space-y-0">
+              {education.map((item, index) => (
+                <div key={item.degree} className="flex gap-4">
+                  {/* Step indicator and connecting segment */}
+                  <div className="flex w-8 shrink-0 flex-col items-center">
+                    <div className="bg-background flex h-8 w-8 items-center justify-center rounded-full border border-cyan-500/50 text-xs font-semibold text-cyan-600 dark:text-cyan-300">
+                      {String(education.length - index).padStart(2, "0")}
+                    </div>
+
+                    {index < education.length - 1 && (
+                      <div aria-hidden="true" className="my-2 min-h-8 w-px flex-1 bg-cyan-500/30" />
+                    )}
+                  </div>
+
+                  {/* Education details */}
+                  <div className="min-w-0 flex-1 pb-8">
+                    <p className="text-xs tracking-[0.12em] text-cyan-600 uppercase dark:text-cyan-300">
+                      {item.date}
+                    </p>
+
+                    <h3 className="text-foreground mt-2 text-lg leading-snug">{item.degree}</h3>
+
+                    <Link
+                      href={item.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-2 inline-flex items-center gap-2 text-sm resume-muted transition hover:text-cyan-500 dark:hover:text-cyan-300"
+                    >
+                      {item.school}
+                      <ArrowUpRight className="h-4 w-4 shrink-0" />
+                    </Link>
+                  </div>
                 </div>
               ))}
             </div>
