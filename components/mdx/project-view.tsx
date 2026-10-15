@@ -5,11 +5,12 @@ import { ArrowUpRight, Eye, GitBranch, GitFork, Star } from "lucide-react";
 import { Breadcrumbs } from "@/components/content/breadcrumbs";
 import { Pill } from "@/components/content/pill";
 import { ContentPage } from "@/components/layouts/content-page";
-import { MDX } from "@/components/mdx/mdx";
 import { ProjectDescription } from "@/components/mdx/project-description";
 import { socialMedia } from "@/data/social";
 import type { ProjectTocItem } from "@/lib/project-toc";
 import type { Project, ProjectReadme } from "@/types/github";
+
+import { ContentMdx } from "../content/content-mdx";
 
 interface Props {
   project: Project;
@@ -59,7 +60,7 @@ export function ProjectView({ project, readme, toc }: Props) {
           href={project.url}
           target="_blank"
           rel="noreferrer"
-          className="shine-border inline-flex w-fit items-center gap-2 glow-action rounded px-5 py-3 text-sm font-semibold text-[#090b0d] shine-border-contrast"
+          className="action-button shine-border inline-flex w-fit items-center gap-2 px-5 py-3 text-sm font-semibold shine-border-contrast"
         >
           <GitBranch className="h-4 w-4" />
           View on GitHub
@@ -103,11 +104,11 @@ export function ProjectView({ project, readme, toc }: Props) {
       fileName={project.name}
       toc={toc}
     >
-      <MDX
+      <ContentMdx
         source={readme.content}
-        repository={readme.repository}
+        repo={readme.repository}
         branch={readme.branch}
-        readmePath={readme.path}
+        path={readme.path}
       />
     </ContentPage>
   );

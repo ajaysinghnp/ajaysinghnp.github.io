@@ -1,4 +1,5 @@
 import { isValidElement } from "react";
+import Image from "next/image";
 
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
@@ -47,16 +48,56 @@ export const components = {
       {children}
     </h4>
   ),
-  p: ({ className, children, ...props }: ComponentPropsWithoutRef<"p">) => (
-    <p {...props} className={cn("text-(--site-muted)", className)}>
-      {children}
-    </p>
-  ),
+  p: ({ className, children, ...props }: ComponentPropsWithoutRef<"p">) => {
+    const hasImage =
+      isValidElement(children) && (children.type === "img" || children.type === Image);
+
+    return (
+      <p
+        {...props}
+        className={cn("max-w-full text-(--site-muted)", hasImage && "text-center", className)}
+      >
+        {children}
+      </p>
+    );
+  },
   a: ({ className, children, ...props }: ComponentPropsWithoutRef<"a">) => (
     <a {...props} className={cn("site-nav-active no-underline hover:underline", className)}>
       {children}
     </a>
   ),
+  img: ({ className, ...props }: ComponentPropsWithoutRef<"img">) => {
+    const width = Number(props.width);
+    const height = Number(props.height);
+    const hasDimensions = width > 0 && height > 0;
+
+    return (
+      <span
+        className={cn("relative my-4 flex w-full justify-center", !hasDimensions && "min-h-24")}
+      >
+        {hasDimensions ? (
+          <Image
+            {...props}
+            alt={props.alt ?? "Image"}
+            src={String(props.src ?? "")}
+            width={width}
+            height={height}
+            className={cn("h-auto max-w-full", className)}
+          />
+        ) : (
+          <Image
+            {...props}
+            alt={props.alt ?? "Image"}
+            src={String(props.src ?? "")}
+            width={1200}
+            height={800}
+            sizes="(max-width: 768px) 100vw, 768px"
+            className={cn("h-auto max-w-full object-contain", className)}
+          />
+        )}
+      </span>
+    );
+  },
   li: ({ className, children, ...props }: ComponentPropsWithoutRef<"li">) => (
     <li {...props} className={cn("text-(--site-muted)", className)}>
       {children}
