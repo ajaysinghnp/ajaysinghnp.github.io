@@ -75,26 +75,14 @@ export const components = {
       <span
         className={cn("relative my-4 flex w-full justify-center", !hasDimensions && "min-h-24")}
       >
-        {hasDimensions ? (
-          <Image
-            {...props}
-            alt={props.alt ?? "Image"}
-            src={String(props.src ?? "")}
-            width={width}
-            height={height}
-            className={cn("h-auto max-w-full", className)}
-          />
-        ) : (
-          <Image
-            {...props}
-            alt={props.alt ?? "Image"}
-            src={String(props.src ?? "")}
-            width={1200}
-            height={800}
-            sizes="(max-width: 768px) 100vw, 768px"
-            className={cn("h-auto max-w-full object-contain", className)}
-          />
-        )}
+        <Image
+          {...props}
+          alt={props.alt ?? "Image"}
+          src={String(props.src ?? "")}
+          width={width > 0 ? width : 976}
+          height={height > 0 ? height : 540}
+          className={cn("h-auto max-w-full", className)}
+        />
       </span>
     );
   },

@@ -45,7 +45,7 @@ export default function ResumePage() {
       <div className="mt-12 grid gap-12 lg:grid-cols-[0.7fr_1.3fr]">
         <aside className="space-y-8">
           <div className="shine-border-hover resume-surface p-5">
-            <div className="relative mx-auto aspect-square max-w-52 overflow-hidden rounded-full border border-current/40 bg-(--photo-c)/80">
+            <div className="relative mx-auto aspect-square max-w-52 overflow-hidden rounded-full border border-current/40 bg-(--photo-c)/20">
               <Image
                 src={resume.image}
                 alt={`Portrait of ${resume.name}`}
