@@ -381,6 +381,16 @@
   }
 }
 
+@theme {
+  --animate-blink: blink 1s step-end infinite;
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+}
+
 .project-toc {
   min-width: 0;
   position: sticky;
