@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { ArrowUpRight, Check, Mail, MapPin, Sparkles } from "lucide-react";
 
+import { Timeline } from "@/components/content/timeline";
 import { resume } from "@/data/resume";
 import { socialMedia } from "@/data/social";
 
@@ -72,45 +73,34 @@ export default function ResumePage() {
               ))}
             </div>
           </div>
+
           <div className="shine-border-hover resume-surface p-5">
             <p className="section-code">education / journey</p>
 
-            <div className="mt-6 space-y-0">
-              {education.map((item, index) => (
-                <div key={item.degree} className="flex gap-4">
-                  {/* Step indicator and connecting segment */}
-                  <div className="flex w-8 shrink-0 flex-col items-center">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-(--site-accent) text-xs font-bold text-(--site-accent-foreground)">
-                      {String(education.length - index).padStart(2, "0")}
-                    </div>
+            <Timeline
+              items={education}
+              getKey={(item) => item.degree}
+              variant="numbered"
+              numbering="descending"
+              className="mt-6"
+              renderContent={(item) => (
+                <>
+                  <p className="text-xs tracking-[0.12em] site-nav-active">{item.date}</p>
 
-                    {index < education.length - 1 && (
-                      <div
-                        aria-hidden="true"
-                        className="my-2 min-h-8 w-px flex-1 bg-(--site-accent)"
-                      />
-                    )}
-                  </div>
+                  <h3 className="mt-2 text-lg leading-snug site-nav-active">{item.degree}</h3>
 
-                  {/* Education details */}
-                  <div className="min-w-0 flex-1 pb-8">
-                    <p className="text-xs tracking-[0.12em] site-nav-active">{item.date}</p>
-
-                    <h3 className="mt-2 text-lg leading-snug site-nav-active">{item.degree}</h3>
-
-                    <Link
-                      href={item.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="mt-2 inline-flex items-center gap-2 text-sm resume-muted transition hover:text-(--site-accent)/60"
-                    >
-                      {item.school}
-                      <ArrowUpRight className="h-4 w-4 shrink-0" />
-                    </Link>
-                  </div>
-                </div>
-              ))}
-            </div>
+                  <Link
+                    href={item.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-2 inline-flex items-center gap-2 text-sm resume-muted transition hover:text-(--site-accent)/60"
+                  >
+                    {item.school}
+                    <ArrowUpRight className="h-4 w-4 shrink-0" />
+                  </Link>
+                </>
+              )}
+            />
           </div>
         </aside>
 
@@ -120,28 +110,37 @@ export default function ResumePage() {
               <p className="section-code">experience</p>
               <span className="text-xs tracking-[0.16em] resume-muted uppercase">signal / 01</span>
             </div>
-            {resume.workExperiences.map((job) => (
-              <article
-                key={job.company}
-                className="resume-timeline relative border-l border-(--site-accent)/60 pl-6"
-              >
-                <span className="absolute top-1 left-[-0.3rem] h-2 w-2 rounded-full bg-(--site-accent) shadow-[0_0_14px_#67e8f9]" />
-                <div className="flex flex-col gap-2 sm:flex-row sm:items-baseline sm:justify-between">
-                  <h2 className="text-3xl site-nav-active">{job.title}</h2>
-                  <span className="text-xs tracking-[0.15em] resume-muted uppercase">
-                    {job.date}
-                  </span>
-                </div>
-                <Link
-                  href={job.link}
-                  target="_blank"
-                  className="mt-2 inline-flex gap-2 site-nav-active hover:underline"
-                >
-                  {job.company} <ArrowUpRight className="h-4 w-4" />
-                </Link>
-                <p className="mt-5 max-w-2xl text-base leading-8 resume-muted">{job.description}</p>
-              </article>
-            ))}
+
+            <Timeline
+              items={resume.workExperiences}
+              getKey={(job) => job.company}
+              variant="numbered"
+              renderContent={(job) => (
+                <>
+                  <div className="flex flex-col gap-2 sm:flex-row sm:items-baseline sm:justify-between">
+                    <h2 className="text-3xl site-nav-active">{job.title}</h2>
+
+                    <span className="text-xs tracking-[0.15em] resume-muted uppercase">
+                      {job.date}
+                    </span>
+                  </div>
+
+                  <Link
+                    href={job.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-2 inline-flex items-center gap-2 site-nav-active hover:underline"
+                  >
+                    {job.company}
+                    <ArrowUpRight className="h-4 w-4" />
+                  </Link>
+
+                  <p className="mt-5 max-w-2xl text-base leading-8 resume-muted">
+                    {job.description}
+                  </p>
+                </>
+              )}
+            />
           </section>
 
           <section>
