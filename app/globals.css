@@ -18,8 +18,9 @@
   --site-bg: #eef4f6;
   --site-panel: #fafdfe;
   --site-text: #0b1f26;
-  --site-muted: #4a6169;
-  --site-border: rgba(11, 31, 38, 0.12);
+  --site-dark-text: #0b1f26;
+  --site-muted: #498aa0;
+  --site-border: rgba(5, 27, 36, 0.12);
   --site-accent: #0e7490;
   --site-shine-color: #0e7490;
   --site-surface-border: color-mix(in srgb, var(--site-accent) 24%, transparent);
@@ -55,7 +56,8 @@
   --site-bg: #090b0d;
   --site-panel: #0d1215;
   --site-text: #f4fbfc;
-  --site-muted: #a1adb1;
+  --site-dark-text: #0b1f26;
+  --site-muted: #647e86;
   --site-border: rgba(255, 255, 255, 0.1);
   --site-accent: #67e8f9;
   --site-shine-color: #67e8f9;
@@ -168,6 +170,10 @@
 .dark .site-nav-link:hover,
 .dark .site-nav-active {
   color: #a5f3fc;
+}
+
+@utility text-muted {
+  color: var(--site-muted);
 }
 
 @utility site-nav-active {
@@ -1251,7 +1257,7 @@ html:not(.dark) body [class~="text-zinc-500"] {
     background-position: 100% 0;
     -webkit-background-clip: text;
     background-clip: text;
-    color: transparent;
+    color: var(--site-accent);
     animation: sparkle-sweep 30s cubic-bezier(0.5, 0, 0.5, 1) infinite;
   }
 

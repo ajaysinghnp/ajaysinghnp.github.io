@@ -80,7 +80,7 @@ export default function ResumePage() {
                 <div key={item.degree} className="flex gap-4">
                   {/* Step indicator and connecting segment */}
                   <div className="flex w-8 shrink-0 flex-col items-center">
-                    <div className="bg-background flex h-8 w-8 items-center justify-center rounded-full border border-cyan-500/50 text-xs font-semibold text-cyan-600 dark:text-cyan-300">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-cyan-400 text-xs font-bold text-slate-950">
                       {String(education.length - index).padStart(2, "0")}
                     </div>
 

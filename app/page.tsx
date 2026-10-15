@@ -61,8 +61,8 @@ export default function HomeRedesign() {
           custom={0.1}
           className="lg:order-last"
         >
-          <div className="mb-8 flex items-center gap-3 text-xs tracking-[0.2em] text-cyan-300 uppercase">
-            <span className="h-2 w-2 animate-pulse rounded-full bg-cyan-300 shadow-[0_0_18px_#67e8f9]" />{" "}
+          <div className="mb-8 flex items-center gap-3 text-xs tracking-[0.2em] site-nav-active uppercase">
+            <span className="live-dot h-2 w-2 rounded-full" />
             Signal online / {resume.contacts.at(0)?.address}
           </div>
           <h1 className="sparkle-text max-w-5xl text-[clamp(4rem,11vw,10rem)] leading-[0.96] font-semibold tracking-[-0.045em]">
@@ -76,14 +76,14 @@ export default function HomeRedesign() {
           <div className="mt-10 flex flex-wrap items-center gap-5">
             <Link
               href="/projects"
-              className="shine-border inline-flex items-center gap-3 glow-action rounded px-5 py-3 text-sm font-semibold text-[#090b0d] shine-border-contrast"
+              className="shine-border inline-flex items-center gap-3 glow-action rounded px-5 py-3 text-sm font-semibold text-(--site-dark-text) shine-border-contrast"
             >
               Explore the work <ArrowUpRight className="h-4 w-4" />
             </Link>
             <Link
               href={socialMedia.github.href}
               target="_blank"
-              className="sparkle inline-flex gap-2 rounded-sm border border-cyan-700/60 bg-cyan-300/10 px-6 py-3 hover:border-cyan-300"
+              className="sparkle inline-flex gap-2 rounded-sm border border-(--site-accent) bg-(--site-accent)/10 px-6 py-3 site-nav-active hover:border-cyan-300"
             >
               <GitMerge className="h-4 w-4" /> GitHub
             </Link>
@@ -142,9 +142,9 @@ export default function HomeRedesign() {
       >
         <div className="mx-auto grid max-w-7xl gap-6 py-7 sm:grid-cols-4">
           {about.highlights.map((highlight) => (
-            <div key={highlight.label} className="border-l border-cyan-300/40 pl-4">
-              <p className="text-2xl font-semibold text-zinc-100">{highlight.label}</p>
-              <p className="mt-1 text-xs tracking-[0.12em] text-zinc-500 uppercase">
+            <div key={highlight.label} className="border-l border-cyan-300/40 pl-4 site-nav-active">
+              <p className="text-2xl font-semibold">{highlight.label}</p>
+              <p className="mt-1 text-xs tracking-[0.12em] text-muted uppercase">
                 {highlight.description}
               </p>
             </div>
@@ -156,7 +156,7 @@ export default function HomeRedesign() {
         <div className="mb-10 flex items-end justify-between gap-6">
           <div>
             <p className="section-code">selected_work</p>
-            <h2 className="mt-4 text-4xl font-semibold tracking-[-0.06em] text-zinc-50 sm:text-6xl">
+            <h2 className="mt-4 text-4xl font-semibold tracking-[-0.06em] site-nav-active sm:text-6xl">
               Useful by design.
             </h2>
           </div>
@@ -167,7 +167,7 @@ export default function HomeRedesign() {
             All projects <ArrowUpRight className="h-4 w-4" />
           </Link>
         </div>
-        <div className="divide-y divide-white/10 border-y border-white/10">
+        <div className="divide-y divide-(--site-accent)/10 border-y border-(--site-accent)/10">
           {projects.map((project, index) => (
             <motion.div
               key={project.index}
@@ -178,12 +178,12 @@ export default function HomeRedesign() {
               custom={index * 0.1}
               className="group grid gap-4 py-7 transition-colors hover:bg-cyan-300/4 sm:grid-cols-[4rem_1fr_auto] sm:items-center sm:px-4"
             >
-              <span className="font-mono text-sm text-cyan-300/70">{project.index}</span>
+              <span className="font-mono text-sm site-nav-active">{project.index}</span>
               <div>
-                <p className="text-[10px] tracking-[0.2em] text-zinc-600 uppercase">
+                <p className="text-[10px] tracking-[0.2em] text-zinc-900 uppercase dark:text-zinc-400">
                   {project.type}
                 </p>
-                <h3 className="mt-2 text-2xl font-medium tracking-[-0.04em] text-zinc-100">
+                <h3 className="mt-2 text-2xl font-medium tracking-[-0.04em] site-nav-active">
                   {project.title}
                 </h3>
                 <p className="mt-2 max-w-2xl text-sm leading-7 text-zinc-500">
@@ -206,31 +206,31 @@ export default function HomeRedesign() {
 
       <section
         id="about"
-        className="shuttle-band relative z-10 border-y border-white/10 site-panel"
+        className="shuttle-band relative z-10 border-y border-(--site-accent)/30 site-panel"
       >
         <div className="mx-auto grid max-w-7xl gap-14 py-24 lg:grid-cols-[0.8fr_1.2fr] lg:py-32">
           <div>
             <p className="section-code">context</p>
-            <h2 className="mt-5 max-w-md text-4xl leading-tight font-semibold tracking-[-0.06em] text-zinc-50 sm:text-5xl">
+            <h2 className="mt-5 max-w-md text-4xl leading-tight font-semibold tracking-[-0.06em] site-nav-active sm:text-5xl">
               Curiosity with somewhere useful to go.
             </h2>
             <p className="mt-7 max-w-md text-base leading-8 text-zinc-400">{about.description}</p>
           </div>
-          <div>
-            <div className="flex items-center gap-3 text-xs tracking-[0.18em] text-cyan-300 uppercase">
+          <div className="site-nav-active">
+            <div className="flex items-center gap-3 text-xs tracking-[0.18em] uppercase">
               <BriefcaseBusiness className="h-4 w-4" /> How I work
             </div>
             <div className="mt-6 space-y-5">
               {resume.skills.slice(0, 3).map((skill) => (
-                <div key={skill.label} className="border-l border-cyan-300/50 pl-6">
-                  <h3 className="text-2xl text-zinc-100">{skill.label}</h3>
-                  <p className="mt-2 max-w-xl leading-8 text-zinc-400">{skill.description}</p>
+                <div key={skill.label} className="border-l border-(--site-accent)/50 pl-6">
+                  <h3 className="text-2xl site-nav-active">{skill.label}</h3>
+                  <p className="mt-2 max-w-xl leading-8 text-muted">{skill.description}</p>
                 </div>
               ))}
             </div>
             <Link
               href="/about"
-              className="mt-8 inline-flex items-center gap-2 text-sm text-zinc-300 underline decoration-cyan-300/60 underline-offset-8 transition hover:text-cyan-200"
+              className="mt-8 inline-flex items-center gap-2 text-sm text-zinc-300 underline decoration-(--site-accent)/60 underline-offset-8 transition hover:text-cyan-200"
             >
               More about the work <ArrowUpRight className="h-4 w-4" />
             </Link>
@@ -241,16 +241,16 @@ export default function HomeRedesign() {
       <section className="relative z-10 mx-auto grid max-w-7xl gap-14 py-24 lg:grid-cols-[1fr_0.8fr] lg:py-32">
         <div>
           <p className="section-code">field_notes</p>
-          <h2 className="mt-5 max-w-xl text-4xl font-semibold tracking-[-0.06em] text-zinc-50 sm:text-6xl">
+          <h2 className="mt-5 max-w-xl text-4xl font-semibold tracking-[-0.06em] site-nav-active sm:text-6xl">
             The signal continues in the notes.
           </h2>
-          <p className="mt-6 max-w-lg text-lg leading-8 text-zinc-500">
+          <p className="mt-6 max-w-lg text-lg leading-8 text-muted">
             Ideas, lessons, and the occasional rabbit hole from building across software,
             automation, and hardware.
           </p>
           <Link
             href="/blog"
-            className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-cyan-200 transition hover:text-cyan-100"
+            className="mt-8 inline-flex items-center gap-2 text-sm font-semibold site-nav-active transition hover:text-(--site-accent)/80"
           >
             <Rss className="h-4 w-4" /> Read the blog <ArrowUpRight className="h-4 w-4" />
           </Link>
