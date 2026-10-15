@@ -115,6 +115,9 @@ export const isRecent = (iso?: string, days = 30) => {
 };
 
 // Lightweight shape for client components, so post bodies never reach the browser.
+export const plural = (count: number, word: string) =>
+  `${count} ${count === 1 ? word : `${word}s`}`;
+
 export function toSummary(
   entry: ContentEntry,
   basePath: string,
@@ -134,6 +137,8 @@ export function toSummary(
     minutes: readingMinutes(entry.content),
     category: entry.category,
     categoryName: categoryLabel(entry.category, labels),
+    topCategory: entry.category.split("/")[0],
+    topCategoryName: categoryLabel(entry.category.split("/")[0], labels),
     hue: categoryHue(entry.category),
     isNew: isRecent(date),
   };

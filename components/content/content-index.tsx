@@ -1,10 +1,12 @@
 import { Chip } from "@/components/content/chip";
 import { ContentList } from "@/components/content/content-list";
 import { Marquee } from "@/components/content/marquee";
+import { SheetList } from "@/components/content/sheet-list";
 import {
   categoryHref,
   type CategorySummary,
   formatDate,
+  plural,
   type TagSummary,
   toSummary,
 } from "@/lib/content-format";
@@ -21,6 +23,8 @@ interface Props {
   eyebrow: React.ReactNode;
   heading: string;
   intro: string;
+  list?: "timeline" | "reference"; // timeline: by year with filters; reference: by category, A-Z
+  itemLabel?: string; // singular noun for counts, e.g. "post" or "sheet"
 }
 
 const stat = "rounded-full border border-(--site-surface-border) px-3 py-1";
@@ -36,9 +40,20 @@ export function ContentIndex({
   eyebrow,
   heading,
   intro,
+  list = "timeline",
+  itemLabel = "post",
 }: Props) {
   const posts = entries.map((entry) => toSummary(entry, basePath, labels));
   const latest = entries[0]?.meta.date;
+
+  let listing: React.ReactNode;
+  if (entries.length === 0) {
+    listing = <p className="mt-10 resume-muted">Nothing here yet.</p>;
+  } else if (list === "reference") {
+    listing = <SheetList posts={posts} basePath={basePath} itemLabel={itemLabel} />;
+  } else {
+    listing = <ContentList posts={posts} showFeatured={!activeCategory && !activeTag} />;
+  }
 
   return (
     <main className="w-full pb-20 resume-shell">
@@ -52,9 +67,7 @@ export function ContentIndex({
         <div>
           <p className="max-w-xl text-xl leading-8 resume-lead">{intro}</p>
           <ul className="mt-6 flex flex-wrap gap-2 font-mono text-xs tracking-[0.08em] resume-muted">
-            <li className={stat}>
-              {entries.length} {entries.length === 1 ? "post" : "posts"}
-            </li>
+            <li className={stat}>{plural(entries.length, itemLabel)}</li>
             {tags.length > 0 && (
               <li className={stat}>
                 {tags.length} {tags.length === 1 ? "tag" : "tags"}
@@ -94,11 +107,7 @@ export function ContentIndex({
         </nav>
       )}
 
-      {entries.length === 0 ? (
-        <p className="mt-10 resume-muted">Nothing here yet.</p>
-      ) : (
-        <ContentList posts={posts} showFeatured={!activeCategory && !activeTag} />
-      )}
+      {listing}
     </main>
   );
 }

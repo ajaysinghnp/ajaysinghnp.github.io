@@ -4,6 +4,7 @@ import matter from "gray-matter";
 import path from "node:path";
 
 import { blogSource } from "@/data/blog";
+import { cheatsheetSource } from "@/data/cheatsheet";
 import type { Author, AuthorLink, ContentEntry, ContentRef, ContentSource } from "@/types/blog";
 
 import { githubToken } from "./github-config";
@@ -11,7 +12,10 @@ import { GitHubHttpError } from "./projects";
 
 const GITHUB_API = "https://api.github.com";
 
-export const contentSources = { blog: blogSource } satisfies Record<string, ContentSource>;
+export const contentSources = {
+  blog: blogSource,
+  cheatsheet: cheatsheetSource,
+} satisfies Record<string, ContentSource>;
 
 async function ghFetch(url: string, source: ContentSource, accept = "application/vnd.github+json") {
   const res = await fetch(url, {
@@ -126,6 +130,9 @@ const asString = (value: unknown) =>
 // YAML turns bare timestamps into Date objects.
 const asIso = (value: unknown) => (value instanceof Date ? value.toISOString() : asString(value));
 
+// Optional device/spec fields some sheets carry in frontmatter.
+const DETAIL_KEYS = ["type", "standard", "board"] as const;
+
 async function readEntry(source: ContentSource, ref: ContentRef): Promise<ContentEntry> {
   const encoded = ref.path.split("/").map(encodeURIComponent).join("/");
   const res = await ghFetch(
@@ -148,6 +155,10 @@ async function readEntry(source: ContentSource, ref: ContentRef): Promise<Conten
       updated: asIso(data.updated_at),
       author: asString(data.author),
       tags: Array.isArray(data.tags) ? data.tags.map(String) : [],
+      details: DETAIL_KEYS.flatMap((key) => {
+        const value = asString(data[key]);
+        return value ? [{ label: key, value }] : [];
+      }),
     },
   };
 }
@@ -289,8 +300,10 @@ async function readAuthor(
 }
 
 export async function listAuthors(source: ContentSource): Promise<Author[]> {
-  const refs = await listAuthorRefs(source);
-  const authors = await Promise.all(refs.map((ref) => readAuthor(source, ref)));
+  // A section can borrow another repo's profiles (cheatsheets use the blog's authors).
+  const host = source.authorsFrom ?? source;
+  const refs = await listAuthorRefs(host);
+  const authors = await Promise.all(refs.map((ref) => readAuthor(host, ref)));
 
   return authors.sort((a, b) => a.name.localeCompare(b.name));
 }

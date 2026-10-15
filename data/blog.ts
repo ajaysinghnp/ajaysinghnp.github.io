@@ -1,5 +1,5 @@
 import { socialMedia } from "@/data/social";
-import type { ContentSource } from "@/types/blog";
+import type { ContentSection, ContentSource } from "@/types/blog";
 
 export const blogConfig = {
   basePath: "/blog",
@@ -39,4 +39,13 @@ export const blogSource: ContentSource = {
   revalidate: blogConfig.revalidateSeconds,
   labels: blogConfig.categoryLabels,
   listHidden: blogConfig.listHidden,
+};
+
+export const blogSection: ContentSection = {
+  source: blogSource,
+  basePath: blogConfig.basePath,
+  rootLabel: "Blog",
+  itemLabel: "post",
+  list: "timeline",
+  page: blogConfig.page,
 };

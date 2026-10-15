@@ -30,10 +30,20 @@ interface Props {
   source: ContentSource;
   basePath: string;
   rootLabel: string;
+  backLabel?: string; // e.g. "All sheets"
+  authorBasePath?: string; // where author pages live, when different from basePath
 }
 
-export async function PostView({ entry, source, basePath, rootLabel }: Props) {
-  const { title, description, date, updated, author: authorValue, tags } = entry.meta;
+export async function PostView({
+  entry,
+  source,
+  basePath,
+  rootLabel,
+  backLabel = "All posts",
+  authorBasePath,
+}: Props) {
+  const { title, description, date, updated, author: authorValue, tags, details } = entry.meta;
+  const authorBase = authorBasePath ?? basePath;
   const [toc, authors] = await Promise.all([extractProjectToc(entry.content), listAuthors(source)]);
   const author = findAuthor(authors, authorValue);
   const crumbs = categoryCrumbs(entry.category, basePath, source.labels);
@@ -43,7 +53,7 @@ export async function PostView({ entry, source, basePath, rootLabel }: Props) {
   return (
     <ContentPage
       backHref={basePath}
-      backLabel="All posts"
+      backLabel={backLabel}
       label={
         <Breadcrumbs
           className="section-code"
@@ -75,7 +85,12 @@ export async function PostView({ entry, source, basePath, rootLabel }: Props) {
       meta={
         <>
           {authorValue && (
-            <AuthorPill author={author} fallbackName={authorValue} hue={hue} basePath={basePath} />
+            <AuthorPill
+              author={author}
+              fallbackName={authorValue}
+              hue={hue}
+              basePath={authorBase}
+            />
           )}
           {date && (
             <Pill>
@@ -89,6 +104,12 @@ export async function PostView({ entry, source, basePath, rootLabel }: Props) {
             <Clock className="h-3.5 w-3.5" aria-hidden="true" />
             {readingMinutes(entry.content)} min read
           </Pill>
+          {details.map(({ label, value }) => (
+            <Pill key={label}>
+              <span className="capitalize">{label}</span>
+              <span className="text-(--site-text)">{value}</span>
+            </Pill>
+          ))}
         </>
       }
       metaEnd={<PostActions actions={["link"]} size="compact" title={heading} />}
@@ -96,11 +117,11 @@ export async function PostView({ entry, source, basePath, rootLabel }: Props) {
       fileName={entry.slug}
       glow={`hsl(${hue} 85% 55%)`}
       toc={toc}
-      tocAside={author && <AuthorAside author={author} basePath={basePath} hue={hue} />}
+      tocAside={author && <AuthorAside author={author} basePath={authorBase} hue={hue} />}
       footer={
         <>
           {author && toc.length === 0 && (
-            <AuthorCard author={author} basePath={basePath} hue={hue} />
+            <AuthorCard author={author} basePath={authorBase} hue={hue} />
           )}
           <PostFooter entry={entry} source={source} basePath={basePath} />
         </>
