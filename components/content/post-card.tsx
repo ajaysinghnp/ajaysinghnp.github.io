@@ -77,7 +77,10 @@ export function PostCard({ post, variant = "default" }: Props) {
         </div>
 
         <Heading
-          className={cn("mt-5 font-semibold tracking-[-0.04em] project-card-title", styles.title)}
+          className={cn(
+            "project-card-title, mt-5 font-semibold tracking-[-0.04em] site-nav-active",
+            styles.title,
+          )}
         >
           {post.title}
         </Heading>

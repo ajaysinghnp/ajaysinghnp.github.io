@@ -76,7 +76,7 @@ export default function HomeRedesign() {
           <div className="mt-10 flex flex-wrap items-center gap-5">
             <Link
               href="/projects"
-              className="shine-border inline-flex items-center gap-3 glow-action rounded px-5 py-3 text-sm font-semibold text-(--site-dark-text) shine-border-contrast"
+              className="action-button shine-border inline-flex items-center gap-3 px-5 py-3 text-sm font-semibold shine-border-contrast"
             >
               Explore the work <ArrowUpRight className="h-4 w-4" />
             </Link>
@@ -120,13 +120,13 @@ export default function HomeRedesign() {
                 <p className="text-[color-mix(in_srgb,var(--site-accent)_55%,var(--site-muted))]">
                   Focus
                 </p>
-                <p className="mt-1 text-(--site-text)">{resume.passion}</p>
+                <p className="mt-1 site-nav-active">{resume.passion}</p>
               </div>
               <div>
                 <p className="text-[color-mix(in_srgb,var(--site-accent)_55%,var(--site-muted))]">
                   Since
                 </p>
-                <p className="mt-1 text-(--site-text)">
+                <p className="mt-1 site-nav-active">
                   {about.highlights[resume.coding_since].label} /{" "}
                   {about.highlights[resume.coding_since].description.split(" ")[0]}
                 </p>

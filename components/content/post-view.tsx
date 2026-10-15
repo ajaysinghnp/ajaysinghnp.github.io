@@ -107,7 +107,7 @@ export async function PostView({
           {details.map(({ label, value }) => (
             <Pill key={label}>
               <span className="capitalize">{label}</span>
-              <span className="text-(--site-text)">{value}</span>
+              <span className="site-nav-active">{value}</span>
             </Pill>
           ))}
         </>

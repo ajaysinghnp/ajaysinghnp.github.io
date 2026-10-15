@@ -147,7 +147,7 @@ export const Notification: React.FC<NotificationProps> = ({
     <div
       role="status"
       aria-live="polite"
-      className="fixed z-10000 flex max-w-[calc(100vw-2rem)] items-center gap-3 resume-surface rounded-xl border border-(--site-surface-border) px-4 py-3 text-sm font-medium text-(--site-text) shadow-xl backdrop-blur-md"
+      className="fixed z-10000 flex max-w-[calc(100vw-2rem)] items-center gap-3 resume-surface rounded-xl border border-(--site-surface-border) px-4 py-3 text-sm font-medium site-nav-active shadow-xl backdrop-blur-md"
       style={positionStyle}
     >
       <span

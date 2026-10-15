@@ -34,7 +34,7 @@ export function AuthorCard({ author, basePath, hue }: Props) {
 
       <div className="min-w-0">
         <p className="section-code">// about the author</p>
-        <h2 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-(--site-text)">
+        <h2 className="mt-2 text-2xl font-semibold tracking-[-0.04em] site-nav-active">
           {author.name}
         </h2>
         {author.role && <p className="text-sm resume-muted">{author.role}</p>}

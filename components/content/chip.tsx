@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 
 // Shared by every pill-shaped control so the rotating edge is consistent.
 export const pillClass =
-  "shine-border-hover relative rounded-full border border-(--site-surface-border) text-(--site-muted) transition hover:text-(--site-text)";
+  "shine-border-hover relative rounded-full border border-(--site-surface-border) text-(--site-muted) transition hover:site-nav-active";
 
 export function Chip({
   href,

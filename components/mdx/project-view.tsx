@@ -72,7 +72,7 @@ export function ProjectView({ project, readme, toc }: Props) {
           {stats.map(({ label, value, icon: Icon }) => (
             <Pill key={label} title={`${value} ${label.toLowerCase()}`}>
               <Icon className="h-3.5 w-3.5 site-nav-active" aria-hidden="true" />
-              <span className="font-medium text-(--site-text)">{compactCount(value)}</span>
+              <span className="font-medium site-nav-active">{compactCount(value)}</span>
               {label}
             </Pill>
           ))}

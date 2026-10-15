@@ -26,7 +26,7 @@ export default function ContactPage() {
         <div className="shine-border-hover flex min-h-88 flex-col justify-between resume-surface p-6 sm:p-8">
           <div>
             <p className="section-code">best way to reach me</p>
-            <h2 className="mt-5 max-w-xl text-4xl font-semibold tracking-tighter text-zinc-50 sm:text-5xl">
+            <h2 className="mt-5 max-w-xl text-4xl font-semibold tracking-tighter site-nav-active sm:text-5xl">
               Email works best.
             </h2>
             <p className="mt-5 max-w-lg text-lg leading-8 resume-muted">
@@ -38,7 +38,7 @@ export default function ContactPage() {
             <Link
               href={socialMedia.email.href}
               aria-label="Start a conversation by email"
-              className="shine-border inline-flex items-center gap-3 glow-action rounded px-5 py-3 text-sm font-semibold text-[#090b0d] shine-border-contrast"
+              className="action-button shine-border inline-flex items-center gap-3 px-5 py-3 text-sm font-semibold shine-border-contrast"
             >
               <Mail className="h-4 w-4" /> Start a conversation <ArrowUpRight className="h-4 w-4" />
             </Link>
@@ -49,7 +49,7 @@ export default function ContactPage() {
           <div>
             <p className="section-code">currently around</p>
             <div className="mt-4 flex items-center gap-3 text-lg resume-meta">
-              <MapPin className="h-5 w-5 text-cyan-300" /> {resume.contacts.at(0)?.address}
+              <MapPin className="h-5 w-5 site-nav-active" /> {resume.contacts.at(0)?.address}
             </div>
           </div>
           <SocialLinksPanel heading="find me elsewhere" />

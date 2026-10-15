@@ -28,22 +28,22 @@ function getTextContent(node: ReactNode): string {
 
 export const components = {
   h1: ({ className, children, ...props }: ComponentPropsWithoutRef<"h1">) => (
-    <h1 {...props} className={cn("text-(--site-text)", className)}>
+    <h1 {...props} className={cn("site-nav-active", className)}>
       {children}
     </h1>
   ),
   h2: ({ className, children, ...props }: ComponentPropsWithoutRef<"h2">) => (
-    <h2 {...props} className={cn("text-(--site-text)", className)}>
+    <h2 {...props} className={cn("site-nav-active", className)}>
       {children}
     </h2>
   ),
   h3: ({ className, children, ...props }: ComponentPropsWithoutRef<"h3">) => (
-    <h3 {...props} className={cn("text-(--site-text)", className)}>
+    <h3 {...props} className={cn("site-nav-active", className)}>
       {children}
     </h3>
   ),
   h4: ({ className, children, ...props }: ComponentPropsWithoutRef<"h4">) => (
-    <h4 {...props} className={cn("text-(--site-text)", className)}>
+    <h4 {...props} className={cn("site-nav-active", className)}>
       {children}
     </h4>
   ),
@@ -63,7 +63,7 @@ export const components = {
     </li>
   ),
   strong: ({ className, children, ...props }: ComponentPropsWithoutRef<"strong">) => (
-    <strong {...props} className={cn("font-bold text-(--site-text)", className)}>
+    <strong {...props} className={cn("font-bold site-nav-active", className)}>
       {children}
     </strong>
   ),

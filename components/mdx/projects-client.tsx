@@ -278,7 +278,7 @@ export function ProjectsClient({ projects }: { projects: Project[] }) {
             <p className="section-code">
               // featured projects / {String(selected.length + 1).padStart(2, "0")}
             </p>
-            <h2 className="mt-3 text-3xl font-semibold tracking-tighter text-(--site-text) sm:text-4xl">
+            <h2 className="mt-3 text-3xl font-semibold tracking-tighter site-nav-active sm:text-4xl">
               Featured projects.
             </h2>
           </div>
@@ -300,7 +300,7 @@ export function ProjectsClient({ projects }: { projects: Project[] }) {
               <p className="section-code">
                 project index / {String(remaining.length).padStart(2, "0")} repos
               </p>
-              <h2 className="mt-4 text-4xl font-semibold tracking-tighter text-(--site-text) sm:text-5xl">
+              <h2 className="mt-4 text-4xl font-semibold tracking-tighter site-nav-active sm:text-5xl">
                 More experiments.
               </h2>
             </div>
@@ -308,7 +308,7 @@ export function ProjectsClient({ projects }: { projects: Project[] }) {
               href={`${socialMedia.github.href}?tab=repositories`}
               target="_blank"
               rel="noreferrer"
-              className="hidden items-center gap-2 text-sm site-nav-active transition hover:text-(--site-text) sm:inline-flex"
+              className="hidden items-center gap-2 text-sm site-nav-active transition hover:site-nav-active sm:inline-flex"
             >
               Browse GitHub <GitBranch className="h-4 w-4" />
             </Link>
@@ -357,7 +357,7 @@ export function ProjectsState({
       className="flex min-h-[55vh] w-full flex-col items-center justify-center gap-5 px-5 text-center resume-shell"
     >
       <p className="section-code">projects / signal</p>
-      <h1 className="text-3xl text-(--site-text)">{label}</h1>
+      <h1 className="text-3xl site-nav-active">{label}</h1>
       {description && <p className="max-w-lg leading-7 resume-muted">{description}</p>}
       {action}
     </main>
