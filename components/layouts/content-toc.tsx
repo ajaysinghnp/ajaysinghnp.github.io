@@ -64,10 +64,10 @@ export function ContentToc({ items, aside, asidePosition = "top" }: ContentTocPr
             href={`#${item.id}`}
             aria-current={activeId === item.id ? "location" : undefined}
             className={[
-              "project-toc-link hover:bg-[color-mix(in_srgb,var(--site-accent)_9%,transparent)] hover:text-[var(--site-text)]",
+              "project-toc-link hover:bg-[color-mix(in_srgb,var(--site-accent)_9%,transparent)] hover:site-nav-active",
               nested ? "project-toc-child-link" : "",
               activeId === item.id
-                ? "shine-border bg-[color-mix(in_srgb,var(--site-accent)_9%,transparent)] font-semibold text-[var(--site-text)]"
+                ? "shine-border bg-[color-mix(in_srgb,var(--site-accent)_9%,transparent)] font-semibold site-nav-active"
                 : "",
             ]
               .filter(Boolean)
@@ -83,7 +83,7 @@ export function ContentToc({ items, aside, asidePosition = "top" }: ContentTocPr
   );
 
   return (
-    <nav className="project-toc" aria-label="Table of contents">
+    <nav className="project-toc min-h-[104dvh]" aria-label="Table of contents">
       <details className="project-toc-mobile">
         <summary>
           <span>

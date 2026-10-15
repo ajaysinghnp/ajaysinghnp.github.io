@@ -208,9 +208,9 @@ export function ContentPage({
           )}
         </AnimatePresence>
 
-        <div className={toc.length ? "project-content-layout" : undefined}>
+        <div className={cn(toc.length > 0 && "project-content-layout items-stretch")}>
           {toc.length > 0 && <ContentToc items={toc} aside={tocAside} />}
-          <main id={CONTENT_ID} className="min-w-0">
+          <main id={CONTENT_ID} className="min-w-0 rounded-l-none">
             {children}
           </main>
         </div>

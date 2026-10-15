@@ -62,7 +62,7 @@ export async function ContentMdx({ source, repo, branch, path }: Props) {
   }
 
   return (
-    <article className="project-readme prose-quoteless mx-auto prose mt-6 max-w-full rounded-2xl border p-6 sm:p-10 prose-p:leading-normal prose-li:leading-normal">
+    <article className="project-readme prose-quoteless mx-auto prose mt-6 max-w-full rounded-r-2xl border p-6 sm:p-10 prose-p:leading-normal prose-li:leading-normal">
       {content}
     </article>
   );

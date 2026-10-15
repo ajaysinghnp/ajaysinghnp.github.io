@@ -369,7 +369,6 @@
 @utility project-content-layout {
   display: grid;
   grid-template-columns: minmax(15rem, 19rem) minmax(0, 1fr);
-  align-items: start;
   gap: 0;
 }
 
@@ -410,7 +409,7 @@
   align-items: center;
   gap: 0.55rem;
   margin: 0 0 0.8rem;
-  color: var(--site-text);
+  color: var(--site-accent);
   font-size: 0.82rem;
   font-weight: 650;
 }
