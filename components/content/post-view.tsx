@@ -42,7 +42,7 @@ export async function PostView({
   backLabel = "All posts",
   authorBasePath,
 }: Props) {
-  const { title, description, date, updated, author: authorValue, tags, details } = entry.meta;
+  const { title, description, date, updated, author: authorValue, tags, details = [] } = entry.meta;
   const authorBase = authorBasePath ?? basePath;
   const [toc, authors] = await Promise.all([extractProjectToc(entry.content), listAuthors(source)]);
   const author = findAuthor(authors, authorValue);
