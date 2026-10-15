@@ -108,7 +108,7 @@ export function AuthorView({ author, posts, source, basePath }: Props) {
       )}
 
       <section className="mt-12">
-        <p className="section-code">// posts</p>
+        <p className="section-code">posts</p>
         <h2 className="mt-3 text-3xl font-semibold tracking-tighter text-(--site-text)">
           Posts by {author.name}.
         </h2>
