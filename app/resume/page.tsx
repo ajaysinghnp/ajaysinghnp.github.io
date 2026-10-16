@@ -45,7 +45,7 @@ export default function ResumePage() {
 
       <div className="mt-12 grid gap-12 lg:grid-cols-[0.7fr_1.3fr]">
         <aside className="space-y-8">
-          <div className="shine-border-hover resume-surface p-5">
+          <div className="light-btn-hover-surface shine-border-hover p-5">
             <div className="relative mx-auto aspect-square max-w-52 overflow-hidden rounded-full border border-current/40 bg-(--photo-c)/20">
               <Image
                 src={resume.image}
@@ -74,7 +74,7 @@ export default function ResumePage() {
             </div>
           </div>
 
-          <div className="shine-border-hover resume-surface p-5">
+          <div className="light-btn-hover-surface shine-border-hover p-4">
             <p className="section-code">education / journey</p>
 
             <Timeline
@@ -152,7 +152,7 @@ export default function ResumePage() {
               {capabilities.map((skill) => (
                 <div
                   key={skill.label}
-                  className="shine-border-hover flex items-start gap-3 resume-surface p-4 resume-skill hover:border-cyan-400/55 hover:bg-cyan-400/10"
+                  className="light-btn-hover-surface shine-border-hover flex items-start gap-3 p-4"
                 >
                   <Check className="mt-0.5 h-4 w-4 shrink-0 site-nav-active" />
                   <div>
@@ -164,7 +164,7 @@ export default function ResumePage() {
             </div>
           </section>
 
-          <section className="shine-border-hover flex flex-col gap-5 resume-surface p-6 sm:flex-row sm:items-center sm:justify-between">
+          <section className="light-btn-hover-surface shine-border-hover flex flex-col gap-5 p-6 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="section-code">next conversation</p>
               <h2 className="mt-2 text-2xl site-nav-active">

@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -40,55 +39,54 @@ export const Navigation: React.FC<Props> = ({ gitTheme = false }: Props) => {
           className="flex shrink-0 items-center gap-3 text-sm font-semibold tracking-wide"
         >
           <span className="site-logo shine-border flex h-8 w-8 items-center justify-center rounded border site-control p-1">
-            <Image
-              src="/images/logo-black.svg"
-              alt="Ajay Singh logo"
-              width={24}
-              height={24}
-              className="logo-light"
-            />
-            <Image
-              src="/images/logo-white.svg"
-              alt=""
-              width={24}
-              height={24}
-              className="logo-dark"
-              loading="eager"
-            />
+            <span aria-hidden="true" className="site-logo-mark h-6 w-6" />
           </span>
           <span className="site-nav-active">
             AJAY SINGH<span className="site-accent animate-[blink_1.5s_step-end_infinite]">_</span>
           </span>
         </Link>
         <nav className="hidden items-center gap-6 text-xs tracking-[0.16em] uppercase md:flex">
-          {navigation.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                "site-nav-link transition-colors hover:text-cyan-600",
-                pathname === item.href || pathname.startsWith(`${item.href}/`)
-                  ? "site-nav-active"
-                  : "",
-              )}
-            >
-              {item.name}
-            </Link>
-          ))}
+          {navigation.map((item) => {
+            const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
+
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={cn(
+                  "group light-btn-hover-bg relative rounded p-2 resume-muted transition-colors",
+                  isActive && "site-nav-active",
+                )}
+              >
+                {item.name}
+
+                <span
+                  aria-hidden="true"
+                  className={cn(
+                    "pointer-events-none absolute -bottom-1 left-0 h-px w-full origin-left scale-x-0 overflow-hidden bg-cyan-700 transition-transform duration-300 group-hover:scale-x-100",
+                    isActive && "scale-x-100",
+                    "dark:bg-(var(--site-accent))",
+                  )}
+                >
+                  <span className="block h-full w-1/3 -translate-x-full bg-linear-to-r from-transparent via-white to-transparent group-hover:animate-[nav-shine_1s_ease-in-out_infinite]" />
+                </span>
+              </Link>
+            );
+          })}
         </nav>
         <div className="flex items-center gap-2">
           <Link
             href={gitTheme ? socialMedia.github.theme : socialMedia.github.href}
             target="_blank"
             rel="noopener noreferrer"
-            className="shine-border-hover site-icon-button site-control hover:bg-cyan-400/[0.14] hover:text-cyan-600"
+            className="light-btn-hover-bg shine-border-hover site-icon-button site-control hover:resume-surface"
             aria-label="Open GitHub"
           >
             <GitBranch className="h-4 w-4" />
           </Link>
           <ModeToggle
             variant={null}
-            className="shine-border-hover site-icon-button site-control hover:bg-cyan-400/[0.14] hover:text-cyan-600"
+            className="light-btn-hover-bg shine-border-hover site-icon-button site-control hover:resume-surface"
           />
         </div>
       </div>

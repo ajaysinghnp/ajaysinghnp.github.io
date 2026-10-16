@@ -372,6 +372,19 @@
   gap: 0;
 }
 
+@layer utilities {
+  .light-btn-hover-surface {
+    @apply resume-surface resume-skill hover:border-cyan-400/55 hover:bg-cyan-400/[0.14] hover:text-cyan-600;
+  }
+}
+
+@layer utilities {
+  .light-btn-hover-bg {
+    @apply hover:border-cyan-400/55 hover:bg-cyan-400/[0.14] hover:text-cyan-600;
+    @apply resume-skill;
+  }
+}
+
 @layer components {
   .action-button {
     @apply shine-border inline-flex items-center gap-3 px-5 py-3 text-sm font-semibold;
@@ -389,6 +402,12 @@
       opacity: 0;
     }
   }
+}
+
+.site-logo-mark {
+  background-color: var(--site-accent);
+  -webkit-mask: url("/images/logo-black.svg") center / contain no-repeat;
+  mask: url("/images/logo-black.svg") center / contain no-repeat;
 }
 
 .project-toc {
