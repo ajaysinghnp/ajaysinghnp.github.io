@@ -46,7 +46,7 @@ export function PostCard({ post, variant = "default" }: Props) {
   else if (post.isNew) badge = "New";
 
   return (
-    <article className="group shine-border-hover relative h-full overflow-hidden rounded-xl border project-card transition duration-300 hover:-translate-y-1">
+    <article className="group light-btn-hover-surface shine-border-hover relative h-full overflow-hidden rounded-xl border project-card transition duration-300 hover:-translate-y-1">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -top-16 -right-12 h-44 w-44 rounded-full opacity-25 blur-3xl transition duration-500 group-hover:opacity-60"

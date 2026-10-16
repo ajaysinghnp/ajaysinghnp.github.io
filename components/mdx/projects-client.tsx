@@ -126,7 +126,7 @@ function ProjectCard({ project, featured = false }: { project: Project; featured
       whileInView="show"
       viewport={{ once: true, amount: 0.2 }}
       variants={reveal}
-      className={`group shine-border-hover relative w-full break-inside-avoid overflow-hidden rounded-xl border project-card transition duration-300 hover:-translate-y-1 hover:border-[color-mix(in_srgb,var(--project-card-accent)_50%,transparent)] hover:shadow-(--project-card-hover-shadow) ${featured ? "h-full" : ""}`}
+      className={`group light-btn-hover-surface shine-border-hover relative w-full break-inside-avoid overflow-hidden rounded-xl border project-card transition duration-300 hover:-translate-y-1 ${featured ? "h-full" : ""}`}
     >
       <div
         aria-hidden="true"
