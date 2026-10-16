@@ -34,14 +34,6 @@ export const resume = {
         "Supporting reliable operations through automation, scripting, system support, and practical technical problem-solving.",
       link: "https://www.nrb.org.np/",
     },
-    {
-      title: "Head Assistant [IT]",
-      company: "Nepal Rastra Bank",
-      date: "[2018 Dec - Present]",
-      description:
-        "Supporting reliable operations through automation, scripting, system support, and practical technical problem-solving.",
-      link: "https://www.nrb.org.np/",
-    },
   ],
   education: [
     {
