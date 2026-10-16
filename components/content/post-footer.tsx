@@ -72,7 +72,7 @@ export async function PostFooter({ entry, source, basePath }: Props) {
     <footer className="mt-14">
       {related.length > 0 && (
         <section>
-          <p className="section-code">// keep reading</p>
+          <p className="section-code">keep reading</p>
           <h2 className="mt-3 text-3xl font-semibold tracking-tighter site-nav-active">
             Related posts.
           </h2>
