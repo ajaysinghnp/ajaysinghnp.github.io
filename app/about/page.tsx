@@ -24,7 +24,7 @@ export default function AboutPage() {
       <section className="mt-14 grid gap-12 lg:grid-cols-[0.8fr_1.2fr]">
         <div>
           <p className="section-code">the short version</p>
-          <h2 className="mt-5 max-w-md text-4xl leading-tight font-semibold tracking-tighter text-zinc-50">
+          <h2 className="mt-5 max-w-md text-4xl leading-tight font-semibold tracking-tighter site-nav-active">
             A practical mind with room for wonder.
           </h2>
         </div>
@@ -36,7 +36,7 @@ export default function AboutPage() {
                 key={highlight.label}
                 className="shine-border-hover cursor-pointer resume-surface p-4"
               >
-                <p className="text-2xl font-semibold text-zinc-100">{highlight.label}</p>
+                <p className="text-2xl font-semibold site-nav-active">{highlight.label}</p>
                 <p className="mt-2 text-xs leading-5 tracking-widest resume-muted uppercase">
                   {highlight.description}
                 </p>
@@ -50,7 +50,7 @@ export default function AboutPage() {
         <div className="mb-8 flex items-end justify-between gap-5">
           <div>
             <p className="section-code">working principles</p>
-            <h2 className="mt-4 text-4xl font-semibold tracking-tighter text-zinc-50 sm:text-5xl">
+            <h2 className="mt-4 text-4xl font-semibold tracking-tighter site-nav-active sm:text-5xl">
               How I approach the work.
             </h2>
           </div>
@@ -64,9 +64,9 @@ export default function AboutPage() {
               key={title}
               className="shine-border-hover resume-surface p-5 resume-skill hover:border-cyan-400/55 hover:bg-cyan-400/10"
             >
-              <div className="flex items-center gap-3">
-                <Icon className="h-10 w-10 text-cyan-300" />
-                <h3 className="text-xl text-zinc-100">{title}</h3>
+              <div className="flex items-center gap-3 site-nav-active">
+                <Icon className="h-10 w-10" />
+                <h3 className="text-xl">{title}</h3>
               </div>
               <p className="mt-3 leading-7 resume-muted">{description}</p>
             </article>
@@ -77,7 +77,7 @@ export default function AboutPage() {
       <section className="mt-20 grid gap-12 lg:grid-cols-[1fr_0.8fr]">
         <div>
           <p className="section-code">current interests</p>
-          <h2 className="mt-4 text-4xl font-semibold tracking-tighter text-zinc-50 sm:text-5xl">
+          <h2 className="mt-4 text-4xl font-semibold tracking-tighter site-nav-active sm:text-5xl">
             Learning by building.
           </h2>
           <p className="mt-6 max-w-xl text-lg leading-8 resume-lead">
@@ -97,7 +97,7 @@ export default function AboutPage() {
         </div>
         <div className="shine-border-hover resume-surface p-6">
           <p className="section-code">keep in touch</p>
-          <h2 className="mt-4 text-2xl text-zinc-50">Good ideas become better conversations.</h2>
+          <h2 className="mt-4 text-2xl site-nav-active">Good ideas become better conversations.</h2>
           <p className="mt-3 leading-7 resume-muted">
             For collaborations, questions, or a problem worth exploring, email is the best place to
             start.
@@ -105,14 +105,14 @@ export default function AboutPage() {
           <div className="mt-7 flex flex-wrap gap-4">
             <Link
               href={socialMedia.email.href}
-              className="shine-border inline-flex items-center gap-2 glow-action rounded px-4 py-3 text-sm font-semibold text-[#090b0d] shine-border-contrast"
+              className="action-button shine-border inline-flex items-center gap-2 px-4 py-3 text-sm font-semibold shine-border-contrast"
             >
               <Mail className="h-4 w-4" /> Say hello
             </Link>
             <Link
               href={socialMedia.github.href}
               target="_blank"
-              className="sparkle inline-flex gap-2 rounded-sm border border-cyan-700/60 bg-cyan-300/10 px-6 py-3 hover:border-cyan-300"
+              className="sparkle inline-flex gap-2 rounded-sm border border-cyan-700/60 bg-cyan-300/10 px-6 py-3 site-nav-active hover:border-cyan-300"
             >
               View the code <ArrowUpRight className="h-4 w-4" />
             </Link>

@@ -34,7 +34,7 @@ export function AuthorAside({ author, basePath, hue }: Props) {
           </AvatarFallback>
         </Avatar>
         <span className="min-w-0 flex-1">
-          <span className="block truncate text-sm font-semibold text-(--site-text)">
+          <span className="block truncate text-sm font-semibold site-nav-active">
             {author.name}
             <span className="sr-only">(opens in a new tab)</span>
           </span>

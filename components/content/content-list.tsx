@@ -243,14 +243,14 @@ export function ContentList({ posts, showFeatured }: Props) {
               onChange={(event) => setQuery(event.target.value)}
               onKeyDown={(event) => event.key === "Escape" && setQuery("")}
               placeholder="Search posts and tags"
-              className="w-full rounded-full bg-transparent py-2.5 pr-12 pl-11 text-sm text-(--site-text) outline-none placeholder:text-(--site-muted)"
+              className="w-full rounded-full bg-transparent py-2.5 pr-12 pl-11 text-sm site-nav-active outline-none placeholder:text-(--site-muted)"
             />
             {query ? (
               <button
                 type="button"
                 aria-label="Clear search"
                 onClick={() => setQuery("")}
-                className="absolute top-1/2 right-3 -translate-y-1/2 rounded-full p-1 text-(--site-muted) hover:text-(--site-text)"
+                className="absolute top-1/2 right-3 -translate-y-1/2 rounded-full p-1 text-(--site-muted) hover:site-nav-active"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -295,7 +295,7 @@ export function ContentList({ posts, showFeatured }: Props) {
                   "rounded-full px-3 py-1 capitalize transition",
                   sort === value
                     ? "bg-(--site-accent)/15 site-nav-active"
-                    : "text-(--site-muted) hover:text-(--site-text)",
+                    : "text-(--site-muted) hover:site-nav-active",
                 )}
               >
                 {value}
@@ -320,7 +320,7 @@ export function ContentList({ posts, showFeatured }: Props) {
 
         {total === 0 ? (
           <div className="mt-12 text-center">
-            <p className="text-lg text-(--site-text)">No posts match these filters.</p>
+            <p className="text-lg site-nav-active">No posts match these filters.</p>
             <button
               type="button"
               onClick={clearAll}
@@ -334,7 +334,7 @@ export function ContentList({ posts, showFeatured }: Props) {
             <div key={group.year || "results"} className={index === 0 ? "mt-8" : "mt-12"}>
               {group.year && (
                 <div className="mb-5 flex items-baseline gap-3">
-                  <h2 className="text-3xl font-semibold tracking-tighter text-(--site-text)">
+                  <h2 className="text-3xl font-semibold tracking-tighter site-nav-active">
                     {group.year}
                   </h2>
                   <span className="font-mono text-xs resume-muted">

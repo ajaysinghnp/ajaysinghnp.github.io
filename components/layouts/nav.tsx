@@ -56,8 +56,8 @@ export const Navigation: React.FC<Props> = ({ gitTheme = false }: Props) => {
               loading="eager"
             />
           </span>
-          <span>
-            AJAY SINGH<span className="site-accent">_</span>
+          <span className="site-nav-active">
+            AJAY SINGH<span className="site-accent animate-[blink_1.5s_step-end_infinite]">_</span>
           </span>
         </Link>
         <nav className="hidden items-center gap-6 text-xs tracking-[0.16em] uppercase md:flex">

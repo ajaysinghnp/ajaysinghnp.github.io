@@ -25,10 +25,10 @@ export default function SocialLinksPanel({ heading = "elsewhere" }: SocialLinksP
             href={href}
             target="_blank"
             rel="noreferrer"
-            className="flex items-center justify-between py-4 text-sm transition hover:text-cyan-300"
+            className="flex items-center justify-between py-4 text-sm site-nav-active transition hover:text-(--site-accent)/80"
           >
             <span className="flex items-center gap-3">
-              <Icon className="h-4 w-4 text-cyan-300" /> {label}
+              <Icon className="h-4 w-4 site-nav-active" /> {label}
             </span>
             <span className="flex items-center gap-2 text-xs resume-muted">
               {handle} <ArrowUpRight className="h-3.5 w-3.5" />

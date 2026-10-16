@@ -1,4 +1,5 @@
 import { isValidElement } from "react";
+import Image from "next/image";
 
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
@@ -28,42 +29,70 @@ function getTextContent(node: ReactNode): string {
 
 export const components = {
   h1: ({ className, children, ...props }: ComponentPropsWithoutRef<"h1">) => (
-    <h1 {...props} className={cn("text-(--site-text)", className)}>
+    <h1 {...props} className={cn("site-nav-active", className)}>
       {children}
     </h1>
   ),
   h2: ({ className, children, ...props }: ComponentPropsWithoutRef<"h2">) => (
-    <h2 {...props} className={cn("text-(--site-text)", className)}>
+    <h2 {...props} className={cn("site-nav-active", className)}>
       {children}
     </h2>
   ),
   h3: ({ className, children, ...props }: ComponentPropsWithoutRef<"h3">) => (
-    <h3 {...props} className={cn("text-(--site-text)", className)}>
+    <h3 {...props} className={cn("site-nav-active", className)}>
       {children}
     </h3>
   ),
   h4: ({ className, children, ...props }: ComponentPropsWithoutRef<"h4">) => (
-    <h4 {...props} className={cn("text-(--site-text)", className)}>
+    <h4 {...props} className={cn("site-nav-active", className)}>
       {children}
     </h4>
   ),
-  p: ({ className, children, ...props }: ComponentPropsWithoutRef<"p">) => (
-    <p {...props} className={cn("text-(--site-muted)", className)}>
-      {children}
-    </p>
-  ),
+  p: ({ className, children, ...props }: ComponentPropsWithoutRef<"p">) => {
+    const hasImage =
+      isValidElement(children) && (children.type === "img" || children.type === Image);
+
+    return (
+      <p
+        {...props}
+        className={cn("max-w-full text-(--site-muted)", hasImage && "text-center", className)}
+      >
+        {children}
+      </p>
+    );
+  },
   a: ({ className, children, ...props }: ComponentPropsWithoutRef<"a">) => (
     <a {...props} className={cn("site-nav-active no-underline hover:underline", className)}>
       {children}
     </a>
   ),
+  img: ({ className, ...props }: ComponentPropsWithoutRef<"img">) => {
+    const width = Number(props.width);
+    const height = Number(props.height);
+    const hasDimensions = width > 0 && height > 0;
+
+    return (
+      <span
+        className={cn("relative my-4 flex w-full justify-center", !hasDimensions && "min-h-24")}
+      >
+        <Image
+          {...props}
+          alt={props.alt ?? "Image"}
+          src={String(props.src ?? "")}
+          width={width > 0 ? width : 976}
+          height={height > 0 ? height : 540}
+          className={cn("h-auto max-w-full", className)}
+        />
+      </span>
+    );
+  },
   li: ({ className, children, ...props }: ComponentPropsWithoutRef<"li">) => (
     <li {...props} className={cn("text-(--site-muted)", className)}>
       {children}
     </li>
   ),
   strong: ({ className, children, ...props }: ComponentPropsWithoutRef<"strong">) => (
-    <strong {...props} className={cn("font-bold text-(--site-text)", className)}>
+    <strong {...props} className={cn("font-bold site-nav-active", className)}>
       {children}
     </strong>
   ),

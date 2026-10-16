@@ -157,7 +157,7 @@ export function ContentPage({
                 )}
               >
                 <div>
-                  <h1 className="max-w-4xl text-4xl leading-tight font-semibold tracking-[-0.055em] wrap-break-word text-(--site-text) sm:text-6xl">
+                  <h1 className="max-w-4xl text-4xl leading-tight font-semibold tracking-[-0.055em] wrap-break-word site-nav-active sm:text-6xl">
                     {title}
                   </h1>
                   {description}
@@ -208,9 +208,9 @@ export function ContentPage({
           )}
         </AnimatePresence>
 
-        <div className={toc.length ? "project-content-layout" : undefined}>
+        <div className={cn(toc.length > 0 && "project-content-layout items-stretch")}>
           {toc.length > 0 && <ContentToc items={toc} aside={tocAside} />}
-          <main id={CONTENT_ID} className="min-w-0">
+          <main id={CONTENT_ID} className="min-w-0 rounded-l-none">
             {children}
           </main>
         </div>
@@ -236,7 +236,7 @@ export function ContentPage({
               <span className="hidden sm:inline">{backLabel}</span>
             </Link>
 
-            <h2 className="min-w-0 flex-1 truncate text-sm font-semibold text-(--site-text) sm:text-base">
+            <h2 className="min-w-0 flex-1 truncate text-sm font-semibold site-nav-active sm:text-base">
               {title}
             </h2>
 

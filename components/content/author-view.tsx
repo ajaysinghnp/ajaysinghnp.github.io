@@ -61,7 +61,7 @@ export function AuthorView({ author, posts, source, basePath }: Props) {
           </Avatar>
 
           <div className="min-w-0">
-            <h1 className="text-4xl leading-tight font-semibold tracking-[-0.055em] wrap-break-word text-(--site-text) sm:text-6xl">
+            <h1 className="text-4xl leading-tight font-semibold tracking-[-0.055em] wrap-break-word site-nav-active sm:text-6xl">
               {author.name}
             </h1>
             {author.role && <p className="mt-2 text-base resume-lead sm:text-lg">{author.role}</p>}
@@ -108,8 +108,8 @@ export function AuthorView({ author, posts, source, basePath }: Props) {
       )}
 
       <section className="mt-12">
-        <p className="section-code">// posts</p>
-        <h2 className="mt-3 text-3xl font-semibold tracking-tighter text-(--site-text)">
+        <p className="section-code">posts</p>
+        <h2 className="mt-3 text-3xl font-semibold tracking-tighter site-nav-active">
           Posts by {author.name}.
         </h2>
 

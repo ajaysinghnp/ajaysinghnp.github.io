@@ -1,6 +1,7 @@
 import { compileMDX } from "next-mdx-remote/rsc";
 
 import { components } from "@/components/mdx/mdx-components";
+import { socialMedia } from "@/data/social";
 import { options } from "@/lib/mdx-options";
 import { rehypeResolveGithubLinks } from "@/lib/project-readme-links";
 
@@ -38,7 +39,14 @@ async function compile(source: string, format: "md" | "mdx", link: LinkOptions) 
 }
 
 export async function ContentMdx({ source, repo, branch, path }: Props) {
-  const [owner, repository] = repo.split("/");
+  let owner: string;
+  let repository: string;
+  if (repo.split("/").length !== 2) {
+    repository = repo.split("/")[0];
+    owner = socialMedia.github.handle;
+  } else {
+    [owner, repository] = repo.split("/");
+  }
   const link = { owner, repository, branch, readmePath: path };
   const isMdx = path.toLowerCase().endsWith(".mdx");
 
@@ -54,7 +62,7 @@ export async function ContentMdx({ source, repo, branch, path }: Props) {
   }
 
   return (
-    <article className="project-readme prose-quoteless mx-auto prose mt-6 max-w-full rounded-2xl border p-6 sm:p-10 prose-p:leading-normal prose-li:leading-normal">
+    <article className="project-readme prose-quoteless mx-auto prose mt-6 max-w-full rounded-r-2xl border p-6 sm:p-10 prose-p:leading-normal prose-li:leading-normal">
       {content}
     </article>
   );
