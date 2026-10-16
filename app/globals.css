@@ -1610,3 +1610,57 @@ html:not(.dark) body [class~="text-zinc-500"] {
     animation: none;
   }
 }
+
+/* BG */
+.shuttle {
+  position: absolute;
+  left: -18rem;
+  width: 12rem;
+  height: 1px;
+  opacity: 0;
+  background: linear-gradient(90deg, transparent, var(--shuttle-color), transparent);
+  box-shadow: 0 0 8px var(--shuttle-color);
+  transform: rotate(-12deg);
+  animation: shuttle-flight 9s linear infinite;
+}
+
+.shuttle::after {
+  content: "";
+  position: absolute;
+  right: 20%;
+  top: -2px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--shuttle-color);
+  box-shadow: 0 0 10px var(--shuttle-color);
+}
+
+@keyframes shuttle-flight {
+  0% {
+    left: -18rem;
+    opacity: 0;
+    transform: translateY(0) rotate(-12deg);
+  }
+
+  8% {
+    opacity: 0.8;
+  }
+
+  75% {
+    opacity: 0.55;
+  }
+
+  100% {
+    left: calc(100% + 18rem);
+    opacity: 0;
+    transform: translateY(5rem) rotate(-12deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shuttle {
+    animation: none;
+    display: none;
+  }
+}
