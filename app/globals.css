@@ -410,6 +410,27 @@
   mask: url("/images/logo-black.svg") center / contain no-repeat;
 }
 
+@keyframes nav-shine {
+  0%,
+  10% {
+    transform: translateX(150%);
+  }
+
+  40% {
+    transform: translateX(250%);
+  }
+
+  /* Reset while the highlight is off the underline. */
+  40.1% {
+    transform: translateX(0%);
+  }
+
+  85%,
+  100% {
+    transform: translateX(150%);
+  }
+}
+
 .project-toc {
   min-width: 0;
   position: sticky;

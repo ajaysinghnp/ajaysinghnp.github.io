@@ -41,8 +41,21 @@ export const Navigation: React.FC<Props> = ({ gitTheme = false }: Props) => {
           <span className="site-logo shine-border flex h-8 w-8 items-center justify-center rounded border site-control p-1">
             <span aria-hidden="true" className="site-logo-mark h-6 w-6" />
           </span>
-          <span className="site-nav-active">
-            AJAY SINGH<span className="site-accent animate-[blink_1.5s_step-end_infinite]">_</span>
+          <span className="group relative inline-block site-nav-active">
+            AJAY SINGH
+            <span className="site-accent animate-[blink_1.5s_step-end_infinite]">_</span>
+            <span
+              aria-hidden="true"
+              className={cn(
+                "pointer-events-none absolute -bottom-0.5 left-0 h-px w-full origin-left overflow-visible rounded-full",
+                "bg-linear-to-r from-transparent via-cyan-700/70 to-transparent",
+                "scale-x-100 transition-transform duration-300",
+                "dark:via-(--site-accent)",
+              )}
+            >
+              <span className="absolute inset-0 rounded-full bg-inherit opacity-40 blur-[1px]" />
+              <span className="relative block h-full w-1/4 translate-x-[150%] rounded-full bg-linear-to-r from-transparent via-white/80 to-transparent" />
+            </span>
           </span>
         </Link>
         <nav className="hidden items-center gap-6 text-xs tracking-[0.16em] uppercase md:flex">
@@ -74,7 +87,7 @@ export const Navigation: React.FC<Props> = ({ gitTheme = false }: Props) => {
                   <span className="absolute inset-0 rounded-full bg-inherit opacity-40 blur-[1px]" />
 
                   {/* moving highlight */}
-                  <span className="relative block h-full w-1/4 translate-x-[150%] animate-[nav-shine_1s_ease-in-out_infinite] rounded-full bg-linear-to-r from-transparent via-white/80 to-transparent" />
+                  <span className="relative block h-full w-1/4 animate-[nav-shine_3s_linear_infinite] rounded-full bg-linear-to-r from-transparent via-white/80 to-transparent" />
                 </span>
               </Link>
             );
