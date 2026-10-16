@@ -261,14 +261,13 @@ export function ProjectsClient({ projects }: { projects: Project[] }) {
     <main className="w-full pb-20 resume-shell">
       <header className="grid gap-10 border-b resume-intro pb-14 lg:grid-cols-[1fr_0.8fr] lg:items-end">
         <div>
-          <p className="section-code">projects / open signal</p>
+          <p className="section-code">{PROJECT_REPOSITORY_SETTINGS.page.eyebrow}</p>
           <h1 className="sparkle-text mt-5 max-w-4xl text-6xl leading-[0.92] font-semibold tracking-[-0.06em] sm:text-8xl">
-            Things I&apos;ve made.
+            {PROJECT_REPOSITORY_SETTINGS.page.heading}
           </h1>
         </div>
         <p className="max-w-xl text-xl leading-8 resume-lead">
-          A changing index of open-source experiments, practical utilities, and tools built to make
-          a real workflow a little better.
+          {PROJECT_REPOSITORY_SETTINGS.page.intro}
         </p>
       </header>
 
@@ -343,10 +342,12 @@ export function ProjectsClient({ projects }: { projects: Project[] }) {
 }
 
 export function ProjectsState({
+  eyebrow = "projects / signal",
   label,
   description,
   action,
 }: {
+  eyebrow?: string;
   label: string;
   description?: string;
   action?: React.ReactNode;
@@ -354,9 +355,9 @@ export function ProjectsState({
   return (
     <main
       role="status"
-      className="flex min-h-[55vh] w-full flex-col items-center justify-center gap-5 px-5 text-center resume-shell"
+      className="flex min-h-[55vh] w-full flex-col items-center justify-center gap-5 px-5 text-center"
     >
-      <p className="section-code">projects / signal</p>
+      <p className="section-code">{eyebrow}</p>
       <h1 className="text-3xl site-nav-active">{label}</h1>
       {description && <p className="max-w-lg leading-7 resume-muted">{description}</p>}
       {action}

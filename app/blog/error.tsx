@@ -6,11 +6,13 @@ import { useRouter } from "next/navigation";
 import { RefreshCw } from "lucide-react";
 
 import { ProjectsState } from "@/components/mdx/projects-client";
+import { blogConfig } from "@/data/blog";
 
 export default function BlogError({ reset }: { error: Error; reset: () => void }) {
   const router = useRouter();
   return (
     <ProjectsState
+      eyebrow={blogConfig.page.eyebrow}
       label="The blog is temporarily unavailable."
       description="GitHub may be limiting requests to its public API. Please try again shortly."
       action={
