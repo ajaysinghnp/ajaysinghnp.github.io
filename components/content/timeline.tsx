@@ -30,7 +30,7 @@ export function Timeline<T>({
             {/* Timeline indicator and connector */}
             <div className="relative flex w-8 shrink-0 flex-col items-center">
               {variant === "numbered" ? (
-                <div className="z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-(--site-accent) pt-0.5 text-xs font-bold text-(--site-accent-foreground)">
+                <div className="z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-(--site-accent) text-xs font-bold text-(--site-accent-foreground)">
                   {String(number).padStart(2, "0")}
                 </div>
               ) : (
