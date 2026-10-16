@@ -63,7 +63,7 @@ export const Navigation: React.FC<Props> = ({ gitTheme = false }: Props) => {
                 <span
                   aria-hidden="true"
                   className={cn(
-                    "pointer-events-none absolute -bottom-0.5 left-0 h-0.5 w-full origin-left scale-x-0 overflow-visible rounded-full",
+                    "pointer-events-none absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 overflow-visible rounded-full",
                     "bg-linear-to-r from-transparent via-cyan-700/70 to-transparent",
                     "transition-transform duration-300 group-hover:scale-x-100",
                     isActive && "scale-x-100",
