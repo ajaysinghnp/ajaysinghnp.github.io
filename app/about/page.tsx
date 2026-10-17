@@ -34,7 +34,7 @@ export default function AboutPage() {
             {about.highlights.map((highlight) => (
               <div
                 key={highlight.label}
-                className="shine-border-hover cursor-pointer resume-surface p-4"
+                className="light-btn-hover-surface shine-border-hover cursor-pointer p-4"
               >
                 <p className="text-2xl font-semibold site-nav-active">{highlight.label}</p>
                 <p className="mt-2 text-xs leading-5 tracking-widest resume-muted uppercase">
@@ -62,7 +62,7 @@ export default function AboutPage() {
           {principles.map(({ icon: Icon, title, description }) => (
             <article
               key={title}
-              className="shine-border-hover resume-surface p-5 resume-skill hover:border-cyan-400/55 hover:bg-cyan-400/10"
+              className="light-btn-hover-surface shine-border-hover cursor-pointer p-5 resume-skill hover:border-cyan-400/55 hover:bg-cyan-400/10"
             >
               <div className="flex items-center gap-3 site-nav-active">
                 <Icon className="h-10 w-10" />
@@ -95,7 +95,7 @@ export default function AboutPage() {
             ))}
           </div>
         </div>
-        <div className="shine-border-hover resume-surface p-6">
+        <div className="light-btn-hover-surface shine-border-hover p-6">
           <p className="section-code">keep in touch</p>
           <h2 className="mt-4 text-2xl site-nav-active">Good ideas become better conversations.</h2>
           <p className="mt-3 leading-7 resume-muted">

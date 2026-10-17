@@ -23,7 +23,7 @@ export default function ContactPage() {
       </header>
 
       <section className="mt-14 grid gap-12 lg:grid-cols-[1.1fr_0.9fr]">
-        <div className="shine-border-hover flex min-h-88 flex-col justify-between resume-surface p-6 sm:p-8">
+        <div className="light-btn-hover-surface shine-border-hover flex min-h-88 flex-col justify-between p-6 sm:p-8">
           <div>
             <p className="section-code">best way to reach me</p>
             <h2 className="mt-5 max-w-xl text-4xl font-semibold tracking-tighter site-nav-active sm:text-5xl">
