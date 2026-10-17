@@ -214,7 +214,7 @@ export function ContentPage({
               <ContentToc items={toc} aside={tocAside} />
             </aside>
           )}
-          <main id={CONTENT_ID} className="min-w-0 rounded-l-none">
+          <main id={CONTENT_ID} className="min-w-0">
             {children}
           </main>
         </div>

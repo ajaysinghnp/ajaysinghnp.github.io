@@ -431,11 +431,44 @@
   }
 }
 
-/* The aside column: a full-height box beside the content. The sticky panel inside it
-   slides down with the page and stops where the content ends. */
 .content-aside {
   min-width: 0;
   align-self: stretch;
+}
+
+@media (min-width: 901px) {
+  /* One connected card: the aside column and the content card share the same height.
+     The panel inside the aside stays sticky, so it slides down with the page and
+     stops where the content ends. */
+  .project-content-layout > .content-aside {
+    margin-top: 1.5rem;
+    /* matches the article's top margin */
+    border: 1px solid var(--site-surface-border);
+    border-right: 0;
+    /* the article's own left border forms the seam */
+    border-radius: var(--site-radius) 0 0 var(--site-radius);
+    background: color-mix(in srgb, var(--site-panel) 72%, transparent);
+  }
+
+  .content-aside > .project-toc {
+    margin-top: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+
+  .project-content-layout > main {
+    display: flex;
+    flex-direction: column;
+    align-self: stretch;
+  }
+
+  .project-content-layout > main > .project-readme {
+    flex: 1 1 auto;
+    margin-inline: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
 }
 
 .project-toc {
