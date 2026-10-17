@@ -431,6 +431,13 @@
   }
 }
 
+/* The aside column: a full-height box beside the content. The sticky panel inside it
+   slides down with the page and stops where the content ends. */
+.content-aside {
+  min-width: 0;
+  align-self: stretch;
+}
+
 .project-toc {
   min-width: 0;
   position: sticky;
