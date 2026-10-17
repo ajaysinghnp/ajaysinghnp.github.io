@@ -1,0 +1,26 @@
+services:
+  app:
+    image: ajaysinghnp/ajaysinghnp.github.io:latest
+    container_name: ajaysingh.com.np
+    restart: unless-stopped
+
+    build:
+      context: .
+      dockerfile: Dockerfile
+      secrets:
+        - github_token
+
+    ports:
+      - "3000:3000"
+
+    env_file:
+      - .env
+
+    environment:
+      NODE_ENV: production
+      PORT: "3000"
+      HOSTNAME: 0.0.0.0
+
+secrets:
+  github_token:
+    environment: GITHUB_TOKEN

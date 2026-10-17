@@ -1,3 +1,5 @@
+# syntax=docker/dockerfile:1
+
 FROM node:24-alpine AS base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
@@ -12,11 +14,11 @@ FROM deps AS build
 RUN apk add --no-cache chromium
 ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
 ENV PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium-browser
-# GitHub is called while pre-rendering /projects and /blog, so the build needs the token too
-ARG GITHUB_TOKEN
-ENV GITHUB_TOKEN=$GITHUB_TOKEN
+
 COPY . .
-RUN pnpm run build
+
+RUN --mount=type=secret,id=github_token,env=GITHUB_TOKEN,required=true \
+    pnpm run build
 
 FROM node:24-alpine AS runner
 WORKDIR /app
