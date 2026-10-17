@@ -66,22 +66,27 @@ export const components = {
       {children}
     </a>
   ),
-  img: ({ className, ...props }: ComponentPropsWithoutRef<"img">) => {
-    const width = Number(props.width);
-    const height = Number(props.height);
-    const hasDimensions = width > 0 && height > 0;
+  img: ({ className, alt, src, width, height, ...rest }: ComponentPropsWithoutRef<"img">) => {
+    const isFirst = (rest as Record<string, unknown>)["data-priority"] === "true";
+    const imageSrc = String(src ?? "");
+    const isGif = imageSrc.toLowerCase().split("?")[0].endsWith(".gif");
+
+    const w = Number(width);
+    const h = Number(height);
+    const hasDimensions = w > 0 && h > 0;
 
     return (
-      <span
-        className={cn("relative my-4 flex w-full justify-center", !hasDimensions && "min-h-24")}
-      >
+      <span className="my-4 flex w-full justify-center">
         <Image
-          {...props}
-          alt={props.alt ?? "Image"}
-          src={String(props.src ?? "")}
-          width={width > 0 ? width : 976}
-          height={height > 0 ? height : 540}
-          className={cn("h-auto max-w-full", className)}
+          src={imageSrc}
+          alt={alt ?? "Image"}
+          width={hasDimensions ? w : 0}
+          height={hasDimensions ? h : 0}
+          sizes="(min-width: 768px) 80vw, 100vw"
+          unoptimized={isGif}
+          loading={isFirst ? "eager" : "lazy"}
+          style={hasDimensions ? { maxWidth: w } : undefined}
+          className={cn("h-auto w-full rounded-md md:w-4/5", className)}
         />
       </span>
     );

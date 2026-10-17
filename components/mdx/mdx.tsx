@@ -3,6 +3,7 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import { githubUsername } from "@/lib/github-config";
 import { options } from "@/lib/mdx-options";
 import { rehypeResolveGithubLinks } from "@/lib/project-readme-links";
+import rehypeRemoteImgSize from "@/lib/rehype-remote-img-size";
 
 type MDXProps = {
   source: string;
@@ -31,6 +32,7 @@ export function MDX({ source, repository, branch, readmePath = "README.md" }: MD
                   readmePath,
                 },
               ],
+              rehypeRemoteImgSize,
             ],
           },
         }}
