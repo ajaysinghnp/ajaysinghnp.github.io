@@ -83,7 +83,7 @@ export function ContentToc({ items, aside, asidePosition = "top" }: ContentTocPr
   );
 
   return (
-    <nav className="project-toc min-h-[104dvh]" aria-label="Table of contents">
+    <nav className="project-toc" aria-label="Table of contents">
       <details className="project-toc-mobile">
         <summary>
           <span>
