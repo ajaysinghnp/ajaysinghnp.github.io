@@ -7,6 +7,7 @@
   "files.eol": "\n",
   "eslint.useFlatConfig": true,
   "cSpell.words": [
+    "calsans",
     "cheatsheet",
     "cheatsheets",
     "contentlayer",
@@ -14,6 +15,7 @@
     "cutover",
     "jobtask",
     "quoteless",
-    "sankatmochan"
+    "sankatmochan",
+    "shadcn"
   ]
 }

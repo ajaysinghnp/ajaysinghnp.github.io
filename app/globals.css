@@ -1895,6 +1895,45 @@ html:not(.dark) .project-card-preview-light {
 }
 
 /* ==========================================================================
+   MERMAID CONNECTOR DASHES
+   Short glowing dashes travel along each connector.
+   ========================================================================== */
+
+.mermaid-diagram .mermaid-canvas svg .mermaid-connector-highlight {
+  stroke: color-mix(in srgb, var(--site-accent) 65%, var(--site-text)) !important;
+
+  stroke-width: 2.5px !important;
+  stroke-dasharray: 4 6 !important;
+  stroke-dashoffset: 0;
+
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+
+  opacity: 0.95 !important;
+
+  filter: drop-shadow(0 0 2px color-mix(in srgb, var(--site-accent) 75%, transparent));
+
+  animation: mermaid-connector-dashes 0.5s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes mermaid-connector-dashes {
+  from {
+    stroke-dashoffset: 0;
+  }
+
+  to {
+    stroke-dashoffset: -7;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mermaid-diagram .mermaid-canvas svg .mermaid-connector-highlight {
+    animation: none !important;
+  }
+}
+
+/* ==========================================================================
    15. PDF DOCUMENT
    ========================================================================== */
 
