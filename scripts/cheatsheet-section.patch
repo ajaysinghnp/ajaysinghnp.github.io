@@ -1,0 +1,1158 @@
+diff --git a/.env.example b/.env.example
+index ced4cff..9c9aeb7 100644
+--- a/.env.example
++++ b/.env.example
+@@ -3,3 +3,6 @@
+ GITHUB_TOKEN=
+ PORT=3000
+ NEXT_PUBLIC_SITE_URL=https://your-domain.example.com
++
++# Branch the cheatsheet repo is read from (default: content)
++CHEATSHEET_BRANCH=
+diff --git a/app/blog/[...path]/page.tsx b/app/blog/[...path]/page.tsx
+index 3c5df3b..2a13beb 100644
+--- a/app/blog/[...path]/page.tsx
++++ b/app/blog/[...path]/page.tsx
+@@ -1,20 +1,7 @@
+-import { notFound } from "next/navigation";
+-
+ import type { Metadata } from "next";
+ 
+-import { Breadcrumbs } from "@/components/content/breadcrumbs";
+-import { ContentIndex } from "@/components/content/content-index";
+-import { PostView } from "@/components/content/post-view";
+-import { blogConfig } from "@/data/blog";
+-import {
+-  authorHref,
+-  categoryCrumbs,
+-  categoryLabel,
+-  childCategories,
+-  collectTags,
+-  findAuthor,
+-} from "@/lib/content-format";
+-import { contentSources, getEntry, listAuthors, listEntries } from "@/lib/github-content";
++import { pathMetadata, SectionPath } from "@/components/content/section-pages";
++import { blogSection } from "@/data/blog";
+ 
+ export const dynamicParams = true;
+ 
+@@ -24,102 +11,12 @@ export async function generateStaticParams() {
+   return [];
+ }
+ 
+-// /blog/a/b/c is a post (category "a/b", slug "c") if one exists, otherwise the category "a/b/c".
+-async function resolve(path: string[]) {
+-  const source = contentSources.blog;
+-
+-  if (path.length > 1) {
+-    const entry = await getEntry(source, path[path.length - 1], path.slice(0, -1).join("/"));
+-    if (entry) return { kind: "post" as const, entry };
+-  }
+-
+-  // Hidden categories have no index page of their own, so only listed posts count here.
+-  const category = path.join("/");
+-  const all = await listEntries(source);
+-  const entries = all.filter(
+-    (e) => e.category === category || e.category.startsWith(`${category}/`),
+-  );
+-
+-  return entries.length > 0 ? { kind: "category" as const, category, entries, all } : null;
+-}
+-
+ export async function generateMetadata({ params }: Props): Promise<Metadata> {
+   const { path } = await params;
+-  const resolved = await resolve(path);
+-  const source = contentSources.blog;
+-
+-  if (!resolved) return { title: "Not found" };
+-  if (resolved.kind === "category") {
+-    return { title: categoryLabel(resolved.category, source.labels) };
+-  }
+-
+-  const { entry } = resolved;
+-  const { title, description, date, updated, author, tags } = entry.meta;
+-
+-  const authorList = await listAuthors(source);
+-  const resolvedAuthor = findAuthor(authorList, author);
+-
+-  let authorMeta: Metadata["authors"];
+-  if (resolvedAuthor) {
+-    authorMeta = [
+-      { name: resolvedAuthor.name, url: authorHref(blogConfig.basePath, resolvedAuthor) },
+-    ];
+-  } else if (author) {
+-    authorMeta = [{ name: author }];
+-  }
+-
+-  return {
+-    title: title ?? entry.slug,
+-    description,
+-    authors: authorMeta,
+-    keywords: tags,
+-    robots: entry.hidden ? { index: false, follow: false } : undefined,
+-    openGraph: { type: "article", publishedTime: date, modifiedTime: updated },
+-  };
++  return pathMetadata(blogSection, path);
+ }
+ 
+ export default async function BlogPathPage({ params }: Props) {
+   const { path } = await params;
+-  const resolved = await resolve(path);
+-  const source = contentSources.blog;
+-
+-  if (!resolved) notFound();
+-
+-  if (resolved.kind === "post") {
+-    return (
+-      <PostView
+-        entry={resolved.entry}
+-        source={source}
+-        basePath={blogConfig.basePath}
+-        rootLabel="Blog"
+-      />
+-    );
+-  }
+-
+-  const { category, entries, all } = resolved;
+-  const label = categoryLabel(category, source.labels);
+-  const crumbs = categoryCrumbs(category, blogConfig.basePath, source.labels);
+-
+-  return (
+-    <ContentIndex
+-      entries={entries}
+-      categories={childCategories(all, category, source.labels)}
+-      tags={collectTags(entries)}
+-      labels={source.labels}
+-      basePath={blogConfig.basePath}
+-      activeCategory={category}
+-      eyebrow={
+-        <Breadcrumbs
+-          items={[
+-            { label: "blog", href: blogConfig.basePath },
+-            ...crumbs.map((crumb, index) =>
+-              index === crumbs.length - 1 ? { label: crumb.label } : crumb,
+-            ),
+-          ]}
+-        />
+-      }
+-      heading={`${label}.`}
+-      intro={`${entries.length} ${entries.length === 1 ? "post" : "posts"} in ${label}.`}
+-    />
+-  );
++  return <SectionPath section={blogSection} path={path} />;
+ }
+diff --git a/app/blog/page.tsx b/app/blog/page.tsx
+index 206bc03..625dec4 100644
+--- a/app/blog/page.tsx
++++ b/app/blog/page.tsx
+@@ -1,29 +1,13 @@
+ import type { Metadata } from "next";
+ 
+-import { ContentIndex } from "@/components/content/content-index";
+-import { blogConfig } from "@/data/blog";
+-import { childCategories, collectTags } from "@/lib/content-format";
+-import { contentSources, listEntries } from "@/lib/github-content";
++import { SectionIndex } from "@/components/content/section-pages";
++import { blogSection } from "@/data/blog";
+ 
+ export const metadata: Metadata = {
+-  title: blogConfig.page.title,
+-  description: blogConfig.page.description,
++  title: blogSection.page.title,
++  description: blogSection.page.description,
+ };
+ 
+-export default async function BlogPage() {
+-  const source = contentSources.blog;
+-  const entries = await listEntries(source);
+-
+-  return (
+-    <ContentIndex
+-      entries={entries}
+-      categories={childCategories(entries, "", source.labels)}
+-      tags={collectTags(entries)}
+-      labels={source.labels}
+-      basePath={blogConfig.basePath}
+-      eyebrow={blogConfig.page.eyebrow}
+-      heading={blogConfig.page.heading}
+-      intro={blogConfig.page.intro}
+-    />
+-  );
++export default function BlogPage() {
++  return <SectionIndex section={blogSection} />;
+ }
+diff --git a/app/blog/tag/[tag]/page.tsx b/app/blog/tag/[tag]/page.tsx
+index 60644be..ee4e10b 100644
+--- a/app/blog/tag/[tag]/page.tsx
++++ b/app/blog/tag/[tag]/page.tsx
+@@ -1,11 +1,7 @@
+-import { notFound } from "next/navigation";
+-
+ import type { Metadata } from "next";
+ 
+-import { ContentIndex } from "@/components/content/content-index";
+-import { blogConfig } from "@/data/blog";
+-import { childCategories, collectTags, tagSlug } from "@/lib/content-format";
+-import { contentSources, listEntries } from "@/lib/github-content";
++import { SectionTag, tagMetadata } from "@/components/content/section-pages";
++import { blogSection } from "@/data/blog";
+ 
+ export const dynamicParams = true;
+ 
+@@ -17,31 +13,10 @@ export async function generateStaticParams() {
+ 
+ export async function generateMetadata({ params }: Props): Promise<Metadata> {
+   const { tag } = await params;
+-  return { title: `Posts tagged ${decodeURIComponent(tag)}` };
++  return tagMetadata(blogSection, tag);
+ }
+ 
+ export default async function BlogTagPage({ params }: Props) {
+   const { tag } = await params;
+-  const source = contentSources.blog;
+-  const all = await listEntries(source);
+-  const allTags = collectTags(all);
+-  const current = allTags.find((t) => t.slug === tag);
+-
+-  if (!current) notFound();
+-
+-  const entries = all.filter((e) => e.meta.tags.some((t) => tagSlug(t) === tag));
+-
+-  return (
+-    <ContentIndex
+-      entries={entries}
+-      categories={childCategories(all, "", source.labels)}
+-      tags={allTags}
+-      labels={source.labels}
+-      basePath={blogConfig.basePath}
+-      activeTag={tag}
+-      eyebrow={`blog / tag / ${tag}`}
+-      heading={`${current.name}.`}
+-      intro={`${current.count} ${current.count === 1 ? "post" : "posts"} tagged ${current.name}.`}
+-    />
+-  );
++  return <SectionTag section={blogSection} tag={tag} />;
+ }
+diff --git a/app/cheatsheet/[...path]/page.tsx b/app/cheatsheet/[...path]/page.tsx
+new file mode 100644
+index 0000000..8380da9
+--- /dev/null
++++ b/app/cheatsheet/[...path]/page.tsx
+@@ -0,0 +1,22 @@
++import type { Metadata } from "next";
++
++import { pathMetadata, SectionPath } from "@/components/content/section-pages";
++import { cheatsheetSection } from "@/data/cheatsheet";
++
++export const dynamicParams = true;
++
++type Props = { params: Promise<{ path: string[] }> };
++
++export async function generateStaticParams() {
++  return [];
++}
++
++export async function generateMetadata({ params }: Props): Promise<Metadata> {
++  const { path } = await params;
++  return pathMetadata(cheatsheetSection, path);
++}
++
++export default async function CheatsheetPathPage({ params }: Props) {
++  const { path } = await params;
++  return <SectionPath section={cheatsheetSection} path={path} />;
++}
+diff --git a/app/cheatsheet/error.tsx b/app/cheatsheet/error.tsx
+new file mode 100644
+index 0000000..2e70949
+--- /dev/null
++++ b/app/cheatsheet/error.tsx
+@@ -0,0 +1,31 @@
++"use client";
++
++import { startTransition } from "react";
++import { useRouter } from "next/navigation";
++
++import { RefreshCw } from "lucide-react";
++
++import { ProjectsState } from "@/components/mdx/projects-client";
++
++export default function CheatsheetError({ reset }: { error: Error; reset: () => void }) {
++  const router = useRouter();
++  return (
++    <ProjectsState
++      label="The cheatsheets are temporarily unavailable."
++      description="GitHub may be limiting requests to its public API. Please try again shortly."
++      action={
++        <button
++          onClick={() =>
++            startTransition(() => {
++              router.refresh();
++              reset();
++            })
++          }
++          className="shine-border inline-flex items-center gap-2 glow-action rounded px-4 py-3 text-sm font-semibold text-[#090b0d] shine-border-contrast"
++        >
++          <RefreshCw className="h-4 w-4" /> Try again
++        </button>
++      }
++    />
++  );
++}
+diff --git a/app/cheatsheet/loading.tsx b/app/cheatsheet/loading.tsx
+new file mode 100644
+index 0000000..77612e3
+--- /dev/null
++++ b/app/cheatsheet/loading.tsx
+@@ -0,0 +1,6 @@
++// app/projects/loading.tsx
++import { ProjectsState } from "@/components/mdx/projects-client";
++
++export default function Loading() {
++  return <ProjectsState label="Scanning the project signal..." />;
++}
+diff --git a/app/cheatsheet/page.tsx b/app/cheatsheet/page.tsx
+new file mode 100644
+index 0000000..3f51010
+--- /dev/null
++++ b/app/cheatsheet/page.tsx
+@@ -0,0 +1,13 @@
++import type { Metadata } from "next";
++
++import { SectionIndex } from "@/components/content/section-pages";
++import { cheatsheetSection } from "@/data/cheatsheet";
++
++export const metadata: Metadata = {
++  title: cheatsheetSection.page.title,
++  description: cheatsheetSection.page.description,
++};
++
++export default function CheatsheetPage() {
++  return <SectionIndex section={cheatsheetSection} />;
++}
+diff --git a/app/cheatsheet/tag/[tag]/page.tsx b/app/cheatsheet/tag/[tag]/page.tsx
+new file mode 100644
+index 0000000..d89ace9
+--- /dev/null
++++ b/app/cheatsheet/tag/[tag]/page.tsx
+@@ -0,0 +1,22 @@
++import type { Metadata } from "next";
++
++import { SectionTag, tagMetadata } from "@/components/content/section-pages";
++import { cheatsheetSection } from "@/data/cheatsheet";
++
++export const dynamicParams = true;
++
++type Props = { params: Promise<{ tag: string }> };
++
++export async function generateStaticParams() {
++  return [];
++}
++
++export async function generateMetadata({ params }: Props): Promise<Metadata> {
++  const { tag } = await params;
++  return tagMetadata(cheatsheetSection, tag);
++}
++
++export default async function CheatsheetTagPage({ params }: Props) {
++  const { tag } = await params;
++  return <SectionTag section={cheatsheetSection} tag={tag} />;
++}
+diff --git a/app/cheatsheet/tag/page.tsx b/app/cheatsheet/tag/page.tsx
+new file mode 100644
+index 0000000..8e20a09
+--- /dev/null
++++ b/app/cheatsheet/tag/page.tsx
+@@ -0,0 +1,5 @@
++import { redirect } from "next/navigation";
++
++export default function CheatsheetTagIndexPage() {
++  redirect("/cheatsheet");
++}
+diff --git a/components/content/content-index.tsx b/components/content/content-index.tsx
+index 18f3424..b4cc95a 100644
+--- a/components/content/content-index.tsx
++++ b/components/content/content-index.tsx
+@@ -1,10 +1,12 @@
+ import { Chip } from "@/components/content/chip";
+ import { ContentList } from "@/components/content/content-list";
+ import { Marquee } from "@/components/content/marquee";
++import { SheetList } from "@/components/content/sheet-list";
+ import {
+   categoryHref,
+   type CategorySummary,
+   formatDate,
++  plural,
+   type TagSummary,
+   toSummary,
+ } from "@/lib/content-format";
+@@ -21,6 +23,8 @@ interface Props {
+   eyebrow: React.ReactNode;
+   heading: string;
+   intro: string;
++  list?: "timeline" | "reference"; // timeline: by year with filters; reference: by category, A-Z
++  itemLabel?: string; // singular noun for counts, e.g. "post" or "sheet"
+ }
+ 
+ const stat = "rounded-full border border-(--site-surface-border) px-3 py-1";
+@@ -36,10 +40,21 @@ export function ContentIndex({
+   eyebrow,
+   heading,
+   intro,
++  list = "timeline",
++  itemLabel = "post",
+ }: Props) {
+   const posts = entries.map((entry) => toSummary(entry, basePath, labels));
+   const latest = entries[0]?.meta.date;
+ 
++  let listing: React.ReactNode;
++  if (entries.length === 0) {
++    listing = <p className="mt-10 resume-muted">Nothing here yet.</p>;
++  } else if (list === "reference") {
++    listing = <SheetList posts={posts} basePath={basePath} itemLabel={itemLabel} />;
++  } else {
++    listing = <ContentList posts={posts} showFeatured={!activeCategory && !activeTag} />;
++  }
++
+   return (
+     <main className="w-full pb-20 resume-shell">
+       <header className="grid gap-10 border-b resume-intro pb-14 lg:grid-cols-[1fr_0.8fr] lg:items-end">
+@@ -52,9 +67,7 @@ export function ContentIndex({
+         <div>
+           <p className="max-w-xl text-xl leading-8 resume-lead">{intro}</p>
+           <ul className="mt-6 flex flex-wrap gap-2 font-mono text-xs tracking-[0.08em] resume-muted">
+-            <li className={stat}>
+-              {entries.length} {entries.length === 1 ? "post" : "posts"}
+-            </li>
++            <li className={stat}>{plural(entries.length, itemLabel)}</li>
+             {tags.length > 0 && (
+               <li className={stat}>
+                 {tags.length} {tags.length === 1 ? "tag" : "tags"}
+@@ -94,11 +107,7 @@ export function ContentIndex({
+         </nav>
+       )}
+ 
+-      {entries.length === 0 ? (
+-        <p className="mt-10 resume-muted">Nothing here yet.</p>
+-      ) : (
+-        <ContentList posts={posts} showFeatured={!activeCategory && !activeTag} />
+-      )}
++      {listing}
+     </main>
+   );
+ }
+diff --git a/components/content/post-view.tsx b/components/content/post-view.tsx
+index 794e675..16b2056 100644
+--- a/components/content/post-view.tsx
++++ b/components/content/post-view.tsx
+@@ -30,10 +30,20 @@ interface Props {
+   source: ContentSource;
+   basePath: string;
+   rootLabel: string;
++  backLabel?: string; // e.g. "All sheets"
++  authorBasePath?: string; // where author pages live, when different from basePath
+ }
+ 
+-export async function PostView({ entry, source, basePath, rootLabel }: Props) {
+-  const { title, description, date, updated, author: authorValue, tags } = entry.meta;
++export async function PostView({
++  entry,
++  source,
++  basePath,
++  rootLabel,
++  backLabel = "All posts",
++  authorBasePath,
++}: Props) {
++  const { title, description, date, updated, author: authorValue, tags, details } = entry.meta;
++  const authorBase = authorBasePath ?? basePath;
+   const [toc, authors] = await Promise.all([extractProjectToc(entry.content), listAuthors(source)]);
+   const author = findAuthor(authors, authorValue);
+   const crumbs = categoryCrumbs(entry.category, basePath, source.labels);
+@@ -43,7 +53,7 @@ export async function PostView({ entry, source, basePath, rootLabel }: Props) {
+   return (
+     <ContentPage
+       backHref={basePath}
+-      backLabel="All posts"
++      backLabel={backLabel}
+       label={
+         <Breadcrumbs
+           className="section-code"
+@@ -75,7 +85,12 @@ export async function PostView({ entry, source, basePath, rootLabel }: Props) {
+       meta={
+         <>
+           {authorValue && (
+-            <AuthorPill author={author} fallbackName={authorValue} hue={hue} basePath={basePath} />
++            <AuthorPill
++              author={author}
++              fallbackName={authorValue}
++              hue={hue}
++              basePath={authorBase}
++            />
+           )}
+           {date && (
+             <Pill>
+@@ -89,6 +104,12 @@ export async function PostView({ entry, source, basePath, rootLabel }: Props) {
+             <Clock className="h-3.5 w-3.5" aria-hidden="true" />
+             {readingMinutes(entry.content)} min read
+           </Pill>
++          {details.map(({ label, value }) => (
++            <Pill key={label}>
++              <span className="capitalize">{label}</span>
++              <span className="site-nav-active">{value}</span>
++            </Pill>
++          ))}
+         </>
+       }
+       metaEnd={<PostActions actions={["link"]} size="compact" title={heading} />}
+@@ -96,11 +117,11 @@ export async function PostView({ entry, source, basePath, rootLabel }: Props) {
+       fileName={entry.slug}
+       glow={`hsl(${hue} 85% 55%)`}
+       toc={toc}
+-      tocAside={author && <AuthorAside author={author} basePath={basePath} hue={hue} />}
++      tocAside={author && <AuthorAside author={author} basePath={authorBase} hue={hue} />}
+       footer={
+         <>
+           {author && toc.length === 0 && (
+-            <AuthorCard author={author} basePath={basePath} hue={hue} />
++            <AuthorCard author={author} basePath={authorBase} hue={hue} />
+           )}
+           <PostFooter entry={entry} source={source} basePath={basePath} />
+         </>
+diff --git a/components/content/section-pages.tsx b/components/content/section-pages.tsx
+new file mode 100644
+index 0000000..a33b26a
+--- /dev/null
++++ b/components/content/section-pages.tsx
+@@ -0,0 +1,182 @@
++import { notFound } from "next/navigation";
++
++import type { Metadata } from "next";
++
++import { Breadcrumbs } from "@/components/content/breadcrumbs";
++import { ContentIndex } from "@/components/content/content-index";
++import { PostView } from "@/components/content/post-view";
++import {
++  authorHref,
++  categoryCrumbs,
++  categoryLabel,
++  childCategories,
++  collectTags,
++  findAuthor,
++  plural,
++  tagSlug,
++} from "@/lib/content-format";
++import { getEntry, listAuthors, listEntries } from "@/lib/github-content";
++import type { ContentSection } from "@/types/blog";
++
++const capitalize = (value: string) => value.charAt(0).toUpperCase() + value.slice(1);
++
++/* ---------- index ---------- */
++
++export async function SectionIndex({ section }: { section: ContentSection }) {
++  const { source, basePath, page } = section;
++  const entries = await listEntries(source);
++
++  return (
++    <ContentIndex
++      entries={entries}
++      categories={childCategories(entries, "", source.labels)}
++      tags={collectTags(entries)}
++      labels={source.labels}
++      basePath={basePath}
++      eyebrow={page.eyebrow}
++      heading={page.heading}
++      intro={page.intro}
++      list={section.list}
++      itemLabel={section.itemLabel}
++    />
++  );
++}
++
++/* ---------- /<section>/a/b/c: a post if one exists, otherwise a category ---------- */
++
++async function resolve(section: ContentSection, path: string[]) {
++  const { source } = section;
++
++  if (path.length > 1) {
++    const entry = await getEntry(source, path[path.length - 1], path.slice(0, -1).join("/"));
++    if (entry) return { kind: "post" as const, entry };
++  }
++
++  // Hidden categories have no index page of their own, so only listed entries count here.
++  const category = path.join("/");
++  const all = await listEntries(source);
++  const entries = all.filter(
++    (e) => e.category === category || e.category.startsWith(`${category}/`),
++  );
++
++  return entries.length > 0 ? { kind: "category" as const, category, entries, all } : null;
++}
++
++export async function pathMetadata(section: ContentSection, path: string[]): Promise<Metadata> {
++  const { source } = section;
++  const resolved = await resolve(section, path);
++
++  if (!resolved) return { title: "Not found" };
++  if (resolved.kind === "category") {
++    return { title: categoryLabel(resolved.category, source.labels) };
++  }
++
++  const { entry } = resolved;
++  const { title, description, date, updated, author, tags } = entry.meta;
++
++  const authorList = await listAuthors(source);
++  const resolvedAuthor = findAuthor(authorList, author);
++
++  let authorMeta: Metadata["authors"];
++  if (resolvedAuthor) {
++    authorMeta = [
++      {
++        name: resolvedAuthor.name,
++        url: authorHref(section.authorBasePath ?? section.basePath, resolvedAuthor),
++      },
++    ];
++  } else if (author) {
++    authorMeta = [{ name: author }];
++  }
++
++  return {
++    title: title ?? entry.slug,
++    description,
++    authors: authorMeta,
++    keywords: tags,
++    robots: entry.hidden ? { index: false, follow: false } : undefined,
++    openGraph: { type: "article", publishedTime: date, modifiedTime: updated },
++  };
++}
++
++export async function SectionPath({ section, path }: { section: ContentSection; path: string[] }) {
++  const { source, basePath, rootLabel, itemLabel } = section;
++  const resolved = await resolve(section, path);
++
++  if (!resolved) notFound();
++
++  if (resolved.kind === "post") {
++    return (
++      <PostView
++        entry={resolved.entry}
++        source={source}
++        basePath={basePath}
++        rootLabel={rootLabel}
++        backLabel={`All ${itemLabel}s`}
++        authorBasePath={section.authorBasePath}
++      />
++    );
++  }
++
++  const { category, entries, all } = resolved;
++  const label = categoryLabel(category, source.labels);
++  const crumbs = categoryCrumbs(category, basePath, source.labels);
++
++  return (
++    <ContentIndex
++      entries={entries}
++      categories={childCategories(all, category, source.labels)}
++      tags={collectTags(entries)}
++      labels={source.labels}
++      basePath={basePath}
++      activeCategory={category}
++      eyebrow={
++        <Breadcrumbs
++          items={[
++            { label: rootLabel.toLowerCase(), href: basePath },
++            ...crumbs.map((crumb, index) =>
++              index === crumbs.length - 1 ? { label: crumb.label } : crumb,
++            ),
++          ]}
++        />
++      }
++      heading={`${label}.`}
++      intro={`${plural(entries.length, itemLabel)} in ${label}.`}
++      list={section.list}
++      itemLabel={itemLabel}
++    />
++  );
++}
++
++/* ---------- /<section>/tag/<tag> ---------- */
++
++export function tagMetadata(section: ContentSection, tag: string): Metadata {
++  return { title: `${capitalize(section.itemLabel)}s tagged ${decodeURIComponent(tag)}` };
++}
++
++export async function SectionTag({ section, tag }: { section: ContentSection; tag: string }) {
++  const { source, basePath, rootLabel, itemLabel } = section;
++  const all = await listEntries(source);
++  const allTags = collectTags(all);
++  const current = allTags.find((t) => t.slug === tag);
++
++  if (!current) notFound();
++
++  const entries = all.filter((e) => e.meta.tags.some((t) => tagSlug(t) === tag));
++
++  return (
++    <ContentIndex
++      entries={entries}
++      categories={childCategories(all, "", source.labels)}
++      tags={allTags}
++      labels={source.labels}
++      basePath={basePath}
++      activeTag={tag}
++      eyebrow={`${rootLabel.toLowerCase()} / tag / ${tag}`}
++      heading={`${current.name}.`}
++      intro={`${plural(current.count, itemLabel)} tagged ${current.name}.`}
++      list={section.list}
++      itemLabel={itemLabel}
++    />
++  );
++}
+diff --git a/components/content/sheet-list.tsx b/components/content/sheet-list.tsx
+new file mode 100644
+index 0000000..6b795ae
+--- /dev/null
++++ b/components/content/sheet-list.tsx
+@@ -0,0 +1,232 @@
++"use client";
++
++import { useEffect, useMemo, useRef, useState } from "react";
++import Link from "next/link";
++
++import { motion,MotionConfig } from "framer-motion";
++import { ArrowUpRight, Search, X } from "lucide-react";
++
++import { pillClass } from "@/components/content/chip";
++import { PostCard } from "@/components/content/post-card";
++import { categoryHref, plural } from "@/lib/content-format";
++import { cn } from "@/lib/utils";
++import type { PostSummary } from "@/types/blog";
++
++type Sort = "az" | "newest";
++
++const SORTS: { value: Sort; label: string }[] = [
++  { value: "az", label: "A–Z" },
++  { value: "newest", label: "Newest" },
++];
++
++const reveal = {
++  hidden: { opacity: 0, y: 16 },
++  show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
++};
++
++function Reveal({ children }: { children: React.ReactNode }) {
++  return (
++    <motion.div
++      initial="hidden"
++      whileInView="show"
++      viewport={{ once: true, amount: 0.15 }}
++      variants={reveal}
++    >
++      {children}
++    </motion.div>
++  );
++}
++
++const byTitle = (a: PostSummary, b: PostSummary) => a.title.localeCompare(b.title);
++
++// Undated sheets always sort last.
++const byNewest = (a: PostSummary, b: PostSummary) => {
++  if (!a.date && !b.date) return 0;
++  if (!a.date) return 1;
++  if (!b.date) return -1;
++  return b.date.localeCompare(a.date);
++};
++
++interface Props {
++  posts: PostSummary[];
++  basePath: string;
++  itemLabel: string;
++}
++
++// Reference-style listing: grouped by top-level category, alphabetical by default.
++export function SheetList({ posts, basePath, itemLabel }: Props) {
++  const [query, setQuery] = useState("");
++  const [sort, setSort] = useState<Sort>("az");
++  const inputRef = useRef<HTMLInputElement>(null);
++
++  // "/" focuses the search box, like most docs sites.
++  useEffect(() => {
++    const onKeyDown = (event: KeyboardEvent) => {
++      if (event.key !== "/" || event.metaKey || event.ctrlKey || event.altKey) return;
++
++      const active = document.activeElement;
++      if (
++        active instanceof HTMLElement &&
++        (active.tagName === "INPUT" || active.tagName === "TEXTAREA" || active.isContentEditable)
++      ) {
++        return;
++      }
++
++      event.preventDefault();
++      inputRef.current?.focus();
++    };
++
++    window.addEventListener("keydown", onKeyDown);
++    return () => window.removeEventListener("keydown", onKeyDown);
++  }, []);
++
++  const indexed = useMemo(
++    () =>
++      posts.map((post) => ({
++        post,
++        haystack: [post.title, post.description ?? "", post.categoryName, ...post.tags]
++          .join(" ")
++          .toLowerCase(),
++      })),
++    [posts],
++  );
++
++  const { groups, total } = useMemo(() => {
++    const terms = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
++    const compare = sort === "az" ? byTitle : byNewest;
++
++    const matches = indexed
++      .filter(({ haystack }) => terms.every((term) => haystack.includes(term)))
++      .map(({ post }) => post)
++      .sort(compare);
++
++    if (terms.length > 0) {
++      return { groups: [{ key: "", label: "", posts: matches }], total: matches.length };
++    }
++
++    const byCategory = new Map<string, { label: string; posts: PostSummary[] }>();
++    for (const post of matches) {
++      const group = byCategory.get(post.topCategory) ?? { label: post.topCategoryName, posts: [] };
++      group.posts.push(post);
++      byCategory.set(post.topCategory, group);
++    }
++
++    return {
++      groups: [...byCategory]
++        .map(([key, group]) => ({ key, ...group }))
++        .sort((a, b) => a.label.localeCompare(b.label)),
++      total: matches.length,
++    };
++  }, [indexed, query, sort]);
++
++  return (
++    <MotionConfig reducedMotion="user">
++      <section className="mt-8">
++        <div className="flex flex-wrap items-center gap-3">
++          <label className="shine-border-hover relative block min-w-56 flex-1 rounded-full border border-(--site-surface-border) transition focus-within:border-(--site-accent) sm:max-w-md">
++            <span className="sr-only">Search {itemLabel}s</span>
++            <Search
++              className="pointer-events-none absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2 text-(--site-muted)"
++              aria-hidden="true"
++            />
++            <input
++              ref={inputRef}
++              type="text"
++              inputMode="search"
++              value={query}
++              onChange={(event) => setQuery(event.target.value)}
++              onKeyDown={(event) => event.key === "Escape" && setQuery("")}
++              placeholder={`Search ${itemLabel}s and tags`}
++              className="w-full rounded-full bg-transparent py-2.5 pr-12 pl-11 text-sm site-nav-active outline-none placeholder:text-(--site-muted)"
++            />
++            {query ? (
++              <button
++                type="button"
++                aria-label="Clear search"
++                onClick={() => setQuery("")}
++                className="absolute top-1/2 right-3 -translate-y-1/2 rounded-full p-1 text-(--site-muted) hover:site-nav-active"
++              >
++                <X className="h-4 w-4" />
++              </button>
++            ) : (
++              <kbd className="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 rounded border border-(--site-surface-border) px-1.5 text-[10px] text-(--site-muted)">
++                /
++              </kbd>
++            )}
++          </label>
++
++          <div
++            role="group"
++            aria-label="Sort sheets"
++            className={cn(pillClass, "inline-flex p-1 text-sm")}
++          >
++            {SORTS.map((option) => (
++              <button
++                key={option.value}
++                type="button"
++                aria-pressed={sort === option.value}
++                onClick={() => setSort(option.value)}
++                className={cn(
++                  "rounded-full px-3 py-1 transition",
++                  sort === option.value
++                    ? "bg-(--site-accent)/15 site-nav-active"
++                    : "text-(--site-muted) hover:site-nav-active",
++                )}
++              >
++                {option.label}
++              </button>
++            ))}
++          </div>
++
++          <p className="ml-auto text-sm resume-muted" aria-live="polite">
++            {plural(total, itemLabel)}
++          </p>
++        </div>
++
++        {total === 0 ? (
++          <div className="mt-12 text-center">
++            <p className="text-lg site-nav-active">
++              No {itemLabel}s match &ldquo;{query}&rdquo;.
++            </p>
++            <button
++              type="button"
++              onClick={() => setQuery("")}
++              className="mt-3 text-sm site-nav-active hover:underline"
++            >
++              Clear search
++            </button>
++          </div>
++        ) : (
++          groups.map((group, index) => (
++            <div key={group.key || "results"} className={index === 0 ? "mt-8" : "mt-12"}>
++              {group.label && (
++                <div className="mb-5 flex items-baseline gap-3">
++                  <h2 className="text-3xl font-semibold tracking-tighter site-nav-active">
++                    {group.label}
++                  </h2>
++                  <span className="font-mono text-xs resume-muted">
++                    {String(group.posts.length).padStart(2, "0")}
++                  </span>
++                  <Link
++                    href={categoryHref(basePath, group.key)}
++                    className="ml-auto inline-flex items-center gap-1 text-sm site-nav-active hover:underline"
++                  >
++                    View all
++                    <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
++                  </Link>
++                </div>
++              )}
++              <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
++                {group.posts.map((post) => (
++                  <Reveal key={post.key}>
++                    <PostCard post={post} />
++                  </Reveal>
++                ))}
++              </div>
++            </div>
++          ))
++        )}
++      </section>
++    </MotionConfig>
++  );
++}
+diff --git a/data/blog.ts b/data/blog.ts
+index 643ee42..2a98937 100644
+--- a/data/blog.ts
++++ b/data/blog.ts
+@@ -1,5 +1,5 @@
+ import { socialMedia } from "@/data/social";
+-import type { ContentSource } from "@/types/blog";
++import type { ContentSection, ContentSource } from "@/types/blog";
+ 
+ export const blogConfig = {
+   basePath: "/blog",
+@@ -40,3 +40,12 @@ export const blogSource: ContentSource = {
+   labels: blogConfig.categoryLabels,
+   listHidden: blogConfig.listHidden,
+ };
++
++export const blogSection: ContentSection = {
++  source: blogSource,
++  basePath: blogConfig.basePath,
++  rootLabel: "Blog",
++  itemLabel: "post",
++  list: "timeline",
++  page: blogConfig.page,
++};
+diff --git a/data/cheatsheet.ts b/data/cheatsheet.ts
+new file mode 100644
+index 0000000..5236800
+--- /dev/null
++++ b/data/cheatsheet.ts
+@@ -0,0 +1,48 @@
++import { blogSource } from "@/data/blog";
++import { socialMedia } from "@/data/social";
++import type { ContentSection, ContentSource } from "@/types/blog";
++
++export const cheatsheetConfig = {
++  basePath: "/cheatsheet",
++  repo: `${socialMedia.github.handle}/Cheatsheets`,
++  // Test branch while developing. Switch to "main" at cutover,
++  // either here or with the CHEATSHEET_BRANCH environment variable.
++  branch: process.env.CHEATSHEET_BRANCH || "content",
++  dir: "sheets",
++  revalidateSeconds: 86400, // fallback only; the webhook refreshes on push
++  cacheTag: "content:cheatsheet",
++  listHidden: false,
++  // Labels come from folder names ("search-engines" -> "Search Engines").
++  categoryLabels: {} as Record<string, string>,
++  page: {
++    title: "Cheatsheets",
++    description: "Commands, short procedures and running notes, kept in one place.",
++    eyebrow: "cheatsheet / reference",
++    heading: "Quick references.",
++    intro:
++      "Commands, short procedures and running notes on Linux, Git, security tooling, smart-home flashing and project setup.",
++  },
++} as const;
++
++export const cheatsheetSource: ContentSource = {
++  key: "cheatsheet",
++  repo: cheatsheetConfig.repo,
++  branch: cheatsheetConfig.branch,
++  dir: cheatsheetConfig.dir,
++  authorsFrom: blogSource, // author profiles live in the blog repo
++  extensions: [".md", ".mdx"],
++  tag: cheatsheetConfig.cacheTag,
++  revalidate: cheatsheetConfig.revalidateSeconds,
++  labels: cheatsheetConfig.categoryLabels,
++  listHidden: cheatsheetConfig.listHidden,
++};
++
++export const cheatsheetSection: ContentSection = {
++  source: cheatsheetSource,
++  basePath: cheatsheetConfig.basePath,
++  rootLabel: "Cheatsheets",
++  itemLabel: "sheet",
++  list: "reference",
++  authorBasePath: "/blog", // author pages live under the blog
++  page: cheatsheetConfig.page,
++};
+diff --git a/data/navigation.ts b/data/navigation.ts
+index 95cc98a..2b6ce3b 100644
+--- a/data/navigation.ts
++++ b/data/navigation.ts
+@@ -2,6 +2,7 @@ export const navigation = [
+   { name: "Resume", href: "/resume" },
+   { name: "Projects", href: "/projects" },
+   { name: "Blog", href: "/blog" },
++  { name: "Cheatsheet", href: "/cheatsheet" },
+   { name: "About", href: "/about" },
+   { name: "Contact", href: "/contact" },
+ ];
+diff --git a/lib/content-format.ts b/lib/content-format.ts
+index 22ad0ca..a177951 100644
+--- a/lib/content-format.ts
++++ b/lib/content-format.ts
+@@ -115,6 +115,9 @@ export const isRecent = (iso?: string, days = 30) => {
+ };
+ 
+ // Lightweight shape for client components, so post bodies never reach the browser.
++export const plural = (count: number, word: string) =>
++  `${count} ${count === 1 ? word : `${word}s`}`;
++
+ export function toSummary(
+   entry: ContentEntry,
+   basePath: string,
+@@ -134,6 +137,8 @@ export function toSummary(
+     minutes: readingMinutes(entry.content),
+     category: entry.category,
+     categoryName: categoryLabel(entry.category, labels),
++    topCategory: entry.category.split("/")[0],
++    topCategoryName: categoryLabel(entry.category.split("/")[0], labels),
+     hue: categoryHue(entry.category),
+     isNew: isRecent(date),
+   };
+diff --git a/lib/github-content.ts b/lib/github-content.ts
+index fefd46a..2ce91df 100644
+--- a/lib/github-content.ts
++++ b/lib/github-content.ts
+@@ -4,6 +4,7 @@ import matter from "gray-matter";
+ import path from "node:path";
+ 
+ import { blogSource } from "@/data/blog";
++import { cheatsheetSource } from "@/data/cheatsheet";
+ import type { Author, AuthorLink, ContentEntry, ContentRef, ContentSource } from "@/types/blog";
+ 
+ import { githubToken } from "./github-config";
+@@ -11,7 +12,10 @@ import { GitHubHttpError } from "./projects";
+ 
+ const GITHUB_API = "https://api.github.com";
+ 
+-export const contentSources = { blog: blogSource } satisfies Record<string, ContentSource>;
++export const contentSources = {
++  blog: blogSource,
++  cheatsheet: cheatsheetSource,
++} satisfies Record<string, ContentSource>;
+ 
+ async function ghFetch(url: string, source: ContentSource, accept = "application/vnd.github+json") {
+   const res = await fetch(url, {
+@@ -126,6 +130,9 @@ const asString = (value: unknown) =>
+ // YAML turns bare timestamps into Date objects.
+ const asIso = (value: unknown) => (value instanceof Date ? value.toISOString() : asString(value));
+ 
++// Optional device/spec fields some sheets carry in frontmatter.
++const DETAIL_KEYS = ["type", "standard", "board"] as const;
++
+ async function readEntry(source: ContentSource, ref: ContentRef): Promise<ContentEntry> {
+   const encoded = ref.path.split("/").map(encodeURIComponent).join("/");
+   const res = await ghFetch(
+@@ -148,6 +155,10 @@ async function readEntry(source: ContentSource, ref: ContentRef): Promise<Conten
+       updated: asIso(data.updated_at),
+       author: asString(data.author),
+       tags: Array.isArray(data.tags) ? data.tags.map(String) : [],
++      details: DETAIL_KEYS.flatMap((key) => {
++        const value = asString(data[key]);
++        return value ? [{ label: key, value }] : [];
++      }),
+     },
+   };
+ }
+@@ -289,8 +300,10 @@ async function readAuthor(
+ }
+ 
+ export async function listAuthors(source: ContentSource): Promise<Author[]> {
+-  const refs = await listAuthorRefs(source);
+-  const authors = await Promise.all(refs.map((ref) => readAuthor(source, ref)));
++  // A section can borrow another repo's profiles (cheatsheets use the blog's authors).
++  const host = source.authorsFrom ?? source;
++  const refs = await listAuthorRefs(host);
++  const authors = await Promise.all(refs.map((ref) => readAuthor(host, ref)));
+ 
+   return authors.sort((a, b) => a.name.localeCompare(b.name));
+ }
+diff --git a/types/blog.ts b/types/blog.ts
+index 3aad6b7..e549c2d 100644
+--- a/types/blog.ts
++++ b/types/blog.ts
+@@ -8,7 +8,19 @@ export interface ContentSource {
+   revalidate: number;
+   labels: Record<string, string>; // category path or segment -> display name
+   listHidden: boolean; // list posts from hidden categories everywhere
+-  authorsDir?: string; // folder of author profiles, e.g. "author"
++  authorsDir?: string; // folder of author profiles, e.g. "authors"
++  authorsFrom?: ContentSource; // read author profiles from another source (e.g. the blog repo)
++}
++
++// One public section of the site (blog, cheatsheets, ...) built from a content source.
++export interface ContentSection {
++  source: ContentSource;
++  basePath: string; // e.g. "/blog"
++  rootLabel: string; // breadcrumb root, e.g. "Blog"
++  itemLabel: string; // singular noun for counts, e.g. "post" or "sheet"
++  list: "timeline" | "reference"; // how the index lists items
++  authorBasePath?: string; // where author pages live, when different from basePath
++  page: { title: string; description: string; eyebrow: string; heading: string; intro: string };
+ }
+ 
+ export interface ContentMeta {
+@@ -18,6 +30,7 @@ export interface ContentMeta {
+   updated?: string;
+   author?: string;
+   tags: string[];
++  details: { label: string; value: string }[]; // optional device/spec fields from frontmatter
+ }
+ 
+ export interface ContentRef {
+@@ -45,6 +58,8 @@ export interface PostSummary {
+   minutes: number;
+   category: string;
+   categoryName: string;
++  topCategory: string; // first segment of the category path
++  topCategoryName: string;
+   hue: number;
+   isNew: boolean;
+ }

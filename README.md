@@ -1,26 +1,27 @@
 # Ajay Singh Portfolio
 
-[![Deployment Status](https://github.com/ajaysinghnp/ajaysinghnp.github.io/actions/workflows/nextjs.yml/badge.svg?branch=main)](https://github.com/ajaysinghnp/ajaysinghnp.github.io/actions/workflows/nextjs.yml)
-
-Personal portfolio and blog built with Next.js, MDX, and Tailwind CSS, and deployed as a static site with GitHub Pages.
+Personal portfolio and blog built with Next.js, MDX, and Tailwind CSS, designed to run behind Docker on an Oracle VPS or similar hosting environment such as Dockploy.
 
 ## Features
 
 - Personal portfolio pages (`about`, `projects`, `resume`, `contact`)
 - Blog support with MDX and Contentlayer
 - Project showcase powered by GitHub API
+- Automatically generated featured-project previews
 - Syntax-highlighted markdown content
 - Theme support (light/dark/system)
-- Static export for GitHub Pages hosting
+- Production-ready Docker deployment for a VPS
 
 ## Tech Stack
 
 - Next.js 16 (App Router)
+- Playwright Chromium for build-time project previews
 - React + TypeScript
 - Tailwind CSS
 - Contentlayer + MDX
 - SWR + Axios
 - Lucide icons
+- pnpm package manager
 
 ## Project Structure
 
@@ -32,6 +33,7 @@ lib/            API/data helpers and utilities
 providers/      Context providers (theme, etc.)
 public/         Static assets
 types/          TypeScript types
+Dockerfile      Container build for VPS/Dockploy deployment
 ```
 
 ## Local Development
@@ -39,35 +41,45 @@ types/          TypeScript types
 ### 1. Install dependencies
 
 ```bash
-npm install
+pnpm install
 ```
 
 ### 2. Start development server
 
 ```bash
-npm run dev
+pnpm run dev
 ```
+
+The first run installs Playwright Chromium if needed, starts the local site, and captures separate light- and dark-theme previews of the local development homepage when the selected featured repository is this portfolio. The preview browser bar continues to show the repository's public homepage URL. Production builds capture the public homepage when configured, otherwise the GitHub repository page. Generated images and their version manifest are stored in the ignored `public/generated-project-previews/` directory.
 
 Open `http://localhost:3000`.
 
 ### 3. Build for production
 
 ```bash
-npm run build
+pnpm run build
+```
+
+### 4. Run production server
+
+```bash
+pnpm run start
 ```
 
 ## Environment Variables
 
-Create a `.env.local` file for optional authenticated GitHub requests:
+Create a `.env.local` file for authenticated server-side GitHub API requests:
 
 ```bash
-GITHUB_TOKEN=your_github_personal_access_token
+GITHUB_TOKEN=your_read_only_github_token
+PORT=3000
 ```
 
 Why this helps:
 
-- Improves GitHub API rate limits
-- Makes project/readme fetching more reliable
+- Raises the GitHub REST API rate limit for repository and README requests.
+- Keep the token server-only. Do not rename it to `NEXT_PUBLIC_GITHUB_TOKEN` or commit a populated `.env.local` file.
+- Use a token with only the read access needed for public repository metadata and contents.
 
 ## Content and Blog
 
@@ -77,19 +89,18 @@ Why this helps:
 
 ## Deployment
 
-This repository is configured for static export:
+This repository is configured for container-based deployment on a VPS such as Oracle Cloud, and is intended for use with Dockploy.
 
-- `next.config.mjs` uses `output: "export"`
-- Output directory is `build/`
-
-Deploy the generated static files to GitHub Pages from your chosen branch/workflow.
+- `next.config.mjs` uses `output: "standalone"`
+- The app is served via a Node.js runtime in Docker
+- The Docker image can be deployed directly through Dockploy
 
 ## Scripts
 
-- `npm run dev` - Start local development server
-- `npm run build` - Create production build/export
-- `npm run start` - Start Next.js server mode (not typically used for static pages)
-- `npm run lint` - Run lint checks
+- `pnpm run dev` - Start local development server
+- `pnpm run build` - Create production build
+- `pnpm run start` - Start the production Next.js server
+- `pnpm run lint` - Run lint checks
 
 ## License
 

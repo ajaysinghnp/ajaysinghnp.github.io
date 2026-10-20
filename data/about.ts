@@ -1,3 +1,5 @@
+import { CircuitBoard, Lightbulb, Workflow } from "lucide-react";
+
 export const about = {
   title: "I love creativity",
   quote:
@@ -20,6 +22,26 @@ export const about = {
     {
       label: "2012",
       description: "Coding Since",
+    },
+  ],
+  principles: [
+    {
+      icon: Lightbulb,
+      title: "Start with curiosity",
+      description:
+        "The best solutions usually begin with a better question and a willingness to look twice.",
+    },
+    {
+      icon: Workflow,
+      title: "Make it useful",
+      description:
+        "I like technology that removes friction, explains itself, and earns its place in a real workflow.",
+    },
+    {
+      icon: CircuitBoard,
+      title: "Stay close to reality",
+      description:
+        "Software, hardware, people, and constraints all belong in the same conversation.",
     },
   ],
 };

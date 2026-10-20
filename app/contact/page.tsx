@@ -1,12 +1,67 @@
-import LetsTalk from '@/components/sections/lets-talk'
-import React from 'react'
+import Link from "next/link";
 
-const ContactPage = () => {
+import { ArrowUpRight, Mail, MapPin } from "lucide-react";
+
+import SocialLinksPanel from "@/components/sections/social-links-panel";
+import { resume } from "@/data/resume";
+import { socialMedia } from "@/data/social";
+
+export default function ContactPage() {
   return (
-    <main className='flex flex-1 gap-4 justify-center items-center text-white'>
-      <LetsTalk />
-    </main>
-  )
-}
+    <main className="w-full pb-20 resume-shell">
+      <header className="grid gap-10 border-b resume-intro pb-14 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
+        <div>
+          <p className="section-code">contact / open channel</p>
+          <h1 className="sparkle-text mt-5 max-w-4xl text-6xl leading-[0.92] font-semibold tracking-[-0.06em] sm:text-8xl">
+            Let&apos;s make something useful.
+          </h1>
+        </div>
+        <p className="max-w-xl text-xl leading-8 resume-lead">
+          Have a product idea, an automation problem, or a technical question worth exploring? Start
+          with a simple note.
+        </p>
+      </header>
 
-export default ContactPage
+      <section className="mt-14 grid gap-12 lg:grid-cols-[1.1fr_0.9fr]">
+        <div className="light-btn-hover-surface shine-border-hover flex min-h-88 flex-col justify-between p-6 sm:p-8">
+          <div>
+            <p className="section-code">best way to reach me</p>
+            <h2 className="mt-5 max-w-xl text-4xl font-semibold tracking-tighter site-nav-active sm:text-5xl">
+              Email works best.
+            </h2>
+            <p className="mt-5 max-w-lg text-lg leading-8 resume-muted">
+              Tell me what you are trying to make, where it is getting stuck, and what a useful
+              outcome would look like.
+            </p>
+          </div>
+          <div className="mt-10">
+            <Link
+              href={socialMedia.email.href}
+              aria-label="Start a conversation by email"
+              className="action-button shine-border inline-flex items-center gap-3 px-5 py-3 text-sm font-semibold shine-border-contrast"
+            >
+              <Mail className="h-4 w-4" /> Start a conversation <ArrowUpRight className="h-4 w-4" />
+            </Link>
+          </div>
+        </div>
+
+        <div className="space-y-8">
+          <div>
+            <p className="section-code">currently around</p>
+            <div className="mt-4 flex items-center gap-3 text-lg resume-meta">
+              <MapPin className="h-5 w-5 site-nav-active" /> {resume.contacts.at(0)?.address}
+            </div>
+          </div>
+          <SocialLinksPanel heading="find me elsewhere" />
+        </div>
+      </section>
+
+      <section className="mt-14 border-t resume-intro pt-6">
+        <p className="text-sm resume-muted">
+          No formal brief needed. A rough idea, a half-working prototype, or a problem you cannot
+          quite name is enough to begin.
+        </p>
+      </section>
+    </main>
+  );
+}

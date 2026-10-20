@@ -1,28 +1,45 @@
-import type { Metadata } from "next";
-
 import "@/app/globals.css";
 import "@/app/mdx.css";
-import { calSans } from "@/components/local-fonts";
-import { ThemeProvider } from "@/providers/theme";
+import "katex/dist/katex.min.css";
+
+import { Playfair_Display, Space_Grotesk } from "next/font/google";
+
+import type { Metadata } from "next";
+
+import Layout from "@/components/layouts/layout";
+import { calSans } from "@/components/layouts/local-fonts";
+import SiteBackground from "@/components/layouts/site-background";
 import { cn } from "@/lib/utils";
-import Particles from "@/components/particles";
-import Layout from "@/components/layout";
+import { ThemeProvider } from "@/providers/theme";
+
+const grotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-space-grotesk",
+  display: "swap",
+});
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  style: ["italic"],
+  variable: "--font-playfair",
+  display: "swap",
+});
 
 const title = "Ajay Singh";
 const description = "A Personal Portfolio for Ajay Singh.";
-// const url = "https://ajaysingh.com.np";
-const url = "/";
+const url = "https://ajaysingh.com.np";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(url),
   title: {
     default: title,
     template: `%s | ${title}`,
   },
-  description: description,
+  description,
   openGraph: {
-    title: title,
-    description: description,
-    url: url,
+    title,
+    description,
+    url,
     siteName: title,
     images: [
       {
@@ -46,7 +63,7 @@ export const metadata: Metadata = {
     },
   },
   twitter: {
-    title: title,
+    title,
     card: "summary_large_image",
   },
   icons: {
@@ -56,42 +73,29 @@ export const metadata: Metadata = {
 
 // const popins = Poppins({ weight: ["300", "400", "500", "600", "700", "800", "900"], subsets: ["latin"] });
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={calSans.className} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={cn(grotesk.variable, playfair.variable, calSans.variable)}
+      suppressHydrationWarning
+    >
       <head>
-        <link
-          rel="apple-touch-icon"
-          sizes="180x180"
-          href="/favicon/apple-touch-icon.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="32x32"
-          href="/favicon/favicon-32x32.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="16x16"
-          href="/favicon/favicon-16x16.png"
-        />
+        <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png" />
         <link rel="manifest" href="/favicon/site.webmanifest" />
       </head>
-      <body
-        className={cn(
-          "bg-black text-white",
-          process.env.NODE_ENV === "development" && "debug-screens"
-        )}
-      >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <Particles className="animate-fade-in" quantity={150} />
-          {/* TODO Refractor the Layout to merge them in this layout rather than having a seperate component */}
+      <body className={cn("site-body", process.env.NODE_ENV === "development" && "debug-screens")}>
+        {/* Theme cycle: system -> dark -> light */}
+        {/* enableSystem reads OS preference and stores it - when no localStorage exists, first visit shows OS theme */}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <SiteBackground />
           <Layout>{children}</Layout>
         </ThemeProvider>
       </body>

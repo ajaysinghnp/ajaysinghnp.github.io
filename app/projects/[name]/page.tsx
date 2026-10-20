@@ -1,32 +1,35 @@
-import { Project } from "@/types/github";
-import { fetchProjectReadme, fetchProjects } from "@/lib/projects";
-import ProjectHeader from "./header";
-import { MDX } from "@/components/mdx";
+import { notFound } from "next/navigation";
+
+import { ProjectView } from "@/components/mdx/project-view";
+import { extractProjectToc } from "@/lib/project-toc";
+import { fetchProject, fetchProjectReadme, fetchProjects } from "@/lib/projects";
+
+export const revalidate = 21600;
+export const dynamicParams = true;
 
 type Props = {
-  params: Promise<{
-    name: string;
-  }>;
+  params: Promise<{ name: string }>;
 };
 
-type StaticParams = {
-  name: string;
-};
-
-export async function generateStaticParams(): Promise<StaticParams[]> {
-  const projs: Project[] = await fetchProjects();
-  return projs.map((proj) => ({ name: proj.name }));
+export async function generateStaticParams() {
+  return [];
 }
 
-export default async function ProjectLoadingPage({ params }: Props) {
-  const { name: rawName } = await params;
-  const name = decodeURIComponent(rawName);
-  const readMe: string = await fetchProjectReadme(name);
+export default async function ProjectPage({ params }: Props) {
+  const { name } = await params;
+  const projects = await fetchProjects();
 
-  return (
-    <main className="space-y-2">
-      <ProjectHeader project_name={name} />
-      <MDX source={readMe} />
-    </main>
-  );
+  if (!projects.some((p) => p.name === name)) {
+    notFound();
+  }
+
+  const [project, readme] = await Promise.all([fetchProject(name), fetchProjectReadme(name)]);
+
+  if (!project) {
+    notFound();
+  }
+
+  const toc = await extractProjectToc(readme.content);
+
+  return <ProjectView project={project} readme={readme} toc={toc} />;
 }

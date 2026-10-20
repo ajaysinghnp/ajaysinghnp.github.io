@@ -1,0 +1,36 @@
+import Link from "next/link";
+
+import { ArrowLeft, ArrowUpRight, SearchX } from "lucide-react";
+
+export default function NotFound() {
+  return (
+    <main className="flex min-h-[55vh] w-full items-center justify-center py-20 resume-shell">
+      <section className="w-full max-w-2xl text-center">
+        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-cyan-300/40 bg-cyan-300/10 text-cyan-300">
+          <SearchX className="h-7 w-7" />
+        </div>
+        <p className="mt-8 section-code">404 / signal lost</p>
+        <h1 className="sparkle-text mt-4 text-7xl font-semibold tracking-[-0.08em] sm:text-9xl">
+          404.
+        </h1>
+        <p className="mx-auto mt-5 max-w-md text-lg leading-8 resume-lead">
+          This route does not exist, or it moved somewhere else while the system was changing.
+        </p>
+        <div className="mt-8 flex flex-wrap justify-center gap-5">
+          <Link
+            href="/"
+            className="shine-border inline-flex items-center gap-2 glow-action rounded px-5 py-3 text-sm font-semibold text-[#090b0d] shine-border-contrast"
+          >
+            <ArrowLeft className="h-4 w-4" /> Return home
+          </Link>
+          <Link
+            href="/projects"
+            className="sparkle inline-flex gap-2 rounded-sm border border-cyan-700/60 bg-cyan-300/10 px-6 py-3 hover:border-cyan-300"
+          >
+            Browse projects <ArrowUpRight className="h-4 w-4" />
+          </Link>
+        </div>
+      </section>
+    </main>
+  );
+}
