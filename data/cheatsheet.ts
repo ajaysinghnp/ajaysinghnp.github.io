@@ -7,7 +7,7 @@ export const cheatsheetConfig = {
   repo: `${socialMedia.github.handle}/Cheatsheets`,
   // Test branch while developing. Switch to "main" at cutover,
   // either here or with the CHEATSHEET_BRANCH environment variable.
-  branch: process.env.CHEATSHEET_BRANCH || "content",
+  branch: process.env.CHEATSHEET_BRANCH || "main",
   dir: "sheets",
   revalidateSeconds: 86400, // fallback only; the webhook refreshes on push
   cacheTag: "content:cheatsheet",

@@ -101,7 +101,7 @@ export function categoryCrumbs(
 
 /* ---------- presentation helpers ---------- */
 
-// Stable hue per top-level category, so each one keeps the same accent colour everywhere.
+// Stable hue per top-level category, so each one keeps the same accent color everywhere.
 export const categoryHue = (category: string) => {
   let hash = 0;
   for (const char of category.split("/")[0]) hash = (hash * 31 + char.charCodeAt(0)) % 360;

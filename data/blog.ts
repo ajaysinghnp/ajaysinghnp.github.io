@@ -6,7 +6,7 @@ export const blogConfig = {
   repo: `${socialMedia.github.handle}/blog`,
   // Test branch while developing. Switch to "main" at cutover,
   // either here or with the BLOG_BRANCH environment variable.
-  branch: process.env.BLOG_BRANCH || "content",
+  branch: process.env.BLOG_BRANCH || "main",
   dir: "posts",
   authorsDir: "authors",
   revalidateSeconds: 86400, // fallback only; the webhook refreshes on push
