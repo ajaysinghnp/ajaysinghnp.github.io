@@ -115,11 +115,13 @@ export const components = {
   pre: ({ raw, className, children, ...props }: PreProps) => {
     const child = isValidElement<{ "data-language"?: string }>(children) ? children : null;
 
-    if (child?.props["data-language"] === "mermaid") {
-      return <MermaidDiagram chart={raw ?? ""} />;
-    }
+    const isMermaid = child?.props["data-language"] === "mermaid";
 
     const code = raw ?? getTextContent(children).replace(/\n$/, "");
+
+    if (isMermaid) {
+      return <MermaidDiagram chart={code} />;
+    }
 
     return (
       <div className="code-block-wrapper">
