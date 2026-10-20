@@ -12,7 +12,6 @@
 # next.js
 /.next/
 /out/
-/public/generated-project-previews/
 
 # production
 /build
