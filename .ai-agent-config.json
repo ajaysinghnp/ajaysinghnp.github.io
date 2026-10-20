@@ -1,0 +1,41 @@
+{
+  "agent": "claude-code",
+  "projectType": "nextjs",
+  "language": "typescript",
+  "framework": "nextjs-16",
+  "features": [
+    "mdx-support",
+    "github-integration",
+    "mermaid-diagrams",
+    "pdf-generation",
+    "tailwind-css"
+  ],
+  "scripts": {
+    "dev": "pnpm dev",
+    "build": "pnpm build",
+    "test": "pnpm check",
+    "lint": "pnpm lint",
+    "format": "pnpm format"
+  },
+  "securityGuardrails": {
+    "environmentAccess": "never_read_env_files",
+    "codeExecution": "never_run_code_without_permissions",
+    "testingRequired": "always_test_before_commit_and_push",
+    "commitRequirements": [
+      "run_typecheck_before_commit",
+      "run_lint_before_commit",
+      "run_format_before_commit",
+      "run_tests_before_commit"
+    ],
+    "pushRequirements": [
+      "ensure_all_tests_pass",
+      "verify_type_safety",
+      "confirm_code_quality",
+      "validate_formatting"
+    ],
+    "dataHandling": "never_expose_sensitive_data",
+    "apiAccess": "respect_rate_limits_and_auth",
+    "fileSystemAccess": "never_write_to_protected_paths",
+    "networkAccess": "only_access_authorized_endpoints"
+  }
+}
