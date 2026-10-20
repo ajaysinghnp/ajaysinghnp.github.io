@@ -1777,7 +1777,6 @@ html:not(.dark) .project-card-preview-light {
 .mermaid-viewport {
   position: relative;
   width: 100%;
-  max-height: 75vh;
   overflow: auto;
   overscroll-behavior: contain;
   padding: 3.5rem 1rem 1rem;
@@ -1924,6 +1923,36 @@ html:not(.dark) .project-card-preview-light {
 
   to {
     stroke-dashoffset: -7;
+  }
+}
+
+/* Theme-aware Mermaid sequence activation bars */
+.mermaid-diagram svg rect.activation0,
+.mermaid-diagram svg rect[class^="activation"] {
+  fill: var(--site-accent) !important;
+  stroke: var(--site-surface-border) !important;
+  stroke-width: 1.5;
+}
+
+/* Mermaid sequence diagram: visible, animated message lines */
+.mermaid-diagram svg line[data-et="message"] {
+  stroke: var(--site-accent, var(--accent, currentColor)) !important;
+  stroke-width: 2px !important;
+  stroke-dasharray: 6 4 !important;
+  stroke-dashoffset: 0;
+  fill: none !important;
+  animation: mermaid-message-dash 1.2s linear infinite;
+}
+
+@keyframes mermaid-message-dash {
+  to {
+    stroke-dashoffset: -20;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mermaid-diagram svg line[data-et="message"] {
+    animation: none;
   }
 }
 
