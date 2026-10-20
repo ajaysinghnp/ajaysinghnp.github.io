@@ -6,7 +6,7 @@
   "scripts": {
     "predev": "playwright install chromium",
     "dev": "tsx scripts/dev-with-project-preview.ts",
-    "prebuild": "playwright install chromium && tsx scripts/generate-project-preview.ts",
+    "prebuild": "playwright install chromium && tsx scripts/build-with-project-preview.ts",
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
