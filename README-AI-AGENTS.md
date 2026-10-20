@@ -189,7 +189,7 @@ This is a personal portfolio website built with Next.js 16 and TypeScript. The p
 
 ### .claude-context.md
 
-````markdown
+`````markdown
 # Claude Code Context
 
 ## Project Overview
@@ -358,7 +358,9 @@ Project and content data is stored in TypeScript files:
 - Examine API routes in `app/api/` directory
 - Look at utility functions in `lib/` directory
 ````
-````
+`````
+
+```
 
 ## Project Modernization
 
@@ -372,7 +374,7 @@ This project is designed to be AI-agent friendly with:
 
 The project structure and configuration files are optimized for AI agent collaboration, making it easy for Claude Code, GitHub Copilot, and other AI agents to understand, modify, and extend the codebase.
 
-````
+```
 
 ## AI Agent Integration Scripts
 
@@ -429,7 +431,7 @@ echo "Next steps:"
 echo "1. Review the AI agent configuration files"
 echo "2. Configure your AI agent with the provided instructions"
 echo "3. Start working with the project using AI assistance"
-````
+```
 
 ## Project Statistics
 
