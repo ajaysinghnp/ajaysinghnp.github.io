@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { GitBranch } from "lucide-react";
+import { GitBranch, Menu, X } from "lucide-react";
 
 import { navigation } from "@/data/navigation";
 import { socialMedia } from "@/data/social";
@@ -18,6 +18,18 @@ interface Props {
 export const Navigation: React.FC<Props> = ({ gitTheme = false }: Props) => {
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
+  // Keyed by pathname so the menu closes automatically after navigation.
+  const [menuPath, setMenuPath] = useState<string | null>(null);
+  const isMenuOpen = menuPath === pathname;
+
+  useEffect(() => {
+    if (!isMenuOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMenuPath(null);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [isMenuOpen]);
 
   useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 18);
@@ -58,7 +70,7 @@ export const Navigation: React.FC<Props> = ({ gitTheme = false }: Props) => {
             </span>
           </span>
         </Link>
-        <nav className="hidden items-center gap-6 text-xs tracking-[0.16em] uppercase md:flex">
+        <nav className="hidden items-center gap-6 text-xs tracking-[0.16em] uppercase lg:flex">
           {navigation.map((item) => {
             const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
 
@@ -107,8 +119,47 @@ export const Navigation: React.FC<Props> = ({ gitTheme = false }: Props) => {
             variant={null}
             className="light-btn-hover-bg shine-border-hover site-icon-button site-control hover:resume-surface"
           />
+          <button
+            type="button"
+            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={isMenuOpen}
+            aria-controls="mobile-navigation"
+            onClick={() => setMenuPath(isMenuOpen ? null : pathname)}
+            className="light-btn-hover-bg shine-border-hover site-icon-button cursor-pointer site-control hover:resume-surface lg:hidden"
+          >
+            {isMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+          </button>
         </div>
       </div>
+      {isMenuOpen && (
+        <nav
+          id="mobile-navigation"
+          aria-label="Main"
+          className="absolute inset-x-0 top-full border-b site-navigation bg-(--site-bg)! shadow-lg lg:hidden"
+        >
+          <ul className="mx-auto flex site-width flex-col gap-1 py-3 text-sm tracking-[0.16em] uppercase">
+            {navigation.map((item) => {
+              const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
+
+              return (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    aria-current={isActive ? "page" : undefined}
+                    onClick={() => setMenuPath(null)}
+                    className={cn(
+                      "light-btn-hover-bg block rounded px-3 py-3 resume-muted transition-colors",
+                      isActive && "font-semibold site-nav-active",
+                    )}
+                  >
+                    {item.name}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+      )}
     </header>
   );
 };
