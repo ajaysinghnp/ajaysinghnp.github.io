@@ -1625,23 +1625,32 @@ html:not(.dark) .project-card-preview-light {
   cursor: default;
 }
 
-/* Header strip with the fence language, editor-tab style. */
+/* Editor tab strip like VS Code: dim strip, one active tab merged into the code area. */
 .project-readme .code-block-header {
   display: flex;
-  align-items: center;
-  gap: 0.45rem;
+  align-items: stretch;
   min-height: 2.25rem;
+  overflow: hidden;
   border: 1px solid var(--site-surface-border);
-  border-bottom-color: var(--site-border);
+  border-bottom: 0;
   border-radius: var(--site-radius) var(--site-radius) 0 0;
-  background: color-mix(in srgb, var(--readme-code-bg) 86%, var(--site-text));
-  padding: 0 5.5rem 0 0.85rem;
-  color: var(--site-muted);
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 0.75rem;
+  background: color-mix(in srgb, var(--readme-code-bg) 88%, #000);
+  box-shadow: inset 0 -1px 0 var(--site-border);
 }
 
-.project-readme .code-block-header svg {
+.project-readme .code-block-tab {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-top: 2px solid var(--site-accent);
+  border-right: 1px solid var(--site-border);
+  background: var(--readme-code-bg);
+  padding: 0 1rem 0 0.85rem;
+  color: var(--site-text);
+  font-size: 0.8rem;
+}
+
+.project-readme .code-block-tab svg {
   color: var(--site-accent);
 }
 

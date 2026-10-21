@@ -133,8 +133,10 @@ export const components = {
       <div className={cn("code-block-wrapper", showHeader && "code-block-titled")}>
         {showHeader && (
           <div className="code-block-header">
-            <FileCode2 className="h-3.5 w-3.5" aria-hidden="true" />
-            <span>{language}</span>
+            <span className="code-block-tab">
+              <FileCode2 className="h-3.5 w-3.5" aria-hidden="true" />
+              <span>{language}</span>
+            </span>
           </div>
         )}
         <pre {...props} className={cn(className)}>
