@@ -275,7 +275,7 @@ export function ProjectsClient({ projects }: { projects: Project[] }) {
         <section className="mt-14">
           <div className="mb-6">
             <p className="section-code">
-              // featured projects / {String(selected.length + 1).padStart(2, "0")}
+              featured projects / {String(selected.length + 1).padStart(2, "0")}
             </p>
             <h2 className="mt-3 text-3xl font-semibold tracking-tighter site-nav-active sm:text-4xl">
               Featured projects.

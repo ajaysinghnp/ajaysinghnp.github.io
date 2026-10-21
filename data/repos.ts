@@ -30,5 +30,11 @@ export const PROJECT_REPOSITORY_SETTINGS = {
     "DSP_MATLAB-Programs",
     "Office-File-Password",
     "Learning-Rust",
+    "YouTube-Video-Downloader",
+    "Maya-Utility-App",
+    "maya-assist",
+    "quizgame",
+    "api_template",
+    "arzun4aabara.github.com",
   ] as readonly string[],
 } as const;

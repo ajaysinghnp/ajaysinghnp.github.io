@@ -16,6 +16,8 @@ const VARIANTS = new Set([
   "pwsh",
   "bat",
   "cmd",
+  "bash",
+  "zsh",
 ]);
 
 /** Turns terminal-like fenced code blocks (see VARIANTS) into terminal windows. */
