@@ -62,21 +62,86 @@ async function highlight(commands: string, flavor: Flavor): Promise<Token[][]> {
   }
 }
 
+interface ShellState {
+  depth: number;
+  quote: string | null;
+  heredoc: string | null;
+}
+
+const BLOCK_OPEN = new Set(["for", "while", "until", "if", "case", "select"]);
+const BLOCK_CLOSE = new Set(["done", "fi", "esac"]);
+const BLOCK_PREFIX = new Set(["then", "do", "else", "elif", "!"]);
+
+/** Updates open quotes and block depth so later lines of a multi-line command stay commands. */
+function scanCommand(text: string, state: ShellState, keywords: boolean) {
+  let word = "";
+  let atStart = true;
+
+  const endWord = () => {
+    if (!word) return;
+    if (keywords && atStart && BLOCK_OPEN.has(word)) state.depth++;
+    else if (keywords && atStart && BLOCK_CLOSE.has(word))
+      state.depth = Math.max(0, state.depth - 1);
+    atStart = BLOCK_PREFIX.has(word);
+    word = "";
+  };
+
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+
+    if (state.quote) {
+      if (ch === "\\" && state.quote === '"') i++;
+      else if (ch === state.quote) state.quote = null;
+      continue;
+    }
+
+    if (/\w/.test(ch)) {
+      word += ch;
+      continue;
+    }
+
+    endWord();
+    if (ch === "'" || ch === '"') state.quote = ch;
+    else if (ch === "#" && (i === 0 || /\s/.test(text[i - 1]))) break;
+    else if (ch === "{" || ch === "(") state.depth++;
+    else if (ch === "}" || ch === ")") state.depth = Math.max(0, state.depth - 1);
+    else if (";&|".includes(ch)) atStart = true;
+  }
+
+  endWord();
+}
+
 function parseLines(source: string, { output, flavor }: Variant): TerminalLine[] {
   const lines = source.replace(/\n$/, "").split("\n");
   if (output) return lines.map((text) => ({ text }));
 
+  const state: ShellState = { depth: 0, quote: null, heredoc: null };
   let continued = false;
 
   return lines.map((line) => {
     const match = PROMPT.exec(line);
-    if (match || continued) {
-      const text = match ? line.slice(match[0].length) : line;
-      continued = text.endsWith(CONTINUATION[flavor]);
-      return { prompt: match ? match[1] : "", text };
+    if (!match && !continued) return { text: line };
+
+    const text = match ? line.slice(match[0].length) : line;
+
+    if (state.heredoc) {
+      if (text.trim() === state.heredoc) state.heredoc = null;
+      continued = state.heredoc !== null;
+    } else {
+      scanCommand(text, state, flavor === "generic");
+      if (flavor === "generic") {
+        const heredoc = /<<-?\s*["']?([\w.-]+)["']?/.exec(text);
+        if (heredoc) state.heredoc = heredoc[1];
+      }
+      continued =
+        state.heredoc !== null ||
+        state.depth > 0 ||
+        state.quote !== null ||
+        text.trimEnd().endsWith(CONTINUATION[flavor]) ||
+        /(\|\||&&|\|)\s*$/.test(text);
     }
 
-    return { text: line };
+    return { prompt: match ? match[1] : "", text };
   });
 }
 

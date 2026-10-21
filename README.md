@@ -143,7 +143,7 @@ Compiled successfully
 | `powershell`, `pwsh` | Windows-style window (`PS` icon, window controls) | Commands + output |
 | `bat`, `cmd`         | Windows-style window (`>_` icon, window controls) | Commands + output |
 
-- In command blocks, lines starting with `$`, `%`, `>`, `PS>`, `PS C:\path>`, or `C:\path>` are commands (shown with a prompt). Lines after a command ending in the continuation character (`\` generic, `` ` `` PowerShell, `^` cmd) continue it. Every other line is dimmed output. Indentation is preserved exactly as written. Commands are syntax-highlighted with Shiki (`bash`, `powershell`, or `bat` grammar depending on the fence) using the same light/dark themes as regular code blocks; output stays plain.
+- In command blocks, lines starting with `$`, `%`, `>`, `PS>`, `PS C:\path>`, or `C:\path>` are commands (shown with a prompt). Lines after a command continue it when it ends with the continuation character (`\` generic, `` ` `` PowerShell, `^` cmd) or a pipe/`&&`/`||`, or while quotes, brackets, shell blocks (`for`/`if`/`case` ... `done`/`fi`/`esac`) or heredocs are still open. Every other line is dimmed output. Indentation is preserved exactly as written. Commands are syntax-highlighted with Shiki (`bash`, `powershell`, or `bat` grammar depending on the fence) using the same light/dark themes as regular code blocks; output stays plain.
 - Every terminal has a **Copy** button that copies the whole block as written (useful for reports). Command blocks that also contain output get a **Commands** button that copies only the commands, without prompts.
 - The title bar shows `title="..."` when given, otherwise the fence language as written (for example `powershell`).
 
