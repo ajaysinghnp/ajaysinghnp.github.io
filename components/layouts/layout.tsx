@@ -20,7 +20,7 @@ const Layout = ({ children }: Props) => {
     <div className="relative flex min-h-screen flex-col">
       <div className="relative flex flex-1 flex-col">
         <Navigation />
-        <div className="mx-auto mb-12 w-full max-w-[80%] flex-1 pt-8 lg:pt-10">{children}</div>
+        <div className="mx-auto mb-12 site-width flex-1 pt-8 lg:pt-10">{children}</div>
       </div>
       <SiteFooter />
     </div>

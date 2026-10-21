@@ -33,7 +33,7 @@ export const Navigation: React.FC<Props> = ({ gitTheme = false }: Props) => {
         isScrolled && "site-navigation-scrolled",
       )}
     >
-      <div className="mx-auto flex w-full max-w-[80%] items-center justify-between gap-6 py-4">
+      <div className="mx-auto flex site-width items-center justify-between gap-6 py-4">
         <Link
           href="/"
           className="flex shrink-0 items-center gap-3 text-sm font-semibold tracking-wide"
