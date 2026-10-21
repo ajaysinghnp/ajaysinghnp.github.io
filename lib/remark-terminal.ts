@@ -41,9 +41,12 @@ export function remarkTerminal() {
 function toTerminal(code: MdastNode): MdastNode {
   const title = /title="([^"]*)"/.exec(code.meta ?? "")?.[1];
 
+  // Passed as a prop: MDX text children lose leading indentation.
   return {
     type: "terminal",
-    data: { hName: "terminal", hProperties: { lang: code.lang, ...(title && { title }) } },
-    children: [{ type: "text", value: code.value ?? "" }],
+    data: {
+      hName: "terminal",
+      hProperties: { lang: code.lang, code: code.value ?? "", ...(title && { title }) },
+    },
   };
 }

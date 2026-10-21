@@ -143,8 +143,8 @@ Compiled successfully
 | `powershell`, `pwsh` | Windows-style window (`PS` icon, window controls) | Commands + output |
 | `bat`, `cmd`         | Windows-style window (`>_` icon, window controls) | Commands + output |
 
-- In command blocks, lines starting with `$`, `%`, `>`, `PS>`, `PS C:\path>`, or `C:\path>` are commands (shown with a prompt). Lines after a command ending in the continuation character (`\` generic, `` ` `` PowerShell, `^` cmd) continue it. Every other line is dimmed output. The copy button copies only the commands.
-- Output blocks treat every line as output and copy the whole block.
+- In command blocks, lines starting with `$`, `%`, `>`, `PS>`, `PS C:\path>`, or `C:\path>` are commands (shown with a prompt). Lines after a command ending in the continuation character (`\` generic, `` ` `` PowerShell, `^` cmd) continue it. Every other line is dimmed output. Indentation is preserved exactly as written.
+- Every terminal has a **Copy** button that copies the whole block as written (useful for reports). Command blocks that also contain output get a **Commands** button that copies only the commands, without prompts.
 - The title bar shows `title="..."` when given, otherwise the fence language as written (for example `powershell`).
 
 Other fence languages (for example `bash`) keep the regular highlighted code block. See `lib/remark-terminal.ts` and `components/mdx/terminal.tsx`.

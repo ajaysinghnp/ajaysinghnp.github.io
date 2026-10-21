@@ -1,12 +1,14 @@
-import type { ComponentPropsWithoutRef, ReactNode } from "react";
+import type { ComponentPropsWithoutRef } from "react";
 
 import { CopyButton } from "@/components/mdx/copy-btn";
 import { cn } from "@/lib/utils";
 
-type TerminalProps = Omit<ComponentPropsWithoutRef<"div">, "title"> & {
+type TerminalProps = Omit<ComponentPropsWithoutRef<"div">, "title" | "children" | "code"> & {
   /** Fence language exactly as written, for example `powershell`. */
   lang?: string;
   title?: string;
+  /** Raw block source, passed as a prop so indentation survives MDX. */
+  code?: string;
 };
 
 interface TerminalLine {
@@ -37,12 +39,6 @@ const PROMPT = /^(PS [^>\n]*>|PS>|[A-Za-z]:\\[^>\n]*>|\$|%|>)\s?/;
 
 const CONTINUATION: Record<Flavor, string> = { generic: "\\", powershell: "`", cmd: "^" };
 
-function toText(node: ReactNode): string {
-  if (typeof node === "string" || typeof node === "number") return String(node);
-  if (Array.isArray(node)) return node.map(toText).join("");
-  return "";
-}
-
 function parseLines(source: string, { output, flavor }: Variant): TerminalLine[] {
   const lines = source.replace(/\n$/, "").split("\n");
   if (output) return lines.map((text) => ({ text }));
@@ -61,20 +57,21 @@ function parseLines(source: string, { output, flavor }: Variant): TerminalLine[]
   });
 }
 
-export function Terminal({ lang = "terminal", title, children }: TerminalProps) {
+export function Terminal({ lang = "terminal", title, code = "" }: TerminalProps) {
   const variant = VARIANTS[lang.toLowerCase()] ?? VARIANTS.terminal;
   const isWindows = variant.flavor !== "generic";
-  const source = toText(children);
+  const source = code.replace(/\n$/, "");
   const lines = parseLines(source, variant);
   const label = title ?? lang;
 
-  // Copy only the commands for shell blocks; output blocks copy as-is.
-  const copyText = variant.output
-    ? source.replace(/\n$/, "")
+  const commands = variant.output
+    ? ""
     : lines
         .filter((line) => line.prompt !== undefined)
         .map((line) => line.text)
         .join("\n");
+  // Offer a commands-only copy only when it differs from copying everything.
+  const showCommands = commands !== "" && commands !== source;
 
   return (
     <div
@@ -108,7 +105,10 @@ export function Terminal({ lang = "terminal", title, children }: TerminalProps) 
           </span>
         )}
       </div>
-      {copyText && <CopyButton text={copyText} />}
+      <div className="terminal-actions">
+        {showCommands && <CopyButton inline label="Commands" text={commands} />}
+        <CopyButton inline label="Copy" text={source} />
+      </div>
       <div className="terminal-body">
         {lines.map((line, index) => (
           // Static, never-reordered lines; text alone is not unique.

@@ -1868,12 +1868,20 @@ html:not(.dark) .project-card-preview-light {
   white-space: nowrap;
 }
 
-.project-readme .terminal > .code-copy-button {
+.project-readme .terminal-actions {
+  position: absolute;
   top: 0.3rem;
+  right: 0.5rem;
+  z-index: 10;
+  display: flex;
+  gap: 0.25rem;
+}
+
+.project-readme .terminal-actions .code-copy-button {
   color: var(--site-muted);
 }
 
-.project-readme .terminal > .code-copy-button:hover {
+.project-readme .terminal-actions .code-copy-button:hover {
   color: var(--site-text);
 }
 
@@ -1947,7 +1955,7 @@ html:not(.dark) .project-card-preview-light {
   color: #fff;
 }
 
-.project-readme .terminal-win > .code-copy-button {
+.project-readme .terminal-win > .terminal-actions {
   right: 8.2rem;
 }
 
