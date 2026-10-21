@@ -37,8 +37,13 @@ const VARIANTS: Record<string, Variant> = {
   cmd: { output: false, flavor: "cmd" },
 };
 
-// `$`/`%`/`>` shells, PowerShell (`PS C:\>`) and cmd (`C:\>`) prompts.
-const PROMPT = /^(PS [^>\n]*>|PS>|[A-Za-z]:\\[^>\n]*>|\$|%|>)\s?/;
+// Prompts per shell. `$` is only a prompt in generic shells, and only when followed by
+// a space: in PowerShell it starts variables such as `$profiles = ...`.
+const PROMPTS: Record<Flavor, RegExp> = {
+  generic: /^(PS [^>\n]*>|PS>|[A-Za-z]:\\[^>\n]*>|\$(?=\s|$)|%(?=\s)|>(?=\s))\s?/,
+  powershell: /^(PS [^>\n]*>|PS>|>(?=\s))\s?/,
+  cmd: /^([A-Za-z]:\\[^>\n]*>|>(?=\s))\s?/,
+};
 
 const CONTINUATION: Record<Flavor, string> = { generic: "\\", powershell: "`", cmd: "^" };
 
@@ -123,13 +128,14 @@ function parseLines(source: string, { output, flavor }: Variant): TerminalLine[]
   const lines = source.replace(/\n$/, "").split("\n");
   if (output) return lines.map((text) => ({ text, command: false }));
 
-  // Without any prompt, every line is a command (common in docs that omit `$`).
-  const bare = !lines.some((line) => PROMPT.test(line));
+  const prompts = PROMPTS[flavor];
+  // Without any prompt (a script, or docs that omit `$`), every line is a command.
+  const bare = !lines.some((line) => prompts.test(line));
   const state: ShellState = { depth: 0, quote: null, heredoc: null };
   let continued = false;
 
   return lines.map((line) => {
-    const match = PROMPT.exec(line);
+    const match = prompts.exec(line);
     const comment = !match && !continued && COMMENT[flavor].test(line);
     if (!bare && !match && !continued && !comment) return { text: line, command: false };
 
