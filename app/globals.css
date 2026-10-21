@@ -1911,6 +1911,14 @@ html:not(.dark) .project-card-preview-light {
   color: var(--site-text);
 }
 
+.project-readme .terminal-cmd span {
+  color: var(--shiki-light, var(--site-text));
+}
+
+.dark .project-readme .terminal-cmd span {
+  color: var(--shiki-dark, var(--site-text));
+}
+
 .project-readme .terminal-out {
   color: var(--site-muted);
 }
