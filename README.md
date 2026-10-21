@@ -103,7 +103,7 @@ Use GitHub-style alerts. Supported types are `NOTE`, `TIP`, `IMPORTANT`, `WARNIN
 > This action cannot be undone.
 ```
 
-The marker must be the first line of the blockquote. A regular blockquote without a marker renders as before. The rendering lives in `lib/remark-callouts.ts` and its styles in `app/globals.css` (`.callout-*`).
+The marker must be the first line of the blockquote. A regular blockquote without a marker renders as before. Each type has its own colour and an icon shown before the title (Note: info, Tip: lightbulb, Important: message, Warning: triangle, Caution: octagon). The rendering lives in `lib/remark-callouts.ts` and its styles and icons in `app/globals.css` (`.callout-*`).
 
 #### Steps
 
