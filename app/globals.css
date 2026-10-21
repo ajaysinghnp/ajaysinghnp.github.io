@@ -553,6 +553,38 @@ html:not(.dark) body [class~="text-zinc-500"] {
   }
 }
 
+/* Reading progress bar */
+.reading-progress-bar {
+  position: relative;
+  height: 100%;
+  transform-origin: left;
+  border-radius: 0 999px 999px 0;
+  background: linear-gradient(90deg, var(--site-accent), #38bdf8 45%, #a78bfa 75%, #f472b6);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--site-accent) 70%, transparent);
+  overflow: hidden;
+}
+
+.reading-progress-bar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.85), transparent);
+  transform: translateX(-100%);
+  animation: reading-progress-shine 2.4s ease-in-out infinite;
+}
+
+@keyframes reading-progress-shine {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reading-progress-bar::after {
+    animation: none;
+  }
+}
+
 /* Always on */
 @utility shine-border {
   --shine-border-duration: 8s;
@@ -1175,6 +1207,30 @@ html:not(.dark) .project-card-preview-light {
   align-self: stretch;
 }
 
+/* Collapse the aside by available content width, not viewport width. */
+.content-columns {
+  container: content-columns / inline-size;
+}
+
+/* Shared page width: wider on smaller screens. */
+@utility site-width {
+  width: 100%;
+  max-width: 80%;
+
+  @media (max-width: 1280px) {
+    max-width: 90%;
+  }
+
+  @media (max-width: 1024px) {
+    max-width: 95%;
+  }
+
+  @media (max-width: 480px) {
+    max-width: 100%;
+    padding-inline: 0.5rem;
+  }
+}
+
 .project-content-layout > .project-readme {
   border-left: 0;
   border-top-left-radius: 0;
@@ -1342,7 +1398,7 @@ html:not(.dark) .project-card-preview-light {
 }
 
 /* ---- Desktop: aside + README as one connected card ---- */
-@media (min-width: 901px) {
+@container content-columns (min-width: 56rem) {
   /* The aside column and the content card share the same height. The panel
      inside the aside stays sticky, so it slides down with the page and stops
      where the content ends. */
@@ -1652,7 +1708,7 @@ html:not(.dark) .project-card-preview-light {
 }
 
 /* ---- Mobile: stack TOC above README (must stay last in this section) ---- */
-@media (max-width: 900px) {
+@container content-columns (max-width: 55.99rem) {
   .project-content-layout {
     grid-template-columns: minmax(0, 1fr);
     gap: 0.75rem;

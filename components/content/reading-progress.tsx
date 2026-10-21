@@ -30,12 +30,8 @@ export function ReadingProgress() {
   }, []);
 
   return (
-    <div aria-hidden="true" className="pointer-events-none fixed inset-x-0 top-0 z-60 h-0.5">
-      <div
-        ref={bar}
-        className="h-full origin-left bg-(--site-accent)"
-        style={{ transform: "scaleX(0)" }}
-      />
+    <div aria-hidden="true" className="pointer-events-none fixed inset-x-0 top-0 z-60 h-[3px]">
+      <div ref={bar} className="reading-progress-bar" style={{ transform: "scaleX(0)" }} />
     </div>
   );
 }
