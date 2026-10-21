@@ -31,6 +31,13 @@ function getTextContent(node: ReactNode): string {
 
 export const components = {
   terminal: Terminal,
+  table: ({ className, children, ...props }: ComponentPropsWithoutRef<"table">) => (
+    <div className="table-wrapper">
+      <table {...props} className={cn(className)}>
+        {children}
+      </table>
+    </div>
+  ),
   h1: ({ className, children, ...props }: ComponentPropsWithoutRef<"h1">) => (
     <h1 {...props} className={cn("site-nav-active", className)}>
       {children}
