@@ -8,6 +8,7 @@ import { ArrowDown, ArrowLeft, Minimize2 } from "lucide-react";
 
 import { PostActions } from "@/components/content/post-actions";
 import { ReadingProgress } from "@/components/content/reading-progress";
+import { ScrollButtons } from "@/components/content/scroll-buttons";
 import { CONTENT_ID } from "@/components/layouts/content-ids";
 import { ContentToc } from "@/components/layouts/content-toc";
 import type { ProjectTocItem } from "@/lib/project-toc";
@@ -118,6 +119,7 @@ export function ContentPage({
   return (
     <div className="pb-16 resume-shell">
       <ReadingProgress />
+      <ScrollButtons />
 
       <section ref={sectionRef} className="project-overview-section pt-5">
         {!manuallyCollapsed && (

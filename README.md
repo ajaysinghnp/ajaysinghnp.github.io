@@ -9,6 +9,9 @@ Personal portfolio and blog built with Next.js, MDX, and Tailwind CSS, designed 
 - Project showcase powered by GitHub API
 - Automatically generated featured-project previews
 - Syntax-highlighted markdown content
+- Shared post detail page with a sticky table of contents that follows the active heading, a gradient reading-progress bar, and floating go-to-top/bottom buttons
+- Callouts (GitHub-style alerts) and step timelines in markdown content
+- Responsive layout: wider content area on small screens, and the table of contents collapses when the content area gets narrow
 - Theme support (light/dark/system)
 - Production-ready Docker deployment for a VPS
 
@@ -86,6 +89,39 @@ Why this helps:
 - Blog content is MDX-driven and processed with Contentlayer.
 - GitHub project data is fetched from the GitHub REST API.
 - Project README content is fetched via `/repos/{owner}/{repo}/readme` endpoint for better compatibility.
+
+### Writing content
+
+Blog, cheatsheet, and project content share one detail page. Besides standard GitHub-flavored markdown, math, Mermaid diagrams, and highlighted code blocks, the following are supported.
+
+#### Callouts
+
+Use GitHub-style alerts. Supported types are `NOTE`, `TIP`, `IMPORTANT`, `WARNING`, and `CAUTION` (case-insensitive):
+
+```md
+> [!WARNING]
+> This action cannot be undone.
+```
+
+The marker must be the first line of the blockquote. A regular blockquote without a marker renders as before. The rendering lives in `lib/remark-callouts.ts` and its styles in `app/globals.css` (`.callout-*`).
+
+#### Steps
+
+A top-level numbered list with two or more items renders as a step timeline:
+
+```md
+1. Install dependencies
+2. Start the dev server
+3. Open the site
+```
+
+Nested numbered lists and the generated table of contents are not affected. See `lib/remark-steps.ts`.
+
+#### Layout behavior
+
+- The table of contents sidebar keeps the active heading in view while scrolling, and collapses into an "On this page" dropdown when the content area is narrower than 56rem.
+- Code blocks wrap long lines on screens 768px wide or narrower.
+- Page width is controlled by the `site-width` utility in `app/globals.css` (80% by default, up to 95% on tablets, 100% on the smallest screens).
 
 ## Deployment
 
