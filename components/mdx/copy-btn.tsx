@@ -10,7 +10,7 @@ const buttonClasses =
   "shine-border-hover flex cursor-pointer items-center rounded text-xs font-medium";
 
 export interface CopyButtonProps {
-  text: string;
+  text: string | (() => string);
   className?: string;
   /** Button text and accessible name; defaults to "Copy". */
   label?: string;
@@ -22,7 +22,8 @@ export function CopyButton({ text, className, label = "Copy", inline = false }: 
   const [isCopied, setIsCopied] = useState(false);
 
   const copy = async () => {
-    await navigator.clipboard.writeText(text);
+    const value = typeof text === "function" ? text() : text;
+    await navigator.clipboard.writeText(value);
     setIsCopied(true);
 
     setTimeout(() => {

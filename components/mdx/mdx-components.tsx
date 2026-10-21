@@ -7,6 +7,7 @@ import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import { CopyButton } from "@/components/mdx/copy-btn";
 import { InlineCodeCopy } from "@/components/mdx/inline-code-copy";
 import { MermaidDiagram } from "@/components/mdx/mermaid-diagram";
+import { TableWrapper } from "@/components/mdx/table-wrapper";
 import { Terminal } from "@/components/mdx/terminal";
 import { cn } from "@/lib/utils";
 
@@ -32,11 +33,11 @@ function getTextContent(node: ReactNode): string {
 export const components = {
   terminal: Terminal,
   table: ({ className, children, ...props }: ComponentPropsWithoutRef<"table">) => (
-    <div className="table-wrapper">
+    <TableWrapper>
       <table {...props} className={cn(className)}>
         {children}
       </table>
-    </div>
+    </TableWrapper>
   ),
   h1: ({ className, children, ...props }: ComponentPropsWithoutRef<"h1">) => (
     <h1 {...props} className={cn("site-nav-active", className)}>
