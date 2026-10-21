@@ -1814,6 +1814,155 @@ html:not(.dark) .project-card-preview-light {
   --callout-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 16h.01M12 8v4M15.312 2a2 2 0 0 1 1.414.586l4.688 4.688A2 2 0 0 1 22 8.688v6.624a2 2 0 0 1-.586 1.414l-4.688 4.688a2 2 0 0 1-1.414.586H8.688a2 2 0 0 1-1.414-.586l-4.688-4.688A2 2 0 0 1 2 15.312V8.688a2 2 0 0 1 .586-1.414l4.688-4.688A2 2 0 0 1 8.688 2z'/%3E%3C/svg%3E");
 }
 
+/* ---- README: terminal blocks ---- */
+/* All colours come from the site theme so light and dark both work. */
+.project-readme .terminal {
+  --terminal-bar: color-mix(in srgb, var(--readme-code-bg) 86%, var(--site-text));
+  --terminal-line: color-mix(in srgb, var(--site-text) 12%, transparent);
+  position: relative;
+  margin: 1.7em 0;
+  overflow: hidden;
+  border: 1px solid var(--site-surface-border);
+  border-radius: var(--site-radius);
+  background: var(--readme-code-bg);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--site-text) 10%, transparent);
+  color: var(--site-text);
+}
+
+.project-readme .terminal-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border-bottom: 1px solid var(--terminal-line);
+  background: var(--terminal-bar);
+  padding: 0.55rem 0.85rem;
+}
+
+.project-readme .terminal-dots {
+  display: inline-flex;
+  gap: 0.4rem;
+}
+
+.project-readme .terminal-dots i {
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 999px;
+  background: #ff5f57;
+}
+
+.project-readme .terminal-dots i:nth-child(2) {
+  background: #febc2e;
+}
+
+.project-readme .terminal-dots i:nth-child(3) {
+  background: #28c840;
+}
+
+.project-readme .terminal-title {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--site-muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.75rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.project-readme .terminal > .code-copy-button {
+  top: 0.3rem;
+  color: var(--site-muted);
+}
+
+.project-readme .terminal > .code-copy-button:hover {
+  color: var(--site-text);
+}
+
+.project-readme .terminal-body {
+  overflow-x: auto;
+  padding: 0.85rem 1rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+.project-readme .terminal-line {
+  display: flex;
+  min-height: 1.6em;
+  gap: 0.6rem;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.project-readme .terminal-prompt {
+  flex: none;
+  color: var(--site-accent);
+  user-select: none;
+}
+
+.project-readme .terminal-cmd {
+  color: var(--site-text);
+}
+
+.project-readme .terminal-out {
+  color: var(--site-muted);
+}
+
+/* Windows-style chrome (PowerShell, cmd): icon left, window controls right, square corners. */
+.project-readme .terminal-win {
+  border-radius: 0.2rem;
+}
+
+.project-readme .terminal-win .terminal-bar {
+  gap: 0.55rem;
+  padding: 0 0 0 0.7rem;
+}
+
+.project-readme .terminal-win .terminal-icon {
+  color: var(--site-accent);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.project-readme .terminal-win .terminal-title {
+  flex: 1;
+  padding: 0.5rem 0;
+}
+
+.project-readme .terminal-controls {
+  display: flex;
+  align-self: stretch;
+}
+
+.project-readme .terminal-controls span {
+  display: grid;
+  width: 2.6rem;
+  place-items: center;
+  color: var(--site-muted);
+  font-size: 0.7rem;
+}
+
+.project-readme .terminal-controls span:last-child:hover {
+  background: #c42b1c;
+  color: #fff;
+}
+
+.project-readme .terminal-win > .code-copy-button {
+  right: 8.2rem;
+}
+
+.project-readme .terminal-win .terminal-body {
+  padding: 0.6rem 0.85rem;
+}
+
+.project-readme .terminal-cmd-shell .terminal-prompt {
+  color: var(--site-text);
+}
+
+.project-readme .terminal-powershell .terminal-prompt {
+  color: color-mix(in srgb, var(--site-accent) 75%, var(--site-text));
+}
+
 /* ---- README: task lists ---- */
 .project-readme :where(ul.contains-task-list) {
   padding-left: 0;

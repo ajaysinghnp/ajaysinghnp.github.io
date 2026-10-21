@@ -117,6 +117,38 @@ A top-level numbered list with two or more items renders as a step timeline:
 
 Nested numbered lists and the generated table of contents are not affected. See `lib/remark-steps.ts`.
 
+#### Terminal blocks
+
+Fenced code blocks tagged `term`, `terminal`, `output`, `text`, `powershell` (`pwsh`), or `bat` (`cmd`) render as a terminal window (title bar, prompt styling, copy button) instead of a syntax-highlighted block. Colours come from the site theme, so it follows light and dark mode:
+
+````md
+```terminal title="zsh"
+$ pnpm install
+Done in 1.2s
+```
+
+```powershell
+PS C:\> Get-ChildItem
+```
+
+```output
+Compiled successfully
+```
+````
+
+| Fence                | Look                                              | Treated as        |
+| -------------------- | ------------------------------------------------- | ----------------- |
+| `term`, `terminal`   | Generic window (traffic-light dots)               | Commands + output |
+| `output`, `text`     | Generic window                                    | Output only       |
+| `powershell`, `pwsh` | Windows-style window (`PS` icon, window controls) | Commands + output |
+| `bat`, `cmd`         | Windows-style window (`>_` icon, window controls) | Commands + output |
+
+- In command blocks, lines starting with `$`, `%`, `>`, `PS>`, `PS C:\path>`, or `C:\path>` are commands (shown with a prompt). Lines after a command ending in the continuation character (`\` generic, `` ` `` PowerShell, `^` cmd) continue it. Every other line is dimmed output. The copy button copies only the commands.
+- Output blocks treat every line as output and copy the whole block.
+- The title bar shows `title="..."` when given, otherwise the fence language as written (for example `powershell`).
+
+Other fence languages (for example `bash`) keep the regular highlighted code block. See `lib/remark-terminal.ts` and `components/mdx/terminal.tsx`.
+
 #### Layout behavior
 
 - The table of contents sidebar keeps the active heading in view while scrolling, and collapses into an "On this page" dropdown when the content area is narrower than 56rem.

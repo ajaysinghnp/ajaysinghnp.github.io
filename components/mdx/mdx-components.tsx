@@ -6,6 +6,7 @@ import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import { CopyButton } from "@/components/mdx/copy-btn";
 import { InlineCodeCopy } from "@/components/mdx/inline-code-copy";
 import { MermaidDiagram } from "@/components/mdx/mermaid-diagram";
+import { Terminal } from "@/components/mdx/terminal";
 import { cn } from "@/lib/utils";
 
 type CodeProps = ComponentPropsWithoutRef<"code"> & { "data-inline-code"?: string };
@@ -28,6 +29,7 @@ function getTextContent(node: ReactNode): string {
 }
 
 export const components = {
+  terminal: Terminal,
   h1: ({ className, children, ...props }: ComponentPropsWithoutRef<"h1">) => (
     <h1 {...props} className={cn("site-nav-active", className)}>
       {children}
