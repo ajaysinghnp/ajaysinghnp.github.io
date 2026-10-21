@@ -135,7 +135,7 @@ export const Navigation: React.FC<Props> = ({ gitTheme = false }: Props) => {
         <nav
           id="mobile-navigation"
           aria-label="Main"
-          className="absolute inset-x-0 top-full border-b site-navigation site-navigation-scrolled shadow-lg lg:hidden"
+          className="absolute inset-x-0 top-full border-b site-navigation bg-(--site-bg)! shadow-lg lg:hidden"
         >
           <ul className="mx-auto flex site-width flex-col gap-1 py-3 text-sm tracking-[0.16em] uppercase">
             {navigation.map((item) => {
