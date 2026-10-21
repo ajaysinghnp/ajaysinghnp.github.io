@@ -1582,6 +1582,14 @@ html:not(.dark) .project-card-preview-light {
   background-color: transparent !important;
 }
 
+@media (max-width: 768px) {
+  .project-readme pre,
+  .project-readme pre code {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+}
+
 .dark .project-readme pre code,
 .dark .project-readme pre code span {
   color: var(--shiki-dark, var(--site-text)) !important;
