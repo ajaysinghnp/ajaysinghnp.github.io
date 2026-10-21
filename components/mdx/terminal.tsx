@@ -14,7 +14,9 @@ type TerminalProps = Omit<ComponentPropsWithoutRef<"div">, "title" | "children" 
 
 interface TerminalLine {
   text: string;
-  prompt?: string;
+  command: boolean;
+  /** Prompt glyph; empty for continuation lines, null when the block has no prompts. */
+  prompt?: string | null;
 }
 
 type Flavor = "generic" | "powershell" | "cmd";
@@ -39,6 +41,12 @@ const VARIANTS: Record<string, Variant> = {
 const PROMPT = /^(PS [^>\n]*>|PS>|[A-Za-z]:\\[^>\n]*>|\$|%|>)\s?/;
 
 const CONTINUATION: Record<Flavor, string> = { generic: "\\", powershell: "`", cmd: "^" };
+
+const COMMENT: Record<Flavor, RegExp> = {
+  generic: /^\s*#/,
+  powershell: /^\s*#/,
+  cmd: /^\s*(REM\b|::)/i,
+};
 
 const SHIKI_LANG: Record<Flavor, BundledLanguage> = {
   generic: "bash",
@@ -113,16 +121,20 @@ function scanCommand(text: string, state: ShellState, keywords: boolean) {
 
 function parseLines(source: string, { output, flavor }: Variant): TerminalLine[] {
   const lines = source.replace(/\n$/, "").split("\n");
-  if (output) return lines.map((text) => ({ text }));
+  if (output) return lines.map((text) => ({ text, command: false }));
 
+  // Without any prompt, every line is a command (common in docs that omit `$`).
+  const bare = !lines.some((line) => PROMPT.test(line));
   const state: ShellState = { depth: 0, quote: null, heredoc: null };
   let continued = false;
 
   return lines.map((line) => {
     const match = PROMPT.exec(line);
-    if (!match && !continued) return { text: line };
+    const comment = !match && !continued && COMMENT[flavor].test(line);
+    if (!bare && !match && !continued && !comment) return { text: line, command: false };
 
     const text = match ? line.slice(match[0].length) : line;
+    if (comment) return { text, command: true, prompt: bare ? null : "" };
 
     if (state.heredoc) {
       if (text.trim() === state.heredoc) state.heredoc = null;
@@ -141,7 +153,8 @@ function parseLines(source: string, { output, flavor }: Variant): TerminalLine[]
         /(\|\||&&|\|)\s*$/.test(text);
     }
 
-    return { prompt: match ? match[1] : "", text };
+    const prompt = match ? match[1] : "";
+    return { text, command: true, prompt: bare ? null : prompt };
   });
 }
 
@@ -167,7 +180,7 @@ export async function Terminal({ lang = "terminal", title, code = "" }: Terminal
   const commands = variant.output
     ? ""
     : lines
-        .filter((line) => line.prompt !== undefined)
+        .filter((line) => line.command)
         .map((line) => line.text)
         .join("\n");
   // Offer a commands-only copy only when it differs from copying everything.
@@ -216,13 +229,15 @@ export async function Terminal({ lang = "terminal", title, code = "" }: Terminal
           // Static, never-reordered lines; text alone is not unique.
           // eslint-disable-next-line react/no-array-index-key
           <div key={index} className="terminal-line">
-            {line.prompt === undefined ? (
+            {!line.command ? (
               <span className="terminal-out">{line.text}</span>
             ) : (
               <>
-                <span className="terminal-prompt" aria-hidden="true">
-                  {line.prompt || " "}
-                </span>
+                {line.prompt !== null && (
+                  <span className="terminal-prompt" aria-hidden="true">
+                    {line.prompt || " "}
+                  </span>
+                )}
                 <span className="terminal-cmd">
                   {renderCommand(line.text, tokens[commandIndex++])}
                 </span>
