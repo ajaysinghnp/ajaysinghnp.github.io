@@ -1,0 +1,162 @@
+name: Deployment validation
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deployment-validation-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: Code quality
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 12.10.1
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      - name: Typecheck
+        id: typecheck
+        run: pnpm typecheck
+
+      - name: Lint
+        id: lint
+        run: pnpm lint
+
+      - name: Check formatting
+        id: format
+        run: pnpm format:check
+
+      - name: Report code quality
+        if: always()
+        env:
+          TYPECHECK_RESULT: ${{ steps.typecheck.outcome }}
+          LINT_RESULT: ${{ steps.lint.outcome }}
+          FORMAT_RESULT: ${{ steps.format.outcome }}
+        run: |
+          {
+            echo "## Code quality"
+            echo "| Check | Result |"
+            echo "| --- | --- |"
+            echo "| TypeScript | ${TYPECHECK_RESULT:-not run} |"
+            echo "| ESLint | ${LINT_RESULT:-not run} |"
+            echo "| Prettier | ${FORMAT_RESULT:-not run} |"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  deployment-readiness:
+    name: Build and smoke test production container
+    needs: quality
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build production image
+        id: image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          load: true
+          tags: portfolio:validation
+          secrets: |
+            github_token=${{ github.token }}
+
+      - name: Start production container
+        id: container
+        run: docker run --detach --name portfolio-validation --publish 127.0.0.1:3000:3000 portfolio:validation
+
+      - name: Smoke test site routes
+        id: smoke
+        run: |
+          set -euo pipefail
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:3000/ >/dev/null; then
+              break
+            fi
+            if [ "$attempt" -eq 30 ]; then
+              docker logs portfolio-validation
+              exit 1
+            fi
+            sleep 2
+          done
+
+          for route in /about /projects /blog /cheatsheet /contact /resume; do
+            curl --fail --silent --show-error "http://127.0.0.1:3000${route}" >/dev/null
+            echo "Validated ${route}"
+          done
+
+      - name: Collect container logs on failure
+        if: failure() && steps.container.outcome == 'success'
+        run: docker logs portfolio-validation
+
+      - name: Remove production container
+        if: always() && steps.container.outcome == 'success'
+        run: docker rm --force portfolio-validation
+
+      - name: Report production validation
+        if: always()
+        env:
+          IMAGE_RESULT: ${{ steps.image.outcome }}
+          CONTAINER_RESULT: ${{ steps.container.outcome }}
+          SMOKE_RESULT: ${{ steps.smoke.outcome }}
+        run: |
+          {
+            echo "## Production container validation"
+            echo "| Check | Result |"
+            echo "| --- | --- |"
+            echo "| Docker production build | ${IMAGE_RESULT:-not run} |"
+            echo "| Container startup | ${CONTAINER_RESULT:-not run} |"
+            echo "| Route smoke tests | ${SMOKE_RESULT:-not run} |"
+            echo
+            echo "A pass indicates the production image builds, starts, and serves the checked routes. It does not verify deployment-provider settings, DNS, external credentials, or production infrastructure."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  validation-report:
+    name: Validation report
+    if: always()
+    needs: [quality, deployment-readiness]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Summarize readiness
+        env:
+          QUALITY_RESULT: ${{ needs.quality.result }}
+          DEPLOYMENT_RESULT: ${{ needs.deployment-readiness.result }}
+        run: |
+          {
+            echo "## Deployment readiness"
+            echo "| Stage | Result |"
+            echo "| --- | --- |"
+            echo "| Code quality | ${QUALITY_RESULT} |"
+            echo "| Production container | ${DEPLOYMENT_RESULT} |"
+            echo
+            if [ "$QUALITY_RESULT" = "success" ] && [ "$DEPLOYMENT_RESULT" = "success" ]; then
+              echo "**Assessment: ready for deployment review.**"
+            else
+              echo "**Assessment: validation failed or was skipped; review the failed stage before deployment.**"
+            fi
+            echo
+            echo "This workflow validates repository quality and production-container startup/routes. It cannot certify deployment-provider configuration or production infrastructure."
+          } >> "$GITHUB_STEP_SUMMARY"
