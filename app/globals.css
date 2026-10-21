@@ -1656,6 +1656,67 @@ html:not(.dark) .project-card-preview-light {
   border-radius: var(--site-radius);
 }
 
+/* ---- README: steps ---- */
+.project-readme ol.steps {
+  position: relative;
+  margin: 1.7em 0;
+  padding-left: 0;
+  list-style: none;
+  counter-reset: step;
+}
+
+.project-readme ol.steps > li {
+  position: relative;
+  min-height: 2rem;
+  margin: 0;
+  padding: 0 0 1.5rem 3rem;
+  counter-increment: step;
+}
+
+.project-readme ol.steps > li::marker {
+  content: none;
+}
+
+.project-readme ol.steps > li:last-child {
+  padding-bottom: 0;
+}
+
+.project-readme ol.steps > li::before {
+  content: counter(step);
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  border: 1px solid var(--site-accent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--site-accent) 12%, var(--site-bg));
+  color: var(--site-accent);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+/* Connector between consecutive step badges */
+.project-readme ol.steps > li:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 2.2rem;
+  bottom: 0.2rem;
+  left: calc(1rem - 1px);
+  width: 2px;
+  background: color-mix(in srgb, var(--site-accent) 35%, transparent);
+}
+
+.project-readme ol.steps > li > :first-child {
+  margin-top: 0.2rem;
+}
+
+.project-readme ol.steps > li > :last-child {
+  margin-bottom: 0;
+}
+
 /* ---- README: alerts / callouts ---- */
 .project-readme .callout {
   --callout-color: #0e7490;

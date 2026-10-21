@@ -9,6 +9,7 @@ import remarkMath from "remark-math";
 import remarkToc from "remark-toc";
 
 import { remarkCallouts } from "@/lib/remark-callouts";
+import { remarkSteps } from "@/lib/remark-steps";
 
 interface HastNode {
   tagName?: string;
@@ -85,6 +86,7 @@ export const options: NonNullable<MDXRemoteProps["options"]> = {
       remarkGfm,
       remarkCallouts,
       remarkMath,
+      remarkSteps,
       [
         remarkToc,
         { ordered: true, tight: false, maxDepth: 3, parents: ["listItem", "root"], skip: "delta" },
