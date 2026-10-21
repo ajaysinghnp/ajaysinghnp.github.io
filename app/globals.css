@@ -1656,6 +1656,70 @@ html:not(.dark) .project-card-preview-light {
   border-radius: var(--site-radius);
 }
 
+/* ---- README: alerts / callouts ---- */
+.project-readme .callout {
+  --callout-color: #0e7490;
+  margin: 1.5em 0;
+  border: 1px solid color-mix(in srgb, var(--callout-color) 35%, var(--site-border));
+  border-left: 0.25rem solid var(--callout-color);
+  border-radius: 0 var(--site-radius) var(--site-radius) 0;
+  background: color-mix(in srgb, var(--callout-color) 9%, transparent);
+  padding: 0.75rem 1rem;
+}
+
+.dark .project-readme .callout {
+  --callout-color: #67e8f9;
+}
+
+.project-readme .callout-tip {
+  --callout-color: #1a7f37;
+}
+
+.project-readme .callout-important {
+  --callout-color: #8250df;
+}
+
+.project-readme .callout-warning {
+  --callout-color: #bf8700;
+}
+
+.project-readme .callout-caution {
+  --callout-color: #cf222e;
+}
+
+.dark .project-readme .callout-tip {
+  --callout-color: #4ade80;
+}
+
+.dark .project-readme .callout-important {
+  --callout-color: #c4b5fd;
+}
+
+.dark .project-readme .callout-warning {
+  --callout-color: #fbbf24;
+}
+
+.dark .project-readme .callout-caution {
+  --callout-color: #f87171;
+}
+
+.project-readme .callout > :first-child {
+  margin-top: 0;
+}
+
+.project-readme .callout > :last-child {
+  margin-bottom: 0;
+}
+
+.project-readme .callout > .callout-title {
+  margin-bottom: 0.4rem;
+  color: var(--callout-color);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 /* ---- README: task lists ---- */
 .project-readme :where(ul.contains-task-list) {
   padding-left: 0;

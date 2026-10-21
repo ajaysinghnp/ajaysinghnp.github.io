@@ -8,6 +8,8 @@ import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import remarkToc from "remark-toc";
 
+import { remarkCallouts } from "@/lib/remark-callouts";
+
 interface HastNode {
   tagName?: string;
   value?: string;
@@ -81,6 +83,7 @@ export const options: NonNullable<MDXRemoteProps["options"]> = {
     remarkPlugins: [
       remarkGemoji,
       remarkGfm,
+      remarkCallouts,
       remarkMath,
       [
         remarkToc,
