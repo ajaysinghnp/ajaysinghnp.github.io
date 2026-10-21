@@ -1,11 +1,13 @@
 import { isValidElement } from "react";
 import Image from "next/image";
 
+import { FileCode2 } from "lucide-react";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 import { CopyButton } from "@/components/mdx/copy-btn";
 import { InlineCodeCopy } from "@/components/mdx/inline-code-copy";
 import { MermaidDiagram } from "@/components/mdx/mermaid-diagram";
+import { Terminal } from "@/components/mdx/terminal";
 import { cn } from "@/lib/utils";
 
 type CodeProps = ComponentPropsWithoutRef<"code"> & { "data-inline-code"?: string };
@@ -28,6 +30,7 @@ function getTextContent(node: ReactNode): string {
 }
 
 export const components = {
+  terminal: Terminal,
   h1: ({ className, children, ...props }: ComponentPropsWithoutRef<"h1">) => (
     <h1 {...props} className={cn("site-nav-active", className)}>
       {children}
@@ -123,8 +126,19 @@ export const components = {
       return <MermaidDiagram chart={code} />;
     }
 
+    const language = child?.props["data-language"];
+    const showHeader = !!language && language !== "plaintext";
+
     return (
-      <div className="code-block-wrapper">
+      <div className={cn("code-block-wrapper", showHeader && "code-block-titled")}>
+        {showHeader && (
+          <div className="code-block-header">
+            <span className="code-block-tab">
+              <FileCode2 className="h-3.5 w-3.5" aria-hidden="true" />
+              <span>{language}</span>
+            </span>
+          </div>
+        )}
         <pre {...props} className={cn(className)}>
           {children}
         </pre>

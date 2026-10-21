@@ -117,6 +117,38 @@ A top-level numbered list with two or more items renders as a step timeline:
 
 Nested numbered lists and the generated table of contents are not affected. See `lib/remark-steps.ts`.
 
+#### Terminal blocks
+
+Fenced code blocks tagged `term`, `terminal`, `output`, `text`, `powershell` (`pwsh`), or `bat` (`cmd`) render as a terminal window (title bar, prompt styling, copy button) instead of a syntax-highlighted block. Colours come from the site theme, so it follows light and dark mode:
+
+````md
+```terminal title="zsh"
+$ pnpm install
+Done in 1.2s
+```
+
+```powershell
+PS C:\> Get-ChildItem
+```
+
+```output
+Compiled successfully
+```
+````
+
+| Fence                | Look                                              | Treated as        |
+| -------------------- | ------------------------------------------------- | ----------------- |
+| `term`, `terminal`   | Generic window (traffic-light dots)               | Commands + output |
+| `output`, `text`     | Generic window                                    | Output only       |
+| `powershell`, `pwsh` | Windows-style window (`PS` icon, window controls) | Commands + output |
+| `bat`, `cmd`         | Windows-style window (`>_` icon, window controls) | Commands + output |
+
+- In command blocks, lines starting with `$`, `%`, `>`, `PS>`, `PS C:\path>`, or `C:\path>` are commands (shown with a prompt). `$` and `%` only count as prompts in generic shells and when followed by a space, so PowerShell scripts with `$variables` render as plain highlighted scripts. Lines after a command continue it when it ends with the continuation character (`\` generic, `` ` `` PowerShell, `^` cmd) or a pipe/`&&`/`||`, or while quotes, brackets, shell blocks (`for`/`if`/`case` ... `done`/`fi`/`esac`) or heredocs are still open. Comment lines (`#`, `REM`, `::`) are commands too. If a block has no prompts at all, every line is treated as a command and highlighted. Every other line is dimmed output. Indentation is preserved exactly as written. Commands are syntax-highlighted with Shiki (`bash`, `powershell`, or `bat` grammar depending on the fence) using the same light/dark themes as regular code blocks; output stays plain.
+- Every terminal has a **Copy** button that copies the whole block as written (useful for reports). Command blocks that also contain output get a **Commands** button that copies only the commands, without prompts.
+- The title bar shows `title="..."` when given, otherwise the fence language as written (for example `powershell`).
+
+Other fence languages (for example `bash`) keep the regular highlighted code block, now with a VS Code-style editor tab header showing the fence language (hidden when no language is given). See `lib/remark-terminal.ts` and `components/mdx/terminal.tsx`.
+
 #### Layout behavior
 
 - The table of contents sidebar keeps the active heading in view while scrolling, and collapses into an "On this page" dropdown when the content area is narrower than 56rem.

@@ -10,6 +10,7 @@ import remarkToc from "remark-toc";
 
 import { remarkCallouts } from "@/lib/remark-callouts";
 import { remarkSteps } from "@/lib/remark-steps";
+import { remarkTerminal } from "@/lib/remark-terminal";
 
 interface HastNode {
   tagName?: string;
@@ -85,6 +86,7 @@ export const options: NonNullable<MDXRemoteProps["options"]> = {
       remarkGemoji,
       remarkGfm,
       remarkCallouts,
+      remarkTerminal,
       remarkMath,
       remarkSteps,
       [
