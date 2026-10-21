@@ -88,3 +88,6 @@ Thumbs.db
 
 # Node.js files
 *.node
+
+# TypeScript incremental build cache
+*.tsbuildinfo

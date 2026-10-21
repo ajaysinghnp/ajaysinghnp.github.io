@@ -5,6 +5,21 @@
     "source.fixAll.eslint": "explicit"
   },
   "files.eol": "\n",
+  "search.exclude": {
+    "**/build": true,
+    "**/.next": true,
+    "**/node_modules": true,
+    "**/pnpm-lock.yaml": true,
+    "**/tsconfig.tsbuildinfo": true,
+    "public/images": true,
+    "public/generated-project-previews": true,
+    "public/fonts": true
+  },
+  "files.watcherExclude": {
+    "**/build/**": true,
+    "**/.next/**": true,
+    "**/node_modules/**": true
+  },
   "eslint.useFlatConfig": true,
   "cSpell.words": [
     "calsans",

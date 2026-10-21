@@ -24,3 +24,10 @@
 - `pnpm build` runs the production build. Run focused checks appropriate to the change, and report checks that could not be run.
 - There is no `test` script in `package.json`; do not describe `pnpm check` as a test suite or claim tests ran unless an actual test command was added and executed.
 - `pnpm dev` has a `predev` lifecycle script that installs Playwright Chromium. Account for that setup/network side effect before running it.
+
+## Context efficiency
+
+- Do not read or search generated or bulky paths: `build/` (about 2.6 GB), `.next/`, `node_modules/`, `pnpm-lock.yaml`, `tsconfig.tsbuildinfo`, `public/images/`, `public/generated-project-previews/`, and `public/fonts/`. Read them only when the task is specifically about them.
+- Search first, then read only the needed line ranges instead of whole files.
+- Prefer one targeted check (for example `pnpm typecheck` or `pnpm lint`) over `pnpm build`; run `pnpm check` once at the end, not after every edit.
+- Do not re-run commands that already passed unless the files changed afterward.
