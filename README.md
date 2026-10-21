@@ -149,6 +149,10 @@ Compiled successfully
 
 Other fence languages (for example `bash`) keep the regular highlighted code block, now with a VS Code-style editor tab header showing the fence language (hidden when no language is given). See `lib/remark-terminal.ts` and `components/mdx/terminal.tsx`.
 
+#### Tables
+
+Standard GFM tables render inside a themed card: accent header row, zebra rows with a hover highlight, column alignment (`:---`, `:---:`, `---:`) respected, and horizontal scrolling inside the card when a table is wider than the content area. See `components/mdx/mdx-components.tsx` and the `.table-wrapper` styles in `app/globals.css`.
+
 #### Layout behavior
 
 - The table of contents sidebar keeps the active heading in view while scrolling, and collapses into an "On this page" dropdown when the content area is narrower than 56rem.

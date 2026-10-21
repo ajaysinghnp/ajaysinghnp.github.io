@@ -1,4 +1,5 @@
-import { mkdir, rename, writeFile } from "node:fs/promises";
+import { createHash } from "node:crypto";
+import { access, mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { type Browser, chromium } from "playwright";
 
@@ -20,6 +21,47 @@ interface GitHubRepository {
 }
 
 const outputDirectory = path.join(process.cwd(), "public", "generated-project-previews");
+const homepagePath = path.join(process.cwd(), "app", "page.tsx");
+
+interface PreviewManifest {
+  repository?: unknown;
+  homepageHash?: unknown;
+  previewSource?: unknown;
+}
+
+async function getHomepageHash(): Promise<string> {
+  const source = await readFile(homepagePath);
+  return createHash("sha256").update(source).digest("hex");
+}
+
+async function isPreviewCurrent(homepageHash: string, previewSource: "local" | "remote") {
+  const manifestPath = path.join(outputDirectory, path.basename(PROJECT_PREVIEW_MANIFEST_PATH));
+
+  try {
+    const manifest = JSON.parse(await readFile(manifestPath, "utf8")) as PreviewManifest;
+    if (
+      manifest.homepageHash !== homepageHash ||
+      manifest.previewSource !== previewSource ||
+      typeof manifest.repository !== "string"
+    ) {
+      return false;
+    }
+
+    await Promise.all(
+      (["light", "dark"] as const).map((theme) =>
+        access(
+          path.join(
+            outputDirectory,
+            getProjectPreviewFileName(manifest.repository as string, theme),
+          ),
+        ),
+      ),
+    );
+    return true;
+  } catch {
+    return false;
+  }
+}
 
 const githubHeaders = {
   Accept: "application/vnd.github+json",
@@ -80,6 +122,7 @@ function getPreviewTarget(repository: GitHubRepository): string {
 async function capturePreview(
   repository: GitHubRepository,
   localDevelopmentUrl?: string,
+  homepageHash?: string,
 ): Promise<void> {
   const targetUrl =
     localDevelopmentUrl && repository.name === socialMedia.github.domain
@@ -168,6 +211,8 @@ async function capturePreview(
       JSON.stringify({
         repository: repository.name,
         generatedAt: new Date().toISOString(),
+        homepageHash,
+        previewSource: localDevelopmentUrl ? "local" : "remote",
       }),
     );
     await rename(manifestTemporaryPath, manifestPath);
@@ -178,6 +223,17 @@ async function capturePreview(
 
 async function main(): Promise<void> {
   try {
+    const devUrlArgumentIndex = process.argv.indexOf("--dev-url");
+    const localDevelopmentUrl =
+      devUrlArgumentIndex >= 0 ? process.argv[devUrlArgumentIndex + 1] : undefined;
+    const previewSource = localDevelopmentUrl ? "local" : "remote";
+    const homepageHash = await getHomepageHash();
+
+    if (await isPreviewCurrent(homepageHash, previewSource)) {
+      console.info("Skipping featured preview generation; app/page.tsx is unchanged.");
+      return;
+    }
+
     const repositories = await fetchRepositories();
     const featuredRepository =
       repositories.find(
@@ -189,10 +245,7 @@ async function main(): Promise<void> {
       return;
     }
 
-    const devUrlArgumentIndex = process.argv.indexOf("--dev-url");
-    const localDevelopmentUrl =
-      devUrlArgumentIndex >= 0 ? process.argv[devUrlArgumentIndex + 1] : undefined;
-    await capturePreview(featuredRepository, localDevelopmentUrl);
+    await capturePreview(featuredRepository, localDevelopmentUrl, homepageHash);
   } catch (error) {
     console.warn(
       "Could not generate the featured-project preview; continuing without updating it.",
