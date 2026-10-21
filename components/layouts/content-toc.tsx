@@ -1,6 +1,6 @@
 "use client";
 
-import { type ReactNode, useCallback, useEffect, useState } from "react";
+import { type ReactNode, useCallback, useEffect, useRef, useState } from "react";
 
 import { ChevronDown, ListTree } from "lucide-react";
 
@@ -14,6 +14,26 @@ interface ContentTocProps {
 
 export function ContentToc({ items, aside, asidePosition = "top" }: ContentTocProps) {
   const [activeId, setActiveId] = useState<string | null>(null);
+  const navRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const nav = navRef.current;
+    if (!nav || !activeId || nav.scrollHeight <= nav.clientHeight) return;
+
+    const link = nav.querySelector<HTMLElement>(".project-toc-desktop a[aria-current='location']");
+    if (!link) return;
+
+    const navRect = nav.getBoundingClientRect();
+    const linkRect = link.getBoundingClientRect();
+    const padding = 48;
+    if (linkRect.top >= navRect.top + padding && linkRect.bottom <= navRect.bottom - padding)
+      return;
+
+    const target =
+      nav.scrollTop + (linkRect.top - navRect.top) - nav.clientHeight / 2 + linkRect.height / 2;
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    nav.scrollTo({ top: Math.max(0, target), behavior: reduceMotion ? "auto" : "smooth" });
+  }, [activeId]);
 
   useEffect(() => {
     const headings = items.flatMap(function flatten(item): string[] {
@@ -83,7 +103,7 @@ export function ContentToc({ items, aside, asidePosition = "top" }: ContentTocPr
   );
 
   return (
-    <nav className="project-toc" aria-label="Table of contents">
+    <nav ref={navRef} className="project-toc" aria-label="Table of contents">
       <details className="project-toc-mobile">
         <summary>
           <span>
