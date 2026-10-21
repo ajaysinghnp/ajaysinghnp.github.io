@@ -147,7 +147,7 @@ Compiled successfully
 - Every terminal has a **Copy** button that copies the whole block as written (useful for reports). Command blocks that also contain output get a **Commands** button that copies only the commands, without prompts.
 - The title bar shows `title="..."` when given, otherwise the fence language as written (for example `powershell`).
 
-Other fence languages (for example `bash`) keep the regular highlighted code block. See `lib/remark-terminal.ts` and `components/mdx/terminal.tsx`.
+Other fence languages (for example `bash`) keep the regular highlighted code block, now with a small header strip showing the fence language (hidden when no language is given). See `lib/remark-terminal.ts` and `components/mdx/terminal.tsx`.
 
 #### Layout behavior
 

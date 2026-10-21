@@ -1,6 +1,7 @@
 import { isValidElement } from "react";
 import Image from "next/image";
 
+import { FileCode2 } from "lucide-react";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 import { CopyButton } from "@/components/mdx/copy-btn";
@@ -125,8 +126,17 @@ export const components = {
       return <MermaidDiagram chart={code} />;
     }
 
+    const language = child?.props["data-language"];
+    const showHeader = !!language && language !== "plaintext";
+
     return (
-      <div className="code-block-wrapper">
+      <div className={cn("code-block-wrapper", showHeader && "code-block-titled")}>
+        {showHeader && (
+          <div className="code-block-header">
+            <FileCode2 className="h-3.5 w-3.5" aria-hidden="true" />
+            <span>{language}</span>
+          </div>
+        )}
         <pre {...props} className={cn(className)}>
           {children}
         </pre>

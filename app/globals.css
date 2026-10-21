@@ -1625,6 +1625,36 @@ html:not(.dark) .project-card-preview-light {
   cursor: default;
 }
 
+/* Header strip with the fence language, editor-tab style. */
+.project-readme .code-block-header {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 2.25rem;
+  border: 1px solid var(--site-surface-border);
+  border-bottom-color: var(--site-border);
+  border-radius: var(--site-radius) var(--site-radius) 0 0;
+  background: color-mix(in srgb, var(--readme-code-bg) 86%, var(--site-text));
+  padding: 0 5.5rem 0 0.85rem;
+  color: var(--site-muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.75rem;
+}
+
+.project-readme .code-block-header svg {
+  color: var(--site-accent);
+}
+
+.project-readme .code-block-titled > pre {
+  border-top: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.project-readme .code-block-titled > .code-copy-button {
+  top: 0.3rem;
+}
+
 /* ---- README: tables, quotes, images ---- */
 .project-readme :where(table) {
   display: block;
