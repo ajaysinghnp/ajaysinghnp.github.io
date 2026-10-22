@@ -145,28 +145,28 @@ export function GlobalSearch() {
         <p>Search the whole site, or narrow by source, category, or tag:</p>
         <div className="mt-3 grid gap-x-5 gap-y-2 sm:grid-cols-2">
           <p>
-            <code className="font-mono text-(--site-accent)">blog:@development docker</code>
+            <code className="font-mono site-nav-active">blog:@development docker</code>
           </p>
           <p>
-            <code className="font-mono text-(--site-accent)">blog:#windows netsh</code>
+            <code className="font-mono site-nav-active">blog:#windows netsh</code>
           </p>
           <p>
-            <code className="font-mono text-(--site-accent)">cheatsheet:@smart-home switch</code>
+            <code className="font-mono site-nav-active">cheatsheet:@smart-home switch</code>
           </p>
           <p>
-            <code className="font-mono text-(--site-accent)">cheatsheet:#git workflows</code>
+            <code className="font-mono site-nav-active">cheatsheet:#git workflows</code>
           </p>
           <p>
-            <code className="font-mono text-(--site-accent)">pages:@about</code>
+            <code className="font-mono site-nav-active">pages:@about</code>
           </p>
           <p>
-            <code className="font-mono text-(--site-accent)">pages:#automation</code>
+            <code className="font-mono site-nav-active">pages:#automation</code>
           </p>
           <p>
-            <code className="font-mono text-(--site-accent)">projects:@open-source</code>
+            <code className="font-mono site-nav-active">projects:@open-source</code>
           </p>
           <p>
-            <code className="font-mono text-(--site-accent)">projects:#calendar</code>
+            <code className="font-mono site-nav-active">projects:#calendar</code>
           </p>
         </div>
       </div>
@@ -240,9 +240,9 @@ export function GlobalSearch() {
         onKeyDown={handleDialogKeyDown}
         className="global-search-dialog fixed inset-x-0 m-0 mx-auto w-[min(42rem,calc(100%-2rem))] overflow-hidden rounded-xl p-0"
       >
-        <div className="border-b border-(--site-surface-border) bg-(--site-panel) p-4 sm:p-5">
+        <div className="border-b border-(--site-surface-border) site-panel p-4 sm:p-5">
           <div className="flex items-center gap-3">
-            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-(--site-surface-border) bg-(--site-accent)/10 text-(--site-accent)">
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-(--site-surface-border) bg-(--site-accent)/10 site-nav-active">
               <Search className="h-4 w-4" aria-hidden="true" />
             </span>
             <h2 id="global-search-title" className="sr-only">
@@ -276,16 +276,16 @@ export function GlobalSearch() {
 
         <div
           id="global-search-hint"
-          className="flex flex-wrap items-center gap-x-3 gap-y-2 border-t border-(--site-surface-border) bg-(--site-panel) px-4 py-3 text-xs text-(--site-muted)"
+          className="flex flex-wrap items-center gap-x-3 gap-y-2 border-t border-(--site-surface-border) site-panel px-4 py-3 text-xs text-(--site-muted)"
         >
           <span className="inline-flex items-center gap-1">
             <ArrowUp className="h-3 w-3" /> <ArrowDown className="h-3 w-3" /> to navigate
           </span>
           <span>Enter to open</span>
           <span className="ml-auto inline-flex items-center gap-1">
-            <kbd className="rounded border border-(--site-surface-border) px-1">⌘ K</kbd>
+            <kbd className="rounded border border-(--site-surface-border) px-1">⌘CMD+K</kbd>
             <span>/</span>
-            <kbd className="rounded border border-(--site-surface-border) px-1">Ctrl K</kbd>
+            <kbd className="rounded border border-(--site-surface-border) px-1">Ctrl+K</kbd>
           </span>
         </div>
       </dialog>
