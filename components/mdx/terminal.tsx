@@ -212,9 +212,9 @@ export async function Terminal({ lang = "terminal", title, code = "" }: Terminal
           </span>
         ) : (
           <span className="terminal-dots" aria-hidden="true">
-            <i />
-            <i />
-            <i />
+            <i className="mac-dot mac-dot-close" />
+            <i className="mac-dot mac-dot-min" />
+            <i className="mac-dot mac-dot-max" />
           </span>
         )}
         <span className="terminal-title">{label}</span>

@@ -169,6 +169,10 @@ export default function FeedbackDialog() {
       if (!dialog || document.querySelector("dialog[open]")) return;
       setStatus((s) => (s === "error" ? "idle" : s));
       dialog.showModal();
+      // showModal focuses the first control (the close dot); focus content instead.
+      requestAnimationFrame(() =>
+        dialog.querySelector<HTMLElement>('[data-autofocus], input[name="name"]')?.focus(),
+      );
     };
 
     const onKeyDown = (event: KeyboardEvent) => {
@@ -255,12 +259,12 @@ export default function FeedbackDialog() {
             type="button"
             onClick={() => dialogRef.current?.close()}
             aria-label="Close feedback form"
-            className="flex h-3 w-3 cursor-pointer items-center justify-center rounded-full bg-rose-400/90"
+            className="mac-dot mac-dot-close cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--site-accent)"
           >
-            <X className="h-2 w-2 text-rose-950 opacity-0 transition-opacity group-hover:opacity-100" />
+            <X className="relative z-10 h-2 w-2 text-rose-950 opacity-0 transition-opacity group-hover:opacity-100" />
           </button>
-          <i className="h-3 w-3 rounded-full bg-amber-400/80" aria-hidden="true" />
-          <i className="h-3 w-3 rounded-full bg-emerald-400/80" aria-hidden="true" />
+          <i className="mac-dot mac-dot-min" aria-hidden="true" />
+          <i className="mac-dot mac-dot-max" aria-hidden="true" />
         </span>
         <span className="flex-1 truncate text-center font-mono text-xs resume-muted">
           ~/feedback <span className="site-nav-active">--send</span>
@@ -293,6 +297,7 @@ export default function FeedbackDialog() {
               </button>
               <button
                 type="button"
+                data-autofocus
                 onClick={() => dialogRef.current?.close()}
                 className="action-button shine-border inline-flex cursor-pointer items-center gap-2 px-5 py-2.5 text-sm font-semibold shine-border-contrast"
               >
