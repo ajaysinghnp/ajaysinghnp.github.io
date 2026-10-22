@@ -104,7 +104,7 @@ export default function ResumePage() {
           </div>
         </aside>
 
-        <div className="flex flex-col justify-between">
+        <div className="flex flex-col gap-8 lg:justify-between lg:gap-0">
           <section>
             <div className="mb-6 flex items-center justify-between">
               <p className="section-code">experience</p>
