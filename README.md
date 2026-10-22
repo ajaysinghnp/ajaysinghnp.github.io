@@ -9,6 +9,7 @@ Personal portfolio and blog built with Next.js, MDX, and Tailwind CSS, designed 
 - Project showcase powered by GitHub API
 - Automatically generated featured-project previews
 - Global search across site pages, project READMEs, blog posts, and cheatsheets, with source, category, and tag filters
+- Feedback form (`Ctrl/⌘+F` on any page, or the contact page button) with live validation, a Markdown editor, and delivery to an n8n webhook
 - Syntax-highlighted markdown content
 - Shared post detail page with a sticky table of contents that follows the active heading, a gradient reading-progress bar, and floating go-to-top/bottom buttons
 - Callouts (GitHub-style alerts) and step timelines in markdown content
@@ -114,6 +115,8 @@ Create a `.env.local` file for authenticated server-side GitHub API requests:
 
 ```bash
 GITHUB_TOKEN=your_read_only_github_token
+N8N_FEEDBACK_WEBHOOK_URL=https://your-n8n-host/webhook/your-feedback-path
+N8N_FEEDBACK_WEBHOOK_SECRET=your_shared_secret
 PORT=3000
 ```
 
@@ -122,6 +125,47 @@ Why this helps:
 - Raises the GitHub REST API rate limit for repository and README requests.
 - Keep the token server-only. Do not rename it to `NEXT_PUBLIC_GITHUB_TOKEN` or commit a populated `.env.local` file.
 - Use a token with only the read access needed for public repository metadata and contents.
+- `N8N_FEEDBACK_WEBHOOK_URL` is required for the feedback form; without it `/api/feedback` returns `500 Not configured`. `N8N_FEEDBACK_WEBHOOK_SECRET` is optional and, when set, is sent as the `x-webhook-secret` header so n8n can reject other callers. Both are server-only. Restart the server after changing env vars.
+
+## Feedback Form
+
+Open the feedback form with `Ctrl+F` / `⌘F` on any page (this replaces the browser's find while on the site) or with the **Share feedback** button on the contact page. The shortcut is ignored while another dialog, such as search, is open.
+
+The form collects an optional name, an optional email, and a required message (3 to 4000 characters) written in Markdown. Fields validate live and show a checklist of rules as you type. The editor toolbar offers normal text, H1/H2, bold, italic, strikethrough, code, link, image, quote, lists, and tables, plus a Write/Preview toggle. Previews render GitHub-flavoured Markdown, never raw HTML, and only `https://` images.
+
+### Draft saving
+
+While you type, the draft is saved in the browser's local storage on that device only (keys `feedback-draft:v1` and `feedback-draft-pref:v1`). It is restored on the next visit and deleted after a successful send or when the visitor discards it. A checkbox in the form turns saving off and deletes any stored draft. The form tells visitors this and that sent feedback is forwarded to a private automation workflow. Review the wording against your privacy policy and local consent rules before relying on it.
+
+### Submission flow
+
+```text
+Browser form  ->  POST /api/feedback  ->  n8n webhook  ->  Discord alert + stored for nightly email digest
+```
+
+`app/api/feedback/route.ts` runs on the server, so the n8n URL is never exposed to the browser. It:
+
+- Rejects bodies over 8 KB (`413`) and invalid JSON (`400`).
+- Silently accepts submissions that fill the hidden honeypot field without forwarding them.
+- Limits each IP to 3 submissions per 10 minutes (`429`). The limiter is in-memory per server instance, so it is best-effort only.
+- Validates the message length and email format (`400`). Keep the email rules in `components/sections/feedback-dialog.tsx` and the route's regex in sync.
+- Forwards `{ message, name, email, submittedAt, source: "contact-page" }` to n8n with a 10 second timeout, returning `502` if n8n is unreachable or answers with a non-2xx status.
+
+The `message` is raw Markdown and all fields are untrusted. The n8n workflow should respond `2xx` quickly, post an immediate Discord alert (with mentions disabled), store the item, and send a nightly email digest through Resend, deleting stored items only after the email succeeds. Test the endpoint locally with:
+
+```bash
+curl -X POST http://localhost:3000/api/feedback \
+  -H 'Content-Type: application/json' \
+  -d '{"message":"Test feedback","name":"Tester","email":""}'
+```
+
+### Reusable pieces
+
+- `components/sections/feedback-dialog.tsx`: the global dialog, mounted in the navigation.
+- `components/sections/feedback-trigger.tsx`: a button that opens the dialog from any page.
+- `components/ui/validated-field.tsx`: input with rule checklist and valid/invalid states.
+- `components/ui/markdown-toolbar.tsx` and `components/ui/markdown-preview.tsx`: Markdown editing and preview.
+- `.mac-dot` classes in `app/globals.css`: the glass macOS window controls, also used by terminal blocks.
 
 ## Content and Blog
 
