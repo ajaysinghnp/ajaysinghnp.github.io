@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 
 import { GitBranch, Menu, X } from "lucide-react";
 
+import FeedbackDialog from "@/components/sections/feedback-dialog";
 import { navigation } from "@/data/navigation";
 import { socialMedia } from "@/data/social";
 import { cn } from "@/lib/utils";
@@ -108,6 +109,7 @@ export const Navigation: React.FC<Props> = ({ gitTheme = false }: Props) => {
         </nav>
         <div className="flex items-center gap-2">
           <GlobalSearch />
+          <FeedbackDialog />
           <Link
             href={gitTheme ? socialMedia.github.theme : socialMedia.github.href}
             target="_blank"
