@@ -32,7 +32,10 @@ export async function POST(req: Request) {
 
   const h = req.headers;
   const client = {
-    ip: h.get("cf-connecting-ip") ?? h.get("x-forwarded-for")?.split(",")[0]?.trim() ?? null,
+    ip: h.get("x-forwarded-for")?.split(",")[0]?.trim() ?? null,
+    cfConnectingIp: h.get("cf-connecting-ip"),
+    xForwardedFor: h.get("x-forwarded-for"),
+    xRealIp: h.get("x-real-ip"),
     country: h.get("cf-ipcountry"),
     city: h.get("cf-ipcity"),
     region: h.get("cf-region"),

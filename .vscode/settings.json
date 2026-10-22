@@ -28,6 +28,8 @@
     "contentlayer",
     "countrydetails",
     "cutover",
+    "ipcity",
+    "ipcountry",
     "jobtask",
     "netsh",
     "quoteless",
