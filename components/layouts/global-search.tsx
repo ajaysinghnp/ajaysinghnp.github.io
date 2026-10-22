@@ -16,6 +16,7 @@ export function GlobalSearch() {
   const router = useRouter();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const optionRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
@@ -89,6 +90,11 @@ export function GlobalSearch() {
     };
   }, [isOpen, query]);
 
+  useEffect(() => {
+    if (resultsQuery !== query.trim() || results.length === 0) return;
+    optionRefs.current[activeIndex]?.scrollIntoView({ block: "nearest" });
+  }, [activeIndex, query, results, resultsQuery]);
+
   const close = () => {
     setIsOpen(false);
     setQuery("");
@@ -148,6 +154,10 @@ export function GlobalSearch() {
         {visibleResults.map((result, index) => (
           <li key={`${result.href}:${result.title}`}>
             <button
+              id={`global-search-result-${index}`}
+              ref={(element) => {
+                optionRefs.current[index] = element;
+              }}
               type="button"
               role="option"
               aria-selected={index === activeIndex}
