@@ -92,7 +92,10 @@ export function GlobalSearch() {
 
   useEffect(() => {
     if (resultsQuery !== query.trim() || results.length === 0) return;
-    optionRefs.current[activeIndex]?.scrollIntoView({ block: "nearest" });
+    optionRefs.current[activeIndex]?.scrollIntoView({
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+      block: "nearest",
+    });
   }, [activeIndex, query, results, resultsQuery]);
 
   const close = () => {
@@ -114,10 +117,10 @@ export function GlobalSearch() {
 
     if (event.key === "ArrowDown") {
       event.preventDefault();
-      setActiveIndex((index) => (index + 1) % visibleResults.length);
+      setActiveIndex((index) => Math.min(index + 1, visibleResults.length - 1));
     } else if (event.key === "ArrowUp") {
       event.preventDefault();
-      setActiveIndex((index) => (index - 1 + visibleResults.length) % visibleResults.length);
+      setActiveIndex((index) => Math.max(index - 1, 0));
     } else if (event.key === "Enter") {
       event.preventDefault();
       openResult(visibleResults[activeIndex]);
