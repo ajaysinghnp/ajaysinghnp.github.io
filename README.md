@@ -8,6 +8,7 @@ Personal portfolio and blog built with Next.js, MDX, and Tailwind CSS, designed 
 - Blog support with MDX and Contentlayer
 - Project showcase powered by GitHub API
 - Automatically generated featured-project previews
+- Global search across site pages, project READMEs, blog posts, and cheatsheets, with source, category, and tag filters
 - Syntax-highlighted markdown content
 - Shared post detail page with a sticky table of contents that follows the active heading, a gradient reading-progress bar, and floating go-to-top/bottom buttons
 - Callouts (GitHub-style alerts) and step timelines in markdown content
@@ -56,6 +57,44 @@ pnpm run dev
 The first run installs Playwright Chromium if needed, starts the local site, and captures separate light- and dark-theme previews of the local development homepage when the selected featured repository is this portfolio. The preview browser bar continues to show the repository's public homepage URL. Production builds capture the public homepage when configured, otherwise the GitHub repository page. Generated images and their version manifest are stored in the ignored `public/generated-project-previews/` directory.
 
 Open `http://localhost:3000`.
+
+## Global Search
+
+Open search with the magnifying-glass button beside GitHub and the theme switcher in the navigation, or press `⌘K` on macOS and `Ctrl+K` on Windows/Linux. The shortcut works from anywhere on the site. Search covers the home, about, resume, and contact pages; public projects and their READMEs; published blog posts; and cheatsheets. Results include a matching excerpt; up to 12 results are shown.
+
+Type ordinary words to search across the whole site:
+
+```text
+nextjs deployment
+```
+
+Use `type:` to limit a search to one content type:
+
+```text
+type:blog docker
+type:project automation
+type:cheatsheet git
+type:page resume
+```
+
+Supported type values are `page` (`pages`, `site`), `project` (`projects`), `blog` (`blogs`, `post`, `posts`), and `cheatsheet` (`cheatsheets`). A type can be used alone, such as `type:blog`, to browse only that source.
+
+Use a source prefix with `@` for categories and `#` for tags. Add words after the filter to search within the matching category or tag:
+
+```text
+blog:@development docker
+blog:#windows netsh
+cheatsheet:@smart-home switch
+cheatsheet:#git workflows
+pages:@about
+pages:#automation
+projects:@open-source
+projects:#calendar
+```
+
+Category values match a category segment or path prefix, so `blog:@development` also includes nested categories such as `development/nextjs`. Tags match case-insensitively against a whole tag. Blog and cheatsheet categories and tags come from their content metadata; project tags are individual words from repository names (for example, `projects:#calendar` matches calendar repositories); and pages use their route categories and assigned keywords. Use quotes to keep a multiword phrase together, for example `type:blog "production image"`.
+
+While the palette is open, use the up/down arrow keys to move through results and press `Enter` to open the selected result. The active result stays visible as the list scrolls; navigation stops at the first and last result. Press `Escape` to close the palette. Search data is built server-side and cached; content webhook updates refresh the index.
 
 ### 3. Build for production
 
