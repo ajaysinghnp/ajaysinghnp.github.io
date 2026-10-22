@@ -142,24 +142,31 @@ export function GlobalSearch() {
   } else if (!searchableQuery) {
     resultsContent = (
       <div className="px-4 py-5 text-sm text-(--site-muted)">
-        <p>Search the whole site, or narrow by content type, category, or tag:</p>
+        <p>Search the whole site, or narrow by source, category, or tag:</p>
         <div className="mt-3 grid gap-x-5 gap-y-2 sm:grid-cols-2">
           <p>
-            <code className="font-mono text-(--site-accent)">type:blog kubernetes</code>
+            <code className="font-mono text-(--site-accent)">blog:@development docker</code>
           </p>
           <p>
-            <code className="font-mono text-(--site-accent)">
-              blog:category web-development nextjs
-            </code>
+            <code className="font-mono text-(--site-accent)">blog:#windows netsh</code>
           </p>
           <p>
-            <code className="font-mono text-(--site-accent)">blog:tag security cve</code>
+            <code className="font-mono text-(--site-accent)">cheatsheet:@smart-home switch</code>
           </p>
           <p>
-            <code className="font-mono text-(--site-accent)">type:project automation</code>
+            <code className="font-mono text-(--site-accent)">cheatsheet:#git workflows</code>
           </p>
           <p>
-            <code className="font-mono text-(--site-accent)">type:cheatsheet git</code>
+            <code className="font-mono text-(--site-accent)">pages:@about</code>
+          </p>
+          <p>
+            <code className="font-mono text-(--site-accent)">pages:#automation</code>
+          </p>
+          <p>
+            <code className="font-mono text-(--site-accent)">projects:@open-source</code>
+          </p>
+          <p>
+            <code className="font-mono text-(--site-accent)">projects:#nextjs</code>
           </p>
         </div>
       </div>

@@ -11,7 +11,8 @@ export interface SearchDocument {
 }
 
 export type SearchFilter =
-  { field: "type"; value: SearchDocumentType } | { field: "category" | "tag"; value: string };
+  | { field: "type"; value: SearchDocumentType }
+  | { field: "category" | "tag"; type: SearchDocumentType; value: string };
 
 export interface ParsedSearchQuery {
   terms: string[];
@@ -39,8 +40,6 @@ const tokensFrom = (input: string) =>
       : token,
   );
 
-const isFilterToken = (token: string) => /^(type:|blog:(category|tag)(:|=)?$)/i.test(token);
-
 export function parseSearchQuery(input: string): ParsedSearchQuery {
   const tokens = tokensFrom(input.trim());
   const terms: string[] = [];
@@ -57,26 +56,17 @@ export function parseSearchQuery(input: string): ParsedSearchQuery {
       }
     }
 
-    const compactFieldMatch = /^blog:(category|tag)(?::|=)(.+)$/i.exec(token);
-    if (compactFieldMatch) {
-      filters.push({
-        field: compactFieldMatch[1].toLowerCase() as "category" | "tag",
-        value: compactFieldMatch[2].toLowerCase(),
-      });
-      continue;
-    }
-
-    const fieldMatch = /^blog:(category|tag)$/i.exec(token);
-    if (fieldMatch) {
-      const value = tokens[index + 1];
-      if (value && !isFilterToken(value)) {
+    const facetMatch = /^([a-z-]+):([@#])(.+)$/i.exec(token);
+    if (facetMatch) {
+      const type = TYPE_ALIASES[facetMatch[1].toLowerCase()];
+      if (type) {
         filters.push({
-          field: fieldMatch[1].toLowerCase() as "category" | "tag",
-          value: value.toLowerCase(),
+          field: facetMatch[2] === "@" ? "category" : "tag",
+          type,
+          value: facetMatch[3].toLowerCase(),
         });
-        index += 1;
+        continue;
       }
-      continue;
     }
 
     terms.push(token.toLowerCase());
@@ -93,14 +83,16 @@ export function scoreSearchDocument(document: SearchDocument, query: ParsedSearc
     if (filter.field === "type" && document.type !== filter.value) return -1;
     if (
       filter.field === "category" &&
-      (document.type !== "blog" || !category.includes(filter.value))
+      (document.type !== filter.type ||
+        !(
+          category === filter.value ||
+          category.startsWith(`${filter.value}/`) ||
+          category.split("/").includes(filter.value)
+        ))
     ) {
       return -1;
     }
-    if (
-      filter.field === "tag" &&
-      (document.type !== "blog" || !tags.some((tag) => tag.includes(filter.value)))
-    ) {
+    if (filter.field === "tag" && (document.type !== filter.type || !tags.includes(filter.value))) {
       return -1;
     }
   }

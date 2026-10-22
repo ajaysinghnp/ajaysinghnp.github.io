@@ -4,7 +4,6 @@ import { type NextRequest, NextResponse } from "next/server";
 import { about } from "@/data/about";
 import { blogConfig, blogSource } from "@/data/blog";
 import { cheatsheetConfig, cheatsheetSource } from "@/data/cheatsheet";
-import { navigation } from "@/data/navigation";
 import { PROJECT_REPOSITORY_SETTINGS } from "@/data/repos";
 import { resume } from "@/data/resume";
 import { entryHref } from "@/lib/content-format";
@@ -55,6 +54,8 @@ const getSearchDocuments = unstable_cache(
           section: "Project",
           text: `${project.description ?? ""} ${readmeContent}`,
           type: "project",
+          category: "open-source",
+          tags: ["open-source", ...project.name.toLowerCase().split(/[-_ ]+/)],
         };
       }),
     );
@@ -87,20 +88,17 @@ const getSearchDocuments = unstable_cache(
         section: "Home",
         text: `${resume.quote} ${resume.profile} ${resume.jobtask} ${resume.skills.map((skill) => `${skill.label} ${skill.description}`).join(" ")}`,
         type: "page",
+        category: "home",
+        tags: ["portfolio", "profile"],
       },
-      ...navigation.map(({ name, href }): SearchDocument => ({
-        title: name,
-        href,
-        section: "Page",
-        text: `${name} Ajay Singh personal website portfolio`,
-        type: "page",
-      })),
       {
         title: "Projects",
         href: "/projects",
         section: "Projects",
         text: PROJECT_REPOSITORY_SETTINGS.page.intro,
         type: "page",
+        category: "projects",
+        tags: ["open-source", "github"],
       },
       {
         title: "Blog",
@@ -108,6 +106,8 @@ const getSearchDocuments = unstable_cache(
         section: "Blog",
         text: blogConfig.page.intro,
         type: "page",
+        category: "blog",
+        tags: ["writing", "articles"],
       },
       {
         title: "Cheatsheets",
@@ -115,6 +115,8 @@ const getSearchDocuments = unstable_cache(
         section: "Cheatsheets",
         text: cheatsheetConfig.page.intro,
         type: "page",
+        category: "cheatsheet",
+        tags: ["reference", "commands"],
       },
       {
         title: "About Ajay Singh",
@@ -128,6 +130,8 @@ const getSearchDocuments = unstable_cache(
           ...about.principles.flatMap((principle) => [principle.title, principle.description]),
         ].join(" "),
         type: "page",
+        category: "about",
+        tags: ["profile", "engineering", "technology", "automation"],
       },
       {
         title: "Resume",
@@ -144,6 +148,8 @@ const getSearchDocuments = unstable_cache(
           ...resume.skills.flatMap((skill) => [skill.label, skill.description]),
         ].join(" "),
         type: "page",
+        category: "resume",
+        tags: ["experience", "education", "skills", "career"],
       },
       {
         title: "Contact Ajay Singh",
@@ -151,6 +157,8 @@ const getSearchDocuments = unstable_cache(
         section: "Contact",
         text: "Contact get in touch email social links conversation",
         type: "page",
+        category: "contact",
+        tags: ["contact", "email", "social"],
       },
     ];
 
