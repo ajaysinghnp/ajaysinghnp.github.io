@@ -1,32 +1,64 @@
 "use client";
 
-import { type FormEvent, type ReactNode, useId, useRef, useState } from "react";
+import { type FormEvent, useId, useRef, useState } from "react";
 
-import { AlertCircle, CheckCircle2, Loader2, MessageSquare, Send, X } from "lucide-react";
+import {
+  AlertCircle,
+  AtSign,
+  CheckCircle2,
+  Loader2,
+  MessageSquare,
+  MessageSquareText,
+  RotateCcw,
+  Send,
+  User,
+  X,
+} from "lucide-react";
 
-import { cn } from "@/lib/utils";
+import { isFieldValid, ValidatedField, type ValidationRule } from "@/components/ui/validated-field";
 
 type Status = "idle" | "sending" | "sent" | "error";
 type FieldName = "name" | "email" | "message";
 type Values = Record<FieldName, string>;
 
 const LIMITS = { name: 100, email: 200, message: 4000 } as const;
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const EMPTY: Values = { name: "", email: "", message: "" };
 const FIELD_ORDER: FieldName[] = ["name", "email", "message"];
 
-function validate(field: FieldName, raw: string): string | null {
-  const value = raw.trim();
-  if (field === "name") return value.length > LIMITS.name ? "Keep it under 100 characters." : null;
-  if (field === "email") {
-    if (!value) return null;
-    if (value.length > LIMITS.email) return "That email is too long.";
-    return EMAIL_RE.test(value) ? null : "Enter a valid email, like you@example.com.";
-  }
-  if (value.length < 3) return "Say a little more, at least 3 characters.";
-  if (value.length > LIMITS.message) return "Too long, trim it to 4000 characters.";
-  return null;
-}
+const RULES: Record<FieldName, ValidationRule[]> = {
+  name: [
+    {
+      id: "max",
+      label: `At most ${LIMITS.name} characters`,
+      test: (v) => v.trim().length <= LIMITS.name,
+    },
+  ],
+  email: [
+    { id: "no-space", label: "No spaces", test: (v) => !/\s/.test(v) },
+    { id: "at", label: "Exactly one @ symbol", test: (v) => v.split("@").length === 2 },
+    { id: "local", label: "Something before the @", test: (v) => /^[^\s@]+@/.test(v) },
+    {
+      id: "domain",
+      label: "A domain after the @, like example.com",
+      test: (v) => /@[^\s@]+\.[^\s@]+$/.test(v),
+    },
+    {
+      id: "max",
+      label: `At most ${LIMITS.email} characters`,
+      test: (v) => v.trim().length <= LIMITS.email,
+    },
+  ],
+  message: [
+    { id: "min", label: "At least 3 characters", test: (v) => v.trim().length >= 3 },
+    {
+      id: "max",
+      label: `At most ${LIMITS.message} characters`,
+      test: (v) => v.trim().length <= LIMITS.message,
+    },
+  ],
+};
+
+const OPTIONAL: Record<FieldName, boolean> = { name: true, email: true, message: false };
 
 const SERVER_ERRORS: Record<number, string> = {
   400: "Some details look off. Please review the form.",
@@ -34,81 +66,20 @@ const SERVER_ERRORS: Record<number, string> = {
   429: "Too many attempts. Please wait a few minutes and try again.",
 };
 
-interface FieldProps {
-  id: string;
-  label: string;
-  hint?: string;
-  error: string | null;
-  valid: boolean;
-  trailing?: ReactNode;
-  children: (aria: { "aria-invalid": boolean; "aria-describedby": string }) => ReactNode;
-}
-
-function Field({ id, label, hint, error, valid, trailing, children }: FieldProps) {
-  const messageId = `${id}-msg`;
-  return (
-    <div>
-      <div className="flex items-baseline justify-between gap-3">
-        <label htmlFor={id} className="section-code">
-          {label}
-        </label>
-        {hint && <span className="text-xs resume-muted">{hint}</span>}
-      </div>
-      <div className="relative mt-2">
-        {children({ "aria-invalid": !!error, "aria-describedby": messageId })}
-        <span className="pointer-events-none absolute top-3 right-3" aria-hidden="true">
-          {error && <AlertCircle className="h-4 w-4 text-rose-500" />}
-          {!error && valid && <CheckCircle2 className="h-4 w-4 text-emerald-500" />}
-        </span>
-      </div>
-      <div className="mt-1.5 flex min-h-5 items-start justify-between gap-3 text-xs">
-        <p
-          id={messageId}
-          role={error ? "alert" : undefined}
-          className={error ? "text-rose-500" : "resume-muted"}
-        >
-          {error}
-        </p>
-        {trailing}
-      </div>
-    </div>
-  );
-}
-
-const inputBase =
-  "w-full rounded-sm border bg-transparent px-3 py-2.5 pr-9 text-sm text-(--site-text) outline-none transition placeholder:text-(--site-muted)/60 focus:shadow-[0_0_0_3px_color-mix(in_srgb,var(--site-accent)_20%,transparent)] disabled:opacity-60";
-
-function inputTone(error: string | null, valid: boolean) {
-  if (error) return "border-rose-500/70 focus:border-rose-500";
-  if (valid) return "border-emerald-500/50 focus:border-emerald-500";
-  return "border-(--site-surface-border) focus:border-(--site-accent)";
-}
-
 export default function FeedbackDialog() {
   const uid = useId();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const [values, setValues] = useState<Values>(EMPTY);
-  const [touched, setTouched] = useState<Record<FieldName, boolean>>({
-    name: false,
-    email: false,
-    message: false,
-  });
+  const [submitted, setSubmitted] = useState(false);
   const [status, setStatus] = useState<Status>("idle");
   const [serverError, setServerError] = useState("");
 
-  const errors: Record<FieldName, string | null> = {
-    name: touched.name ? validate("name", values.name) : null,
-    email: touched.email ? validate("email", values.email) : null,
-    message: touched.message ? validate("message", values.message) : null,
-  };
-  const isValid = (f: FieldName) => touched[f] && !validate(f, values[f]) && !!values[f].trim();
   const busy = status === "sending";
-  const messageLength = values.message.length;
 
   function reset() {
     setValues(EMPTY);
-    setTouched({ name: false, email: false, message: false });
+    setSubmitted(false);
     setStatus("idle");
     setServerError("");
   }
@@ -118,24 +89,11 @@ export default function FeedbackDialog() {
     dialogRef.current?.showModal();
   }
 
-  const bind = (field: FieldName) => ({
-    id: `${uid}-${field}`,
-    name: field,
-    value: values[field],
-    disabled: busy,
-    onChange: (e: { target: { value: string } }) => {
-      const next = e.target.value;
-      setValues((v) => ({ ...v, [field]: next }));
-      setTouched((t) => (t[field] || !next ? t : { ...t, [field]: true }));
-    },
-    onBlur: () => setTouched((t) => ({ ...t, [field]: true })),
-  });
-
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setTouched({ name: true, email: true, message: true });
+    setSubmitted(true);
 
-    const firstInvalid = FIELD_ORDER.find((f) => validate(f, values[f]));
+    const firstInvalid = FIELD_ORDER.find((f) => !isFieldValid(RULES[f], values[f], OPTIONAL[f]));
     if (firstInvalid) {
       formRef.current?.querySelector<HTMLElement>(`[name="${firstInvalid}"]`)?.focus();
       return;
@@ -162,6 +120,17 @@ export default function FeedbackDialog() {
     }
   }
 
+  const field = (name: FieldName) => ({
+    id: `${uid}-${name}`,
+    name,
+    value: values[name],
+    onValueChange: (v: string) => setValues((prev) => ({ ...prev, [name]: v })),
+    rules: RULES[name],
+    optional: OPTIONAL[name],
+    disabled: busy,
+    showErrors: submitted,
+  });
+
   return (
     <>
       <button
@@ -177,25 +146,25 @@ export default function FeedbackDialog() {
         ref={dialogRef}
         aria-labelledby={`${uid}-title`}
         onClick={(e) => e.target === dialogRef.current && dialogRef.current.close()}
-        className="global-search-dialog top-auto! m-auto w-[min(92vw,34rem)] overflow-hidden rounded-xl p-0"
+        className="global-search-dialog fixed top-1/2! left-1/2 m-0 max-h-[calc(100dvh-2rem)] w-[min(92vw,32rem)] -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-xl p-0"
       >
         <div className="flex items-center gap-3 border-b border-(--site-surface-border) bg-(--site-accent)/5 px-4 py-2.5">
-          <span className="flex gap-1.5" aria-hidden="true">
-            <i className="h-2.5 w-2.5 rounded-full bg-rose-400/80" />
-            <i className="h-2.5 w-2.5 rounded-full bg-amber-400/80" />
-            <i className="h-2.5 w-2.5 rounded-full bg-emerald-400/80" />
+          <span className="group flex gap-1.5">
+            <button
+              type="button"
+              onClick={() => dialogRef.current?.close()}
+              aria-label="Close feedback form"
+              className="flex h-3 w-3 cursor-pointer items-center justify-center rounded-full bg-rose-400/90"
+            >
+              <X className="h-2 w-2 text-rose-950 opacity-0 transition-opacity group-hover:opacity-100" />
+            </button>
+            <i className="h-3 w-3 rounded-full bg-amber-400/80" aria-hidden="true" />
+            <i className="h-3 w-3 rounded-full bg-emerald-400/80" aria-hidden="true" />
           </span>
-          <span className="flex-1 truncate font-mono text-xs resume-muted">
+          <span className="flex-1 truncate text-center font-mono text-xs resume-muted">
             ~/feedback <span className="site-nav-active">--send</span>
           </span>
-          <button
-            type="button"
-            onClick={() => dialogRef.current?.close()}
-            aria-label="Close feedback form"
-            className="light-btn-hover-bg site-icon-button cursor-pointer resume-muted"
-          >
-            <X className="h-4 w-4" />
-          </button>
+          <span className="w-12" aria-hidden="true" />
         </div>
 
         {status === "sent" ? (
@@ -216,105 +185,57 @@ export default function FeedbackDialog() {
               <button
                 type="button"
                 onClick={reset}
-                className="cursor-pointer rounded-sm border border-(--site-surface-border) px-5 py-2.5 text-sm font-semibold hover:border-(--site-accent)"
+                className="inline-flex cursor-pointer items-center gap-2 rounded-sm border border-(--site-surface-border) px-5 py-2.5 text-sm font-semibold hover:border-(--site-accent)"
               >
-                Send another
+                <RotateCcw className="h-4 w-4" /> Send another
               </button>
               <button
                 type="button"
                 onClick={() => dialogRef.current?.close()}
-                className="action-button shine-border cursor-pointer px-5 py-2.5 text-sm font-semibold shine-border-contrast"
+                className="action-button shine-border inline-flex cursor-pointer items-center gap-2 px-5 py-2.5 text-sm font-semibold shine-border-contrast"
               >
-                Done
+                <CheckCircle2 className="h-4 w-4" /> Done
               </button>
             </div>
           </div>
         ) : (
           <form ref={formRef} onSubmit={onSubmit} noValidate className="space-y-5 p-6">
             <div>
-              <h2 id={`${uid}-title`} className="text-3xl font-semibold tracking-tight">
+              <h2
+                id={`${uid}-title`}
+                className="flex items-center gap-3 text-3xl font-semibold tracking-tight"
+              >
+                <MessageSquareText className="h-7 w-7 site-nav-active" aria-hidden="true" />
                 What&apos;s on your mind?
               </h2>
               <p className="mt-2 text-sm leading-6 resume-muted">
-                Ideas, bugs, or kind words. Name and email are optional, add an email if you want a
-                reply.
+                Ideas, bugs, or kind words. Add an email if you want a reply.
               </p>
             </div>
 
-            <div className="grid gap-5 sm:grid-cols-2">
-              <Field
-                id={`${uid}-name`}
-                label="name"
-                hint="optional"
-                error={errors.name}
-                valid={isValid("name")}
-              >
-                {(aria) => (
-                  <input
-                    {...bind("name")}
-                    {...aria}
-                    autoComplete="name"
-                    placeholder="Ada Lovelace"
-                    className={cn(inputBase, inputTone(errors.name, isValid("name")))}
-                  />
-                )}
-              </Field>
-              <Field
-                id={`${uid}-email`}
-                label="email"
-                hint="optional"
-                error={errors.email}
-                valid={isValid("email")}
-              >
-                {(aria) => (
-                  <input
-                    {...bind("email")}
-                    {...aria}
-                    type="email"
-                    autoComplete="email"
-                    placeholder="you@example.com"
-                    className={cn(inputBase, inputTone(errors.email, isValid("email")))}
-                  />
-                )}
-              </Field>
-            </div>
-
-            <Field
-              id={`${uid}-message`}
+            <ValidatedField
+              {...field("name")}
+              label="name"
+              icon={User}
+              autoComplete="name"
+              placeholder="Ada Lovelace"
+            />
+            <ValidatedField
+              {...field("email")}
+              label="email"
+              icon={AtSign}
+              type="email"
+              autoComplete="email"
+              placeholder="you@example.com"
+            />
+            <ValidatedField
+              {...field("message")}
               label="feedback"
-              hint="required"
-              error={errors.message}
-              valid={isValid("message")}
-              trailing={
-                <span
-                  className={cn(
-                    "shrink-0 font-mono tabular-nums",
-                    messageLength > LIMITS.message && "text-rose-500",
-                    messageLength > LIMITS.message * 0.9 &&
-                      messageLength <= LIMITS.message &&
-                      "text-amber-500",
-                    messageLength <= LIMITS.message * 0.9 && "resume-muted",
-                  )}
-                  aria-hidden="true"
-                >
-                  {messageLength} / {LIMITS.message}
-                </span>
-              }
-            >
-              {(aria) => (
-                <textarea
-                  {...bind("message")}
-                  {...aria}
-                  rows={5}
-                  placeholder="Tell me what worked, what didn't, or what you'd love to see..."
-                  className={cn(
-                    inputBase,
-                    "resize-y",
-                    inputTone(errors.message, isValid("message")),
-                  )}
-                />
-              )}
-            </Field>
+              icon={MessageSquareText}
+              multiline
+              counterMax={LIMITS.message}
+              placeholder="Tell me what worked, what didn't, or what you'd love to see..."
+            />
 
             <input
               name="website"
