@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { ArrowUpRight, Mail, MapPin } from "lucide-react";
 
+import FeedbackDialog from "@/components/sections/feedback-dialog";
 import SocialLinksPanel from "@/components/sections/social-links-panel";
 import { resume } from "@/data/resume";
 import { socialMedia } from "@/data/social";
@@ -34,7 +35,7 @@ export default function ContactPage() {
               outcome would look like.
             </p>
           </div>
-          <div className="mt-10">
+          <div className="mt-10 flex flex-wrap items-center gap-4">
             <Link
               href={socialMedia.email.href}
               aria-label="Start a conversation by email"
@@ -42,6 +43,7 @@ export default function ContactPage() {
             >
               <Mail className="h-4 w-4" /> Start a conversation <ArrowUpRight className="h-4 w-4" />
             </Link>
+            <FeedbackDialog />
           </div>
         </div>
 
