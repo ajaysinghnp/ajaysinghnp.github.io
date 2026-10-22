@@ -15,6 +15,8 @@ import {
   X,
 } from "lucide-react";
 
+import { MarkdownPreview } from "@/components/ui/markdown-preview";
+import { MarkdownToolbar } from "@/components/ui/markdown-toolbar";
 import { isFieldValid, ValidatedField, type ValidationRule } from "@/components/ui/validated-field";
 
 type Status = "idle" | "sending" | "sent" | "error";
@@ -70,7 +72,9 @@ export default function FeedbackDialog() {
   const uid = useId();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
+  const messageRef = useRef<HTMLTextAreaElement>(null);
   const [values, setValues] = useState<Values>(EMPTY);
+  const [previewing, setPreviewing] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [status, setStatus] = useState<Status>("idle");
   const [serverError, setServerError] = useState("");
@@ -79,6 +83,7 @@ export default function FeedbackDialog() {
 
   function reset() {
     setValues(EMPTY);
+    setPreviewing(false);
     setSubmitted(false);
     setStatus("idle");
     setServerError("");
@@ -95,7 +100,10 @@ export default function FeedbackDialog() {
 
     const firstInvalid = FIELD_ORDER.find((f) => !isFieldValid(RULES[f], values[f], OPTIONAL[f]));
     if (firstInvalid) {
-      formRef.current?.querySelector<HTMLElement>(`[name="${firstInvalid}"]`)?.focus();
+      if (firstInvalid === "message") setPreviewing(false);
+      requestAnimationFrame(() =>
+        formRef.current?.querySelector<HTMLElement>(`[name="${firstInvalid}"]`)?.focus(),
+      );
       return;
     }
 
@@ -146,7 +154,7 @@ export default function FeedbackDialog() {
         ref={dialogRef}
         aria-labelledby={`${uid}-title`}
         onClick={(e) => e.target === dialogRef.current && dialogRef.current.close()}
-        className="global-search-dialog fixed top-1/2! left-1/2 m-0 max-h-[calc(100dvh-2rem)] w-[min(92vw,32rem)] -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-xl p-0"
+        className="global-search-dialog fixed top-1/2! left-1/2 m-0 max-h-[calc(100dvh-2rem)] w-[min(94vw,44rem)] -translate-x-1/2 -translate-y-1/2 overflow-x-hidden overflow-y-auto rounded-xl p-0"
       >
         <div className="flex items-center gap-3 border-b border-(--site-surface-border) bg-(--site-accent)/5 px-4 py-2.5">
           <span className="group flex gap-1.5">
@@ -209,7 +217,7 @@ export default function FeedbackDialog() {
                 What&apos;s on your mind?
               </h2>
               <p className="mt-2 text-sm leading-6 resume-muted">
-                Ideas, bugs, or kind words. Add an email if you want a reply.
+                Ideas, bugs, or kind words. Markdown is supported. Add an email if you want a reply.
               </p>
             </div>
 
@@ -234,6 +242,18 @@ export default function FeedbackDialog() {
               icon={MessageSquareText}
               multiline
               counterMax={LIMITS.message}
+              textareaRef={messageRef}
+              toolbar={
+                <MarkdownToolbar
+                  textareaRef={messageRef}
+                  value={values.message}
+                  onValueChange={(v) => setValues((prev) => ({ ...prev, message: v }))}
+                  previewing={previewing}
+                  onPreviewingChange={setPreviewing}
+                  disabled={busy}
+                />
+              }
+              preview={previewing ? <MarkdownPreview source={values.message} /> : undefined}
               placeholder="Tell me what worked, what didn't, or what you'd love to see..."
             />
 

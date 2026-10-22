@@ -1,6 +1,6 @@
 "use client";
 
-import { type ReactNode, useState } from "react";
+import { type ReactNode, type RefObject, useState } from "react";
 
 import { AlertCircle, Check, CheckCircle2, Circle, type LucideIcon, X } from "lucide-react";
 
@@ -37,6 +37,11 @@ interface ValidatedFieldProps {
   counterMax?: number;
   /** Forces error styling, e.g. after a submit attempt. */
   showErrors?: boolean;
+  /** Rendered between the label and the control, e.g. a formatting toolbar. */
+  toolbar?: ReactNode;
+  /** When set, replaces the textarea (which stays mounted but hidden). */
+  preview?: ReactNode;
+  textareaRef?: RefObject<HTMLTextAreaElement | null>;
 }
 
 function Counter({ length, max }: { length: number; max: number }): ReactNode {
@@ -71,6 +76,9 @@ export function ValidatedField({
   disabled,
   counterMax,
   showErrors = false,
+  toolbar,
+  preview,
+  textareaRef,
 }: ValidatedFieldProps) {
   const [focused, setFocused] = useState(false);
   const [blurred, setBlurred] = useState(false);
@@ -115,6 +123,8 @@ export function ValidatedField({
         <span className="text-xs resume-muted">{optional ? "optional" : "required"}</span>
       </div>
 
+      {toolbar && <div className="mt-2">{toolbar}</div>}
+
       <div className="relative mt-2">
         <Icon
           className={cn(
@@ -127,12 +137,14 @@ export function ValidatedField({
         {multiline ? (
           <textarea
             {...sharedProps}
+            ref={textareaRef}
             rows={rows}
-            className={cn(sharedProps.className, "resize-y")}
+            className={cn(sharedProps.className, "resize-y", preview !== undefined && "hidden")}
           />
         ) : (
           <input {...sharedProps} type={type} />
         )}
+        {preview}
         <span
           className={cn(
             "pointer-events-none absolute right-3",
