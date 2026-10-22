@@ -153,7 +153,12 @@ export function GlobalSearch() {
     );
   } else if (visibleResults.length) {
     resultsContent = (
-      <ul id="global-search-results" role="listbox" aria-label="Search results">
+      <ul
+        id="global-search-results"
+        role="listbox"
+        aria-label="Search results"
+        className="flex flex-col gap-2"
+      >
         {visibleResults.map((result, index) => (
           <li key={`${result.href}:${result.title}`}>
             <button
@@ -166,11 +171,7 @@ export function GlobalSearch() {
               aria-selected={index === activeIndex}
               onMouseEnter={() => setActiveIndex(index)}
               onClick={() => openResult(result)}
-              className={`light-btn-hover-surface w-full cursor-pointer border py-3 text-left transition ${
-                index === activeIndex
-                  ? "border-(--site-surface-border) bg-(--site-accent)/10"
-                  : "border-transparent hover:bg-(--site-bg)"
-              }`}
+              className="global-search-result light-btn-hover-surface w-full cursor-pointer border border-transparent px-4 py-3 text-left transition"
             >
               <span className="flex items-center justify-between gap-3">
                 <span className="truncate font-medium site-nav-active">{result.title}</span>

@@ -315,6 +315,12 @@ html:not(.dark) body [class~="text-zinc-500"] {
   backdrop-filter: blur(5px) saturate(0.85);
 }
 
+.global-search-result[aria-selected="true"] {
+  border-color: color-mix(in srgb, var(--site-accent) 55%, transparent);
+  background-color: color-mix(in srgb, var(--site-accent) 14%, var(--site-panel));
+  color: var(--site-accent);
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .global-search-dialog[open] {
     animation: search-spotlight-in 160ms ease-out both;
