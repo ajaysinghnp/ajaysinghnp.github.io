@@ -9,6 +9,7 @@ import { navigation } from "@/data/navigation";
 import { socialMedia } from "@/data/social";
 import { cn } from "@/lib/utils";
 
+import { GlobalSearch } from "./global-search";
 import { ModeToggle } from "./theme-toggle";
 
 interface Props {
@@ -106,6 +107,7 @@ export const Navigation: React.FC<Props> = ({ gitTheme = false }: Props) => {
           })}
         </nav>
         <div className="flex items-center gap-2">
+          <GlobalSearch />
           <Link
             href={gitTheme ? socialMedia.github.theme : socialMedia.github.href}
             target="_blank"

@@ -30,5 +30,6 @@ export async function POST(req: Request) {
   }
 
   revalidateTag(source.tag, { expire: 0 });
+  revalidateTag("global-search-documents", { expire: 0 });
   return NextResponse.json({ revalidated: source.tag });
 }
