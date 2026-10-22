@@ -294,6 +294,45 @@ html:not(.dark) body [class~="text-zinc-500"] {
   box-shadow: var(--nav-shadow);
 }
 
+.global-search-dialog {
+  top: clamp(1rem, 14vh, 7rem);
+  max-height: calc(100dvh - clamp(1rem, 14vh, 7rem) - 1rem);
+  border: 1px solid var(--site-surface-border);
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--site-accent) 7%, var(--site-panel)),
+    var(--site-panel) 48%
+  );
+  color: var(--site-text);
+  box-shadow:
+    0 30px 90px rgba(0, 0, 0, 0.28),
+    0 0 0 1px color-mix(in srgb, var(--site-accent) 10%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--site-accent) 16%, transparent);
+}
+
+.global-search-dialog::backdrop {
+  background: rgba(5, 14, 18, 0.52);
+  backdrop-filter: blur(5px) saturate(0.85);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .global-search-dialog[open] {
+    animation: search-spotlight-in 160ms ease-out both;
+  }
+
+  @keyframes search-spotlight-in {
+    from {
+      opacity: 0;
+      transform: translateY(-8px) scale(0.985);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+}
+
 @utility site-nav-link {
   color: var(--site-muted);
 }

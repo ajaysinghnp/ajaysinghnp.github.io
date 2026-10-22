@@ -153,8 +153,10 @@ export function GlobalSearch() {
               aria-selected={index === activeIndex}
               onMouseEnter={() => setActiveIndex(index)}
               onClick={() => openResult(result)}
-              className={`w-full cursor-pointer rounded-lg px-4 py-3 text-left transition ${
-                index === activeIndex ? "bg-(--site-accent)/10" : "hover:bg-(--site-panel)"
+              className={`w-full cursor-pointer rounded-md border px-4 py-3 text-left transition ${
+                index === activeIndex
+                  ? "border-(--site-surface-border) bg-(--site-accent)/10"
+                  : "border-transparent hover:bg-(--site-bg)"
               }`}
             >
               <span className="flex items-center justify-between gap-3">
@@ -196,11 +198,13 @@ export function GlobalSearch() {
         onClose={() => setIsOpen(false)}
         onClick={(event) => event.target === event.currentTarget && close()}
         onKeyDown={handleDialogKeyDown}
-        className="m-auto max-h-[min(42rem,calc(100dvh-2rem))] w-[min(42rem,calc(100%-2rem))] overflow-hidden rounded-xl border border-(--site-surface-border) bg-(--site-bg) p-0 text-(--site-text) shadow-2xl backdrop:bg-black/60"
+        className="global-search-dialog fixed inset-x-0 m-0 mx-auto w-[min(42rem,calc(100%-2rem))] overflow-hidden rounded-xl p-0"
       >
-        <div className="border-b border-(--site-surface-border) p-4 sm:p-5">
+        <div className="border-b border-(--site-surface-border) bg-(--site-panel) p-4 sm:p-5">
           <div className="flex items-center gap-3">
-            <Search className="h-5 w-5 shrink-0 text-(--site-accent)" aria-hidden="true" />
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-(--site-surface-border) bg-(--site-accent)/10 text-(--site-accent)">
+              <Search className="h-4 w-4" aria-hidden="true" />
+            </span>
             <h2 id="global-search-title" className="sr-only">
               Search the site
             </h2>
@@ -213,26 +217,26 @@ export function GlobalSearch() {
               aria-label="Search pages and content"
               aria-controls="global-search-results"
               aria-describedby="global-search-hint"
-              className="min-w-0 flex-1 bg-transparent text-base outline-none placeholder:text-(--site-muted)"
+              className="min-w-0 flex-1 bg-transparent text-lg font-medium text-(--site-text) outline-none placeholder:text-(--site-muted)"
             />
             <button
               type="button"
               aria-label="Close search"
               onClick={close}
-              className="site-icon-button inline-flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded border site-control border-(--site-surface-border) text-(--site-muted) transition hover:text-(--site-text)"
+              className="site-icon-button inline-flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-md border border-(--site-surface-border) bg-(--site-bg) text-(--site-muted) transition hover:text-(--site-text)"
             >
               <X className="h-4 w-4" />
             </button>
           </div>
         </div>
 
-        <div className="max-h-[min(30rem,calc(100dvh-10rem))] overflow-y-auto p-2">
+        <div className="max-h-[min(30rem,calc(100dvh-12rem))] overflow-y-auto p-2 sm:p-3">
           {resultsContent}
         </div>
 
         <div
           id="global-search-hint"
-          className="flex flex-wrap items-center gap-x-3 gap-y-2 border-t border-(--site-surface-border) px-4 py-3 text-xs text-(--site-muted)"
+          className="flex flex-wrap items-center gap-x-3 gap-y-2 border-t border-(--site-surface-border) bg-(--site-panel) px-4 py-3 text-xs text-(--site-muted)"
         >
           <span className="inline-flex items-center gap-1">
             <ArrowUp className="h-3 w-3" /> <ArrowDown className="h-3 w-3" /> to navigate
