@@ -167,6 +167,29 @@ export default function FeedbackDialog() {
     dialogRef.current?.showModal();
   }
 
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (
+        event.key.toLowerCase() !== "f" ||
+        !(event.metaKey || event.ctrlKey) ||
+        event.altKey ||
+        event.shiftKey
+      ) {
+        return;
+      }
+      const dialog = dialogRef.current;
+      if (!dialog) return;
+      event.preventDefault();
+      // Another modal (e.g. search) is open: don't stack on top of it.
+      if (dialog.open || document.querySelector("dialog[open]")) return;
+      setStatus((s) => (s === "error" ? "idle" : s));
+      dialog.showModal();
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, []);
+
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setSubmitted(true);
@@ -223,6 +246,8 @@ export default function FeedbackDialog() {
         type="button"
         onClick={open}
         aria-haspopup="dialog"
+        aria-keyshortcuts="Control+F Meta+F"
+        title="Share feedback (Ctrl/Cmd + F)"
         className="sparkle inline-flex cursor-pointer items-center gap-2 rounded-sm border border-(--site-accent) bg-(--site-accent)/10 px-6 py-3 text-sm font-semibold site-nav-active hover:border-cyan-300"
       >
         <MessageSquare className="h-4 w-4" /> Share feedback
