@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 
+import { cleanLine, cleanMessage, getClientInfo, isValidEmail } from "@/lib/sanitization";
+
 const MAX_BODY_BYTES = 8_000;
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
 const RATE_LIMIT_MAX = 3;
@@ -17,34 +19,24 @@ function isRateLimited(key: string) {
   recent.push(now);
   hits.set(key, recent);
   if (hits.size > 1000) {
-    for (const [k, v] of hits) if (v.every((t) => now - t >= RATE_LIMIT_WINDOW_MS)) hits.delete(k);
+    for (const [k, v] of hits) {
+      if (v.every((t) => now - t >= RATE_LIMIT_WINDOW_MS)) hits.delete(k);
+    }
   }
   return false;
-}
-
-function clean(value: unknown, max: number) {
-  return typeof value === "string" ? value.trim().slice(0, max) : "";
 }
 
 export async function POST(req: Request) {
   const webhookUrl = process.env.N8N_FEEDBACK_WEBHOOK_URL;
   if (!webhookUrl) return NextResponse.json({ error: "Not configured" }, { status: 500 });
 
-  const h = req.headers;
-  const client = {
-    ip: h.get("x-forwarded-for")?.split(",")[0]?.trim() ?? null,
-    cfConnectingIp: h.get("cf-connecting-ip"),
-    xForwardedFor: h.get("x-forwarded-for"),
-    xRealIp: h.get("x-real-ip"),
-    country: h.get("cf-ipcountry"),
-    city: h.get("cf-ipcity"),
-    region: h.get("cf-region"),
-    timezone: h.get("cf-timezone"),
-    userAgent: h.get("user-agent"),
-  };
-
+  // Reject oversized bodies before reading them, then re-check the real byte size
+  const declared = Number(req.headers.get("content-length") ?? 0);
+  if (declared > MAX_BODY_BYTES) {
+    return NextResponse.json({ error: "Payload too large" }, { status: 413 });
+  }
   const raw = await req.text();
-  if (raw.length > MAX_BODY_BYTES) {
+  if (new TextEncoder().encode(raw).length > MAX_BODY_BYTES) {
     return NextResponse.json({ error: "Payload too large" }, { status: 413 });
   }
 
@@ -58,21 +50,23 @@ export async function POST(req: Request) {
   }
 
   // Honeypot: bots fill the hidden field; pretend success.
-  if (clean(input.website, 200)) return NextResponse.json({ ok: true });
+  if (cleanLine(input.website, 200)) return NextResponse.json({ ok: true });
 
-  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
-  if (isRateLimited(ip)) {
+  const client = getClientInfo(req.headers);
+
+  const rateKey = client.ip ?? "unknown";
+  if (isRateLimited(rateKey)) {
     return NextResponse.json({ error: "Too many requests" }, { status: 429 });
   }
 
-  const message = clean(input.message, 4000);
-  const name = clean(input.name, 100);
-  const email = clean(input.email, 200);
+  const message = cleanMessage(input.message, 4000);
+  const name = cleanLine(input.name, 100);
+  const email = cleanLine(input.email, 200);
 
   if (message.length < 3) {
     return NextResponse.json({ error: "Message is required" }, { status: 400 });
   }
-  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+  if (email && !isValidEmail(email)) {
     return NextResponse.json({ error: "Invalid email" }, { status: 400 });
   }
 
@@ -94,6 +88,7 @@ export async function POST(req: Request) {
       }),
       signal: AbortSignal.timeout(10_000),
       cache: "no-store",
+      redirect: "error", // never follow redirects with the secret header attached
     });
     if (!res.ok) throw new Error();
   } catch {
