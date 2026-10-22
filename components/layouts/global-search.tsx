@@ -166,7 +166,7 @@ export function GlobalSearch() {
             <code className="font-mono text-(--site-accent)">projects:@open-source</code>
           </p>
           <p>
-            <code className="font-mono text-(--site-accent)">projects:#nextjs</code>
+            <code className="font-mono text-(--site-accent)">projects:#calendar</code>
           </p>
         </div>
       </div>
