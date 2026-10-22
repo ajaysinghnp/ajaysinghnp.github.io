@@ -313,18 +313,20 @@ html:not(.dark) body [class~="text-zinc-500"] {
 
 .global-search-dialog::before {
   position: absolute;
-  top: 0;
+  z-index: 1;
+  top: 1px;
   left: 0;
-  width: 28%;
-  height: 1px;
+  width: 32%;
+  height: 2px;
   background: linear-gradient(
     90deg,
     transparent,
-    color-mix(in srgb, var(--site-accent) 70%, transparent),
+    color-mix(in srgb, var(--site-accent) 85%, transparent),
     transparent
   );
   content: "";
-  opacity: 0.3;
+  filter: drop-shadow(0 0 3px color-mix(in srgb, var(--site-accent) 55%, transparent));
+  opacity: 0.55;
   pointer-events: none;
 }
 
