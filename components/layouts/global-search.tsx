@@ -141,9 +141,28 @@ export function GlobalSearch() {
     );
   } else if (!searchableQuery) {
     resultsContent = (
-      <p className="px-4 py-8 text-center text-sm text-(--site-muted)">
-        Type at least two characters to search.
-      </p>
+      <div className="px-4 py-5 text-sm text-(--site-muted)">
+        <p>Search the whole site, or narrow by content type, category, or tag:</p>
+        <div className="mt-3 grid gap-x-5 gap-y-2 sm:grid-cols-2">
+          <p>
+            <code className="font-mono text-(--site-accent)">type:blog kubernetes</code>
+          </p>
+          <p>
+            <code className="font-mono text-(--site-accent)">
+              blog:category web-development nextjs
+            </code>
+          </p>
+          <p>
+            <code className="font-mono text-(--site-accent)">blog:tag security cve</code>
+          </p>
+          <p>
+            <code className="font-mono text-(--site-accent)">type:project automation</code>
+          </p>
+          <p>
+            <code className="font-mono text-(--site-accent)">type:cheatsheet git</code>
+          </p>
+        </div>
+      </div>
     );
   } else if (hasSearchError) {
     resultsContent = (

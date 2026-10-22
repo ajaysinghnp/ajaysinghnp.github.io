@@ -10,13 +10,7 @@ import { resume } from "@/data/resume";
 import { entryHref } from "@/lib/content-format";
 import { listEntries } from "@/lib/github-content";
 import { fetchProjectReadme, fetchProjects } from "@/lib/projects";
-
-interface SearchDocument {
-  title: string;
-  href: string;
-  section: string;
-  text: string;
-}
+import { parseSearchQuery, scoreSearchDocument, type SearchDocument } from "@/lib/search-query";
 
 const markdownText = (markdown: string) =>
   markdown
@@ -36,17 +30,6 @@ function excerpt(text: string, terms: string[]) {
   const end = Math.min(normalized.length, start + 180);
 
   return `${start > 0 ? "..." : ""}${normalized.slice(start, end)}${end < normalized.length ? "..." : ""}`;
-}
-
-function rank(document: SearchDocument, terms: string[]) {
-  const title = document.title.toLowerCase();
-  const text = `${document.section} ${document.text}`.toLowerCase();
-  if (!terms.every((term) => title.includes(term) || text.includes(term))) return -1;
-
-  return terms.reduce(
-    (score, term) => score + (title.includes(term) ? 8 : 0) + (text.includes(term) ? 1 : 0),
-    title === terms.join(" ") ? 20 : 0,
-  );
 }
 
 const getSearchDocuments = unstable_cache(
@@ -71,6 +54,7 @@ const getSearchDocuments = unstable_cache(
           href: `/projects/${encodeURIComponent(project.name)}`,
           section: "Project",
           text: `${project.description ?? ""} ${readmeContent}`,
+          type: "project",
         };
       }),
     );
@@ -81,12 +65,18 @@ const getSearchDocuments = unstable_cache(
         href: entryHref("/blog", entry),
         section: `Blog ${entry.category.replaceAll("/", " ")} ${entry.meta.tags.join(" ")}`,
         text: `${entry.meta.description ?? ""} ${entry.content}`,
+        type: "blog",
+        category: entry.category,
+        tags: entry.meta.tags,
       })),
       ...cheatsheetEntries.map((entry): SearchDocument => ({
         title: entry.meta.title ?? entry.slug,
         href: entryHref("/cheatsheet", entry),
         section: `Cheatsheet ${entry.category.replaceAll("/", " ")} ${entry.meta.tags.join(" ")}`,
         text: `${entry.meta.description ?? ""} ${entry.content}`,
+        type: "cheatsheet",
+        category: entry.category,
+        tags: entry.meta.tags,
       })),
     ];
 
@@ -96,30 +86,35 @@ const getSearchDocuments = unstable_cache(
         href: "/",
         section: "Home",
         text: `${resume.quote} ${resume.profile} ${resume.jobtask} ${resume.skills.map((skill) => `${skill.label} ${skill.description}`).join(" ")}`,
+        type: "page",
       },
-      ...navigation.map(({ name, href }) => ({
+      ...navigation.map(({ name, href }): SearchDocument => ({
         title: name,
         href,
         section: "Page",
         text: `${name} Ajay Singh personal website portfolio`,
+        type: "page",
       })),
       {
         title: "Projects",
         href: "/projects",
         section: "Projects",
         text: PROJECT_REPOSITORY_SETTINGS.page.intro,
+        type: "page",
       },
       {
         title: "Blog",
         href: "/blog",
         section: "Blog",
         text: blogConfig.page.intro,
+        type: "page",
       },
       {
         title: "Cheatsheets",
         href: "/cheatsheet",
         section: "Cheatsheets",
         text: cheatsheetConfig.page.intro,
+        type: "page",
       },
       {
         title: "About Ajay Singh",
@@ -132,6 +127,7 @@ const getSearchDocuments = unstable_cache(
           ...about.highlights.flatMap((highlight) => [highlight.label, highlight.description]),
           ...about.principles.flatMap((principle) => [principle.title, principle.description]),
         ].join(" "),
+        type: "page",
       },
       {
         title: "Resume",
@@ -147,12 +143,14 @@ const getSearchDocuments = unstable_cache(
           ...resume.education.flatMap((item) => [item.degree, item.school, item.description]),
           ...resume.skills.flatMap((skill) => [skill.label, skill.description]),
         ].join(" "),
+        type: "page",
       },
       {
         title: "Contact Ajay Singh",
         href: "/contact",
         section: "Contact",
         text: "Contact get in touch email social links conversation",
+        type: "page",
       },
     ];
 
@@ -168,13 +166,15 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "Search query is too long." }, { status: 400 });
   }
 
-  const terms = query.toLowerCase().split(/\s+/).filter(Boolean);
-  if (terms.join("").length < 2) return NextResponse.json({ results: [] });
+  const parsedQuery = parseSearchQuery(query);
+  if (!parsedQuery.filters.length && parsedQuery.terms.join("").length < 2) {
+    return NextResponse.json({ results: [] });
+  }
 
   try {
     const documents = await getSearchDocuments();
     const results = documents
-      .map((document) => ({ document, score: rank(document, terms) }))
+      .map((document) => ({ document, score: scoreSearchDocument(document, parsedQuery) }))
       .filter(({ score }) => score >= 0)
       .sort((a, b) => b.score - a.score || a.document.title.localeCompare(b.document.title))
       .slice(0, 12)
@@ -182,7 +182,7 @@ export async function GET(request: NextRequest) {
         title: document.title,
         href: document.href,
         section: document.section.split(" ")[0],
-        excerpt: excerpt(document.text, terms),
+        excerpt: excerpt(document.text, parsedQuery.terms),
       }));
 
     return NextResponse.json({ results }, { headers: { "Cache-Control": "private, max-age=30" } });
