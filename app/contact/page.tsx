@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { ArrowUpRight, Mail, MapPin } from "lucide-react";
 
-import FeedbackDialog from "@/components/sections/feedback-dialog";
+import FeedbackTrigger from "@/components/sections/feedback-trigger";
 import SocialLinksPanel from "@/components/sections/social-links-panel";
 import { resume } from "@/data/resume";
 import { socialMedia } from "@/data/social";
@@ -43,7 +43,7 @@ export default function ContactPage() {
             >
               <Mail className="h-4 w-4" /> Start a conversation <ArrowUpRight className="h-4 w-4" />
             </Link>
-            <FeedbackDialog />
+            <FeedbackTrigger />
           </div>
         </div>
 
