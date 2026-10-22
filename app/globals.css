@@ -307,6 +307,8 @@ html:not(.dark) body [class~="text-zinc-500"] {
   color: var(--site-text);
   box-shadow:
     0 30px 90px rgba(0, 0, 0, 0.28),
+    0 0 20px color-mix(in srgb, var(--site-accent) 16%, transparent),
+    0 0 44px color-mix(in srgb, var(--site-accent) 7%, transparent),
     0 0 0 1px color-mix(in srgb, var(--site-accent) 10%, transparent),
     inset 0 1px 0 color-mix(in srgb, var(--site-accent) 16%, transparent);
 }
