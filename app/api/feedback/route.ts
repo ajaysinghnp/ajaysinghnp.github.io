@@ -30,6 +30,16 @@ export async function POST(req: Request) {
   const webhookUrl = process.env.N8N_FEEDBACK_WEBHOOK_URL;
   if (!webhookUrl) return NextResponse.json({ error: "Not configured" }, { status: 500 });
 
+  const h = req.headers;
+  const client = {
+    ip: h.get("cf-connecting-ip") ?? h.get("x-forwarded-for")?.split(",")[0]?.trim() ?? null,
+    country: h.get("cf-ipcountry"),
+    city: h.get("cf-ipcity"),
+    region: h.get("cf-region"),
+    timezone: h.get("cf-timezone"),
+    userAgent: h.get("user-agent"),
+  };
+
   const raw = await req.text();
   if (raw.length > MAX_BODY_BYTES) {
     return NextResponse.json({ error: "Payload too large" }, { status: 413 });
@@ -77,6 +87,7 @@ export async function POST(req: Request) {
         email: email || null,
         submittedAt: new Date().toISOString(),
         source: "contact-page",
+        client,
       }),
       signal: AbortSignal.timeout(10_000),
       cache: "no-store",
