@@ -40,7 +40,7 @@ export default function FeedbackDialog() {
         type="button"
         onClick={open}
         aria-haspopup="dialog"
-        className="light-btn-hover-surface inline-flex items-center gap-3 px-5 py-3 text-sm font-semibold"
+        className="sparkle inline-flex cursor-pointer items-center gap-2 rounded-sm border border-(--site-accent) bg-(--site-accent)/10 px-6 py-3 text-sm font-semibold site-nav-active hover:border-cyan-300"
       >
         <MessageSquare className="h-4 w-4" /> Share feedback
       </button>
