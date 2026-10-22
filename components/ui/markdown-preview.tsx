@@ -10,7 +10,17 @@ export function MarkdownPreview({ source }: { source: string }) {
         <ReactMarkdown
           remarkPlugins={[remarkGfm]}
           components={{
-            img: () => null,
+            img: ({ src, alt }) =>
+              typeof src === "string" && src.startsWith("https://") ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={src}
+                  alt={alt ?? ""}
+                  loading="lazy"
+                  referrerPolicy="no-referrer"
+                  className="max-h-60 rounded-sm"
+                />
+              ) : null,
             a: ({ href, children }) => (
               <a href={href} target="_blank" rel="noopener noreferrer nofollow">
                 {children}

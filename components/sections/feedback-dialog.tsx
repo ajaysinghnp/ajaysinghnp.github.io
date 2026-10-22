@@ -1,16 +1,18 @@
 "use client";
 
-import { type FormEvent, useId, useRef, useState } from "react";
+import { type FormEvent, useEffect, useId, useRef, useState } from "react";
 
 import {
   AlertCircle,
   AtSign,
   CheckCircle2,
+  Info,
   Loader2,
   MessageSquare,
   MessageSquareText,
   RotateCcw,
   Send,
+  Trash2,
   User,
   X,
 } from "lucide-react";
@@ -26,6 +28,31 @@ type Values = Record<FieldName, string>;
 const LIMITS = { name: 100, email: 200, message: 4000 } as const;
 const EMPTY: Values = { name: "", email: "", message: "" };
 const FIELD_ORDER: FieldName[] = ["name", "email", "message"];
+const DRAFT_KEY = "feedback-draft:v1";
+const DRAFT_PREF_KEY = "feedback-draft-pref:v1";
+
+function readDraft(): Values | null {
+  try {
+    const parsed: unknown = JSON.parse(localStorage.getItem(DRAFT_KEY) ?? "null");
+    if (!parsed || typeof parsed !== "object") return null;
+    const draft = { ...EMPTY };
+    for (const f of FIELD_ORDER) {
+      const v = (parsed as Record<string, unknown>)[f];
+      if (typeof v === "string") draft[f] = v.slice(0, 10_000);
+    }
+    return FIELD_ORDER.some((f) => draft[f]) ? draft : null;
+  } catch {
+    return null;
+  }
+}
+
+function storage(action: () => void) {
+  try {
+    action();
+  } catch {
+    // Storage can be unavailable (private mode, blocked); the form still works without it.
+  }
+}
 
 const RULES: Record<FieldName, ValidationRule[]> = {
   name: [
@@ -78,13 +105,59 @@ export default function FeedbackDialog() {
   const [submitted, setSubmitted] = useState(false);
   const [status, setStatus] = useState<Status>("idle");
   const [serverError, setServerError] = useState("");
+  const [formKey, setFormKey] = useState(0);
+  const [saveDraft, setSaveDraft] = useState(true);
+  const [restored, setRestored] = useState(false);
+  const hydrated = useRef(false);
 
   const busy = status === "sending";
+  const hasContent = FIELD_ORDER.some((f) => values[f]);
 
-  function reset() {
+  useEffect(() => {
+    storage(() => {
+      if (localStorage.getItem(DRAFT_PREF_KEY) === "off") {
+        setSaveDraft(false);
+        return;
+      }
+      const draft = readDraft();
+      if (draft) {
+        setValues(draft);
+        setRestored(true);
+      }
+    });
+    hydrated.current = true;
+  }, []);
+
+  useEffect(() => {
+    if (!hydrated.current) return;
+    const timer = setTimeout(() => {
+      storage(() => {
+        if (saveDraft && hasContent) localStorage.setItem(DRAFT_KEY, JSON.stringify(values));
+        else localStorage.removeItem(DRAFT_KEY);
+      });
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [values, saveDraft, hasContent]);
+
+  function toggleSaveDraft(enabled: boolean) {
+    setSaveDraft(enabled);
+    storage(() => {
+      if (enabled) localStorage.removeItem(DRAFT_PREF_KEY);
+      else localStorage.setItem(DRAFT_PREF_KEY, "off");
+    });
+  }
+
+  function discardDraft() {
     setValues(EMPTY);
     setPreviewing(false);
     setSubmitted(false);
+    setRestored(false);
+    setFormKey((k) => k + 1);
+    storage(() => localStorage.removeItem(DRAFT_KEY));
+  }
+
+  function reset() {
+    discardDraft();
     setStatus("idle");
     setServerError("");
   }
@@ -122,6 +195,11 @@ export default function FeedbackDialog() {
         return;
       }
       setStatus("sent");
+      setValues(EMPTY);
+      setPreviewing(false);
+      setSubmitted(false);
+      setRestored(false);
+      storage(() => localStorage.removeItem(DRAFT_KEY));
     } catch {
       setServerError("Couldn't reach the server. Check your connection and retry.");
       setStatus("error");
@@ -154,7 +232,7 @@ export default function FeedbackDialog() {
         ref={dialogRef}
         aria-labelledby={`${uid}-title`}
         onClick={(e) => e.target === dialogRef.current && dialogRef.current.close()}
-        className="global-search-dialog fixed top-1/2! left-1/2 m-0 max-h-[calc(100dvh-2rem)] w-[min(94vw,44rem)] -translate-x-1/2 -translate-y-1/2 overflow-x-hidden overflow-y-auto rounded-xl p-0"
+        className="global-search-dialog fixed top-1/2! left-1/2 m-0 max-h-[calc(100dvh-2rem)] w-[78vw] max-w-[94vw] min-w-[min(94vw,32rem)] -translate-x-1/2 -translate-y-1/2 overflow-x-hidden overflow-y-auto rounded-xl p-0"
       >
         <div className="flex items-center gap-3 border-b border-(--site-surface-border) bg-(--site-accent)/5 px-4 py-2.5">
           <span className="group flex gap-1.5">
@@ -207,7 +285,13 @@ export default function FeedbackDialog() {
             </div>
           </div>
         ) : (
-          <form ref={formRef} onSubmit={onSubmit} noValidate className="space-y-5 p-6">
+          <form
+            key={formKey}
+            ref={formRef}
+            onSubmit={onSubmit}
+            noValidate
+            className="space-y-5 p-6"
+          >
             <div>
               <h2
                 id={`${uid}-title`}
@@ -241,6 +325,7 @@ export default function FeedbackDialog() {
               label="feedback"
               icon={MessageSquareText}
               multiline
+              rows={8}
               counterMax={LIMITS.message}
               textareaRef={messageRef}
               toolbar={
@@ -256,6 +341,55 @@ export default function FeedbackDialog() {
               preview={previewing ? <MarkdownPreview source={values.message} /> : undefined}
               placeholder="Tell me what worked, what didn't, or what you'd love to see..."
             />
+
+            {restored && (
+              <p className="flex items-center gap-2 text-xs site-nav-active" role="status">
+                <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" /> Restored your unsent draft
+                from this device.
+              </p>
+            )}
+
+            <div className="space-y-3 rounded-sm border border-(--site-surface-border) bg-(--site-accent)/5 p-3 text-xs leading-5 resume-muted">
+              <p className="flex items-start gap-2">
+                <Info className="mt-0.5 h-3.5 w-3.5 shrink-0 site-nav-active" aria-hidden="true" />
+                <span>
+                  <strong className="text-(--site-text)">Draft saving.</strong> While you type, your
+                  entries are saved in this browser&apos;s local storage on this device only. They
+                  are not sent anywhere until you press Send, and are deleted once you send or
+                  discard them. Turn it off if this is a shared device.
+                </span>
+              </p>
+              <p className="flex items-start gap-2">
+                <Info className="mt-0.5 h-3.5 w-3.5 shrink-0 site-nav-active" aria-hidden="true" />
+                <span>
+                  <strong className="text-(--site-text)">When you send.</strong> Your feedback, plus
+                  your name and email if given, is forwarded to me through a private automation
+                  workflow (chat alert and email) and used only to read and reply. Please don&apos;t
+                  include sensitive personal information.
+                </span>
+              </p>
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <label className="inline-flex cursor-pointer items-center gap-2 text-(--site-text)">
+                  <input
+                    type="checkbox"
+                    checked={saveDraft}
+                    onChange={(e) => toggleSaveDraft(e.target.checked)}
+                    className="h-3.5 w-3.5 cursor-pointer accent-(--site-accent)"
+                  />
+                  Save draft on this device
+                </label>
+                {hasContent && (
+                  <button
+                    type="button"
+                    onClick={discardDraft}
+                    disabled={busy}
+                    className="inline-flex cursor-pointer items-center gap-1.5 hover:text-rose-500 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    <Trash2 className="h-3.5 w-3.5" aria-hidden="true" /> Discard draft
+                  </button>
+                )}
+              </div>
+            </div>
 
             <input
               name="website"
