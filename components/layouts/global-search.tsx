@@ -166,7 +166,7 @@ export function GlobalSearch() {
               aria-selected={index === activeIndex}
               onMouseEnter={() => setActiveIndex(index)}
               onClick={() => openResult(result)}
-              className={`w-full cursor-pointer rounded-md border px-4 py-3 text-left transition ${
+              className={`light-btn-hover-surface w-full cursor-pointer border py-3 text-left transition ${
                 index === activeIndex
                   ? "border-(--site-surface-border) bg-(--site-accent)/10"
                   : "border-transparent hover:bg-(--site-bg)"
@@ -243,7 +243,7 @@ export function GlobalSearch() {
           </div>
         </div>
 
-        <div className="max-h-[min(30rem,calc(100dvh-12rem))] overflow-y-auto p-2 sm:p-3">
+        <div className="max-h-[min(30rem,calc(100dvh-12rem))] scroll-p-3 overflow-y-auto p-3 sm:scroll-p-4 sm:p-4">
           {resultsContent}
         </div>
 
